@@ -1,0 +1,22 @@
+{
+  "GuiGui": {
+    "owner": "GuiGui",
+    "cartData": {
+      "Leffe": 5.0
+    }
+  },
+  "GuiGui": {
+    "owner": "GuiGui",
+    "cartData": {
+      "Leffe": 18.0
+    }
+  },
+  "admin": {
+    "owner": "admin",
+    "cartData": {
+      "Leffe": 18.0,
+      "GuiBeer": 21.0,
+      "YoBeer": 24.0
+    }
+  }
+}

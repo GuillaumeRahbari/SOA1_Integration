@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements. See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership. The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License. You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<!-- START SNIPPET: beans -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:jaxws="http://cxf.apache.org/blueprint/jawrs"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cxf="http://cxf.apache.org/blueprint/core"
+           xsi:schemaLocation="
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+             http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+             ">
+
+    <jaxrs:server id="volleyOnTheBeach" address="/volley">
+        <jaxrs:serviceBeans>
+            <ref component-id="catalogService"/>
+            <ref component-id="accountService"/>
+            <ref component-id="orderService"/>
+            <ref component-id="basketService"/>
+            <ref component-id="paymentService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+            <bean class="com.fasterxml.jackson.jaxrs.base.JsonParseExceptionMapper"/>
+            <bean class="com.fasterxml.jackson.jaxrs.base.JsonMappingExceptionMapper"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <bean id="catalogService" class="fr.unice.polytech.soa1.volley.catalog.CatalogService"/>
+    <bean id="accountService" class="fr.unice.polytech.soa1.volley.accounts.AccountServiceImpl"/>
+    <bean id="orderService" class="fr.unice.polytech.soa1.volley.orders.OrderServiceImpl"/>
+    <bean id="basketService" class="fr.unice.polytech.soa1.volley.basket.BasketServiceImpl"/>
+    <bean id="paymentService" class="fr.unice.polytech.soa1.volley.payments.PaymentServiceImpl"/>
+
+</blueprint>

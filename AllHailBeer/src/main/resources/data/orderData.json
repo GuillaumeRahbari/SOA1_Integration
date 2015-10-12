@@ -1,0 +1,25 @@
+{
+  "1":{
+    "cart":{
+      "owner":"GuiGui",
+      "cartData":{
+        "Leffe":5.0
+      }
+    },
+    "creditCard":1234567890,
+    "id":1,
+    "price":10.0
+  },
+  "2":{
+    "cart":{
+      "owner":"GuiGui",
+      "cartData":{
+        "Leffe":3.0,
+        "GuiBeer":120.0
+      }
+    },
+    "creditCard":1234567890,
+    "id":2,
+    "price":6006.0
+  }
+}

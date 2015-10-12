@@ -1,0 +1,42 @@
+{
+    "Hankook":{
+        "name":"Hankook",
+        "user":"",
+        "cereale":"houblon",
+        "titration":"20%",
+        "gout":"abricot",
+        "pricePerLiter":20.0
+    },
+    "Leffe":{
+        "name":"Leffe",
+        "user":"",
+        "cereale":"malt",
+        "titration":"10%",
+        "gout":"cerise",
+        "pricePerLiter":2.0
+    },
+    "GuiBeer":{
+        "name":"GuiBeer",
+        "user":"",
+        "cereale":"houblon",
+        "titration":"30%",
+        "gout":"framboise",
+        "pricePerLiter":50.0
+    },
+    "Mort Subite":{
+        "name":"Mort Subite",
+        "user":"",
+        "cereale":"houblon",
+        "titration":"20%",
+        "gout":"chocolat",
+        "pricePerLiter":5.0
+    },
+    "YoBeer":{
+        "name":"YoBeer",
+        "user":"",
+        "cereale":"malt",
+        "titration":"50%",
+        "gout":"asticot",
+        "pricePerLiter":7.0
+    }
+}
