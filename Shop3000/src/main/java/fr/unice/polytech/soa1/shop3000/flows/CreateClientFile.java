@@ -1,5 +1,8 @@
 package fr.unice.polytech.soa1.shop3000.flows;
 
+import fr.unice.polytech.soa1.shop3000.filter.ClientRegistered;
+import fr.unice.polytech.soa1.shop3000.process.ClientCheckProcess;
+import fr.unice.polytech.soa1.shop3000.process.mock.ClientFileMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoints;
 import org.apache.camel.builder.RouteBuilder;
 
@@ -8,11 +11,24 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class CreateClientFile extends RouteBuilder {
 
+    private ClientCheckProcess clientCheckProcess = new ClientCheckProcess();
+    private ClientFileMock clientFileMock = new ClientFileMock();
+
     @Override
     public void configure() throws Exception {
         from(Endpoints.CLIENT_FILE_INPUT)
-                .to(Endpoints.CLIENT_DATABASE)
+                .log("Processing ${file:name}")
+                .process(clientFileMock)
+                .log(" After process")
+                .log("Body : ${body.firstName}")
+                .filter()
+                .method(new ClientRegistered(),"filter")
+                .log("Body : ${body.firstName}")
+
+
+/*
                 .filter(simple("properties:bdok"))
+*/
                 .log("After filter")
                 ;
 
