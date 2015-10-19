@@ -9,8 +9,61 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+
     <artifactId>Shop3000</artifactId>
+    <packaging>bundle</packaging>
     <name>SOA1 :: Shop3000</name>
 
+    <properties>
+        <camel.version>2.15.2</camel.version>
+        <bundle.symbolicName>${project.artifactId}</bundle.symbolicName>
+        <bundle.namespace>fr.unice.polytech.soa1.shop3000</bundle.namespace>
+    </properties>
+
+
+    <dependencies>
+        <!-- Apache Camel Integration Flow -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <!-- Apache Camel CSV processing artifacts -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-csv</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <!-- Maven build plugin to create an OSGI bundle instead of a plain JAR file-->
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <version>2.5.4</version>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Import-Package>*</Import-Package>
+                        <Export-Package>${bundle.namespace}.flows.*;version="${project.version}"</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
