@@ -16,12 +16,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-
     <!-- Pour gérer les sous pom.xml -->
     <modules>
         <module>AllHailBeer</module>
         <module>Biko</module>
         <module>VolleyOnTheBeach</module>
+        <module>Shop3000</module>
     </modules>
+
 
 </project>
