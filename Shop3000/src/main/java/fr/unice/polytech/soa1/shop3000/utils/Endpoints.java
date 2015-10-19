@@ -1,7 +1,9 @@
 package fr.unice.polytech.soa1.shop3000.utils;
 
 /**
- * Created by Quentin on 10/19/2015.
+ * @author Quentin Cornevin
+ *
+ * This interface will contain all the endpoint of the application
  */
 public interface Endpoints {
 

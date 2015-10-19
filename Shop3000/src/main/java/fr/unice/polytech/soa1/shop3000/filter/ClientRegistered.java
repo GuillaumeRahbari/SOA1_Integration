@@ -6,12 +6,19 @@ import org.apache.camel.Exchange;
 
 
 /**
- * Created by Quentin on 10/19/2015.
+ * This Class allow to filtrer the use who are already registered our system or not.
+ * This class will handle more filter in the future
+ *
  */
 public class ClientRegistered  {
 
+    /**
+     * Filter if the client in the body of the exchange is in the database
+     * @param exchange
+     * @return true if the client is not in the database, false otherwise.
+     */
     public boolean filter(Exchange exchange) {
         Client client = exchange.getIn().getBody(Client.class);
-        return ClientStorage.checkInDB(client);
+        return !(ClientStorage.checkInDB(client));
     }
 }

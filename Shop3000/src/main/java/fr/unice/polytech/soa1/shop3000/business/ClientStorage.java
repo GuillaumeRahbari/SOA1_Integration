@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 
 /**
- * Created by Quentin on 10/19/2015.
+ * @author Quentin Cornevin
+ *
+ * This class mock the storage of all the client of the application
  */
 public class ClientStorage {
 
@@ -42,6 +44,9 @@ public class ClientStorage {
         return false;
     }
 
+    /**
+     * This part put some false client in the database.
+     */
     static {
         ClientStorage.create("Quentin","Cornevin");
         ClientStorage.create("Marc","Karassev");

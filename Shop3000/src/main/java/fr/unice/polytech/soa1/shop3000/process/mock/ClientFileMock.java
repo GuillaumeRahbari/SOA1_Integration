@@ -5,10 +5,17 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 /**
- * Created by Quentin on 10/19/2015.
+ * @author Quentin Corneivn
+ *
+ * This class mock the creation of a client in the body of the message
  */
 public class ClientFileMock implements Processor {
 
+    /**
+     * Body mocked with a fake client
+     * @param exchange
+     * @throws Exception
+     */
     public void process(Exchange exchange) throws Exception {
         Client goodClient = new Client(MockedData.CLIENT_FIRST_NAME,MockedData.CLEINT_LAST_NAME);
         exchange.getIn().setBody(goodClient);

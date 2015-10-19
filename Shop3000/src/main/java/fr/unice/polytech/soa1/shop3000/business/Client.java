@@ -1,7 +1,9 @@
 package fr.unice.polytech.soa1.shop3000.business;
 
 /**
- * Created by Quentin on 10/19/2015.
+ * @author Quentin Cornevin
+ *
+ * This class represent the client of the application
  */
 public class Client {
 
