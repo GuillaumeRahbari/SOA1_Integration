@@ -35,12 +35,22 @@ public class ClientStorage {
         return clientStorage.values();
     }
 
+    public static boolean checkInDB(Client client) {
+         if(clientStorage.get(client.getFirstName()) !=null) {
+             return true;
+         }
+        return false;
+    }
+
     static {
         ClientStorage.create("Quentin","Cornevin");
         ClientStorage.create("Marc","Karassev");
         ClientStorage.create("Laureen","Ginier");
         ClientStorage.create("Guillaume","Rahbari");
         ClientStorage.create("Je connais pas","bien l'orthographe de vos noms");
+
+        /** Uncomment this line if you want the filter to work **/
+    //    ClientStorage.create("ClientFirstName","ClientFirstName");
 
     }
 

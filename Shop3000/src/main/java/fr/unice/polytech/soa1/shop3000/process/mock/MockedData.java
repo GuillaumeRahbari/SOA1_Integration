@@ -6,5 +6,5 @@ package fr.unice.polytech.soa1.shop3000.process.mock;
 public interface MockedData {
 
     String CLIENT_FIRST_NAME = "ClientFirstName";
-    String CLEINT_LAST_name = "ClientLastName";
+    String CLEINT_LAST_NAME = "ClientLastName";
 }

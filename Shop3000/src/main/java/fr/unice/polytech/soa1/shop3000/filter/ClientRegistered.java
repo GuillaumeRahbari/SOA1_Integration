@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.filter;
 
+import fr.unice.polytech.soa1.shop3000.business.Client;
+import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import org.apache.camel.Exchange;
 
 
@@ -9,6 +11,7 @@ import org.apache.camel.Exchange;
 public class ClientRegistered  {
 
     public boolean filter(Exchange exchange) {
-        return true;
+        Client client = exchange.getIn().getBody(Client.class);
+        return ClientStorage.checkInDB(client);
     }
 }

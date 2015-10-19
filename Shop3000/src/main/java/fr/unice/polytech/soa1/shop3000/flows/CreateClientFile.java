@@ -22,15 +22,9 @@ public class CreateClientFile extends RouteBuilder {
                 .log(" After process")
                 .log("Body : ${body.firstName}")
                 .filter()
-                .method(new ClientRegistered(),"filter")
-                .log("Body : ${body.firstName}")
-
-
-/*
-                .filter(simple("properties:bdok"))
-*/
+                .method(new ClientRegistered(), "filter")
                 .log("After filter")
-                ;
+                .log("Body : ${body.firstName}");
 
     }
 }
