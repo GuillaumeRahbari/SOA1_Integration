@@ -30,8 +30,10 @@ public class CartService extends BaseService {
     @Path("/all")
     public Response getAllCarts(@QueryParam("compte") String admin) {
 
+        /*
         //Hardcore logging
         System.out.println("GET /cart/all");
+        */
 
         if (!AccountData.getData().containsKey(admin)){
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -48,9 +50,11 @@ public class CartService extends BaseService {
     @GET
     public Response getCart(@QueryParam("username") String user) {
 
+        /*
         //Hardcore logging
         System.out.println("GET /{userId} with {userId}=" + user + ".");
         System.out.println("Result : " + CartData.get(user));
+        */
 
         JSONArray result = new JSONArray();
 
@@ -71,8 +75,10 @@ public class CartService extends BaseService {
     @POST
     public Response createCart(String cart, @QueryParam("username") String user){
         ObjectMapper mapper = new ObjectMapper();
+        /*
         //Hardcore logging
         System.out.println("POST /cart --- with " + cart);
+        */
         try {
             Cart cart1 = mapper.readValue(cart,Cart.class);
             if (!CartData.getData().containsKey(user)){
@@ -91,8 +97,12 @@ public class CartService extends BaseService {
     @Path("/validation")
     public Response validateCart(@QueryParam("username") String user, @QueryParam("cb") String cb){
         ObjectMapper mapper = new ObjectMapper();
+
+        /*
         //Hardcore logging
         System.out.println("PUT /cart/validation");
+        */
+
         for(Map.Entry<String, Cart> entry: CartData.getData().entrySet()) {
             if (entry.getValue().getOwner().equals(user)){
                 Long orderId = OrderData.add(new Order(entry.getValue(),cb));
@@ -108,8 +118,12 @@ public class CartService extends BaseService {
     @PUT
     public Response updateCart (String cart, @QueryParam("username") String user){
         ObjectMapper mapper = new ObjectMapper();
+
+        /*
         //Hardcore logging
         System.out.println("PUT /cart?username=" + user + " --- with " + cart);
+        */
+
         try {
             Cart cart1 = mapper.readValue(cart,Cart.class);
             for(Map.Entry<String, Cart> entry: CartData.getData().entrySet()) {
@@ -128,8 +142,11 @@ public class CartService extends BaseService {
 
     @DELETE
     public Response deleteCart (@QueryParam("username") String user) {
+
+        /*
         //Hardcore logging
         System.out.println("DELETE /cart?username=" + user);
+        */
 
         for(Map.Entry<String, Cart> entry: CartData.getData().entrySet()) {
             if (entry.getValue().getOwner().equals(user)){
