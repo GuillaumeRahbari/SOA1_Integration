@@ -19,6 +19,13 @@ public class CatalogItem {
         this.price = price;
     }
 
+    public CatalogItem(String name, double price, String description, Customization customization){
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.customization = customization;
+    }
+
     public String getName() {
         return name;
     }

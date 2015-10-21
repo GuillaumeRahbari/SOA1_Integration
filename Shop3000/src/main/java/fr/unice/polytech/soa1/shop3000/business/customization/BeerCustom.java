@@ -7,10 +7,10 @@ package fr.unice.polytech.soa1.shop3000.business.customization;
  */
 public class BeerCustom extends Customization {
 
-    private boolean clientCustomization;
+    private boolean isClientCustomization;
 
     public BeerCustom(boolean isClientCustomization){
-        this.clientCustomization = isClientCustomization;
+        this.isClientCustomization = isClientCustomization;
     }
 
 }
