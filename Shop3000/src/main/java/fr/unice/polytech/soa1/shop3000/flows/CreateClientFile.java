@@ -3,7 +3,7 @@ package fr.unice.polytech.soa1.shop3000.flows;
 import fr.unice.polytech.soa1.shop3000.filter.ClientRegistered;
 import fr.unice.polytech.soa1.shop3000.process.AddClientToDataBase;
 import fr.unice.polytech.soa1.shop3000.process.mock.ClientFileMock;
-import fr.unice.polytech.soa1.shop3000.utils.Endpoints;
+import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -26,7 +26,7 @@ public class CreateClientFile extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from(Endpoints.CLIENT_FILE_INPUT)
+        from(Endpoint.CLIENT_FILE_INPUT.getInstruction())
                 .log("Start processing")
                 .process(clientFileMock)
                 .log("Fake client addded")
@@ -41,7 +41,7 @@ public class CreateClientFile extends RouteBuilder {
                 .process(addClientToDataBase)
                 .log("Client added to the database")
                 .log("End of the process")
-                .to(Endpoints.CATALOG_TEST);
+                .to(Endpoint.CATALOG_TEST.getInstruction());
 
 
     }

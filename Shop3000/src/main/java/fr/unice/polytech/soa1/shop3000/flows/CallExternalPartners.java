@@ -1,7 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows;
 
 import fr.unice.polytech.soa1.shop3000.process.ReadResponseStream;
-import fr.unice.polytech.soa1.shop3000.utils.Endpoints;
+import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
@@ -18,7 +18,7 @@ public class CallExternalPartners extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from(Endpoints.BIKO_CATALOG)
+        from(Endpoint.BIKO_CATALOG.getInstruction())
                 .log("Begin processing : Get Biko catalog")
                 .setHeader(Exchange.HTTP_METHOD,constant("GET"))
                 .setBody(constant(""))
@@ -26,7 +26,7 @@ public class CallExternalPartners extends RouteBuilder {
                 .process(readResponseStream)
                 .log("${body}");
 
-        from(Endpoints.VOLLEY_CATALOG)
+        from(Endpoint.VOLLEY_CATALOG.getInstruction())
                 .log("Begin processing : Get Volley catalog")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
@@ -34,7 +34,7 @@ public class CallExternalPartners extends RouteBuilder {
                 .process(readResponseStream)
                 .log("${body}");
 
-        from(Endpoints.BEER_CATALOG)
+        from(Endpoint.BEER_CATALOG.getInstruction())
                 .log("Begin processing : Get Beer catalog")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))

@@ -1,6 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows;
 
-import fr.unice.polytech.soa1.shop3000.utils.Endpoints;
+import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -10,16 +10,16 @@ public class GetCatalogs extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from(Endpoints.CATALOG_TEST)
+        from(Endpoint.CATALOG_TEST.getInstruction())
                 .log("Start get catalog Processing")
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy())
                     .parallelProcessing()
                     .log("Test parallele processing")
                     .log("Seconde test")
-                    .to(Endpoints.BIKO_CATALOG)
-                    .to(Endpoints.VOLLEY_CATALOG)
-                    .to(Endpoints.BEER_CATALOG)
+                    .to(Endpoint.BIKO_CATALOG.getInstruction())
+                    .to(Endpoint.VOLLEY_CATALOG.getInstruction())
+                    .to(Endpoint.BEER_CATALOG.getInstruction())
                     .end()
                     .log("${body}");
 
