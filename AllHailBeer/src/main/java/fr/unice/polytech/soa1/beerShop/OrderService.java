@@ -23,11 +23,6 @@ public class OrderService extends BaseService{
     @Path("/all")
     public Response getAllOrders() {
 
-        /*
-        //Hardcore logging
-        System.out.println("GET /orders/all");
-        */
-
         JSONArray result = new JSONArray();
         for(Map.Entry<Long, Order> entry: OrderData.getData().entrySet()) {
             result.put(entryToJson(entry));
@@ -39,12 +34,6 @@ public class OrderService extends BaseService{
     @GET
     @Path("/{orderId}")
     public Response getOrder(@PathParam("orderId") Long orderId, @QueryParam("username") String username, @QueryParam("password") String password) {
-
-        /*
-        //Hardcore logging
-        System.out.println("GET /{orderId} with {orderId}=" + orderId + ".");
-        System.out.println("Result : " + OrderData.get(orderId));
-        */
 
         //Bad user and password association
         if (!authenticate(username, password) ){

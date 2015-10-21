@@ -26,10 +26,7 @@ public class BeersService extends BaseService{
     @GET
     @Path("/all")
     public Response getAllBeers (@DefaultValue("") @QueryParam("username") String username){
-        /*
-        //Hardcore logging
-        System.out.println("GET /beers/all");
-        */
+
         JSONArray result = new JSONArray();
         for(Map.Entry<String, Beer> entry: BeerData.getData().entrySet()) {
             if (entry.getValue().getUser().equals("") || entry.getValue().getUser().equals(username)){
@@ -42,11 +39,6 @@ public class BeersService extends BaseService{
     @Path("/{id}")
     @GET
     public Response getBeer (@PathParam("id") String beerName, @DefaultValue("") @QueryParam("username") String username){
-
-        /*
-        //Hardcore logging
-        System.out.println("GET /beers/" + beerName + "?username=" + username);
-        */
 
         JSONArray result = new JSONArray();
         for(Map.Entry<String, Beer> entry: BeerData.getData().entrySet()) {
@@ -62,10 +54,7 @@ public class BeersService extends BaseService{
     @Path("/new")
     public Response createBeer(String beerName, @DefaultValue("") @QueryParam("username") String username){
         ObjectMapper mapper = new ObjectMapper();
-        /*
-        //Hardcore logging
-        System.out.println("POST /beers/new?username=" + username + "--- with " + beerName);
-        */
+
         try {
             Beer beer = mapper.readValue(beerName,Beer.class);
             for (Map.Entry<String, Account> entry : AccountData.getData().entrySet()){
@@ -86,11 +75,6 @@ public class BeersService extends BaseService{
     @Path("/{id}")
     public Response deleteBeer (@PathParam("id") String beerName, @QueryParam("username") String username){
 
-        /*
-        //Hardcore logging
-        System.out.println("DELETE /beers/" + beerName + "?username=" + username);
-        */
-
         for(Map.Entry<String, Beer> entry: BeerData.getData().entrySet()) {
             if (entry.getValue().getUser().equals(username) && entry.getValue().getName().equals(beerName)){
                 BeerData.delete(entry.getValue());
@@ -103,11 +87,6 @@ public class BeersService extends BaseService{
     @PUT
     public Response updateBeer (String beerUpdated, @QueryParam("username") String username) {
         ObjectMapper mapper = new ObjectMapper();
-
-        /*
-        //Hardcore logging
-        System.out.println("PUT /beers/?username=" + username + " --- with " + beerUpdated);
-        */
 
         try {
             Beer beer = mapper.readValue(beerUpdated,Beer.class);
