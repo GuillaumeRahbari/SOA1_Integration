@@ -26,11 +26,6 @@ public class AccountService extends BaseService {
     @GET
     public Response getAllAccount(@QueryParam("compte") String admin) {
 
-        /*
-        //Hardcore logging
-        System.out.println("GET /account/all");
-        */
-
         if (!AccountData.getData().containsKey(admin)){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -48,10 +43,7 @@ public class AccountService extends BaseService {
     @POST
     public Response createAccount(String account){
         ObjectMapper mapper = new ObjectMapper();
-        /*
-        //Hardcore logging
-        System.out.println("POST /account --- with " + account);
-        */
+
         try {
             Account account1 = mapper.readValue(account,Account.class);
             System.out.println("cc");
@@ -75,9 +67,6 @@ public class AccountService extends BaseService {
     @GET
     public Response getAccount(@PathParam("name") String name, @PathParam("password") String password) {
 
-        /*//Hardcore logging
-        System.out.println("GET /account/{"+ name+"}/{"+password+"}");
-        */
         JSONArray result = new JSONArray();
         for(Map.Entry<String, Account> entry: AccountData.getData().entrySet()) {
             if (entry.getValue().getUsername().equals(name) && entry.getValue().getPassword().equals(password)){
@@ -92,9 +81,6 @@ public class AccountService extends BaseService {
     @Path("/{id}")
     public Response deleteAccount (@PathParam("id") String accountName, @QueryParam("username") String username){
 
-        /*//Hardcore logging
-        System.out.println("DELETE /account/" + accountName + "?username=" + username);
-        */
         for(Map.Entry<String, Account> entry: AccountData.getData().entrySet()) {
             if (entry.getValue().getUsername().equals(username) && entry.getValue().getUsername().equals(accountName)){
                 AccountData.delete(entry.getValue());
@@ -108,10 +94,7 @@ public class AccountService extends BaseService {
     @Path("/")
     public Response updateAccount (String accountUpdated, @QueryParam("username") String username) {
         ObjectMapper mapper = new ObjectMapper();
-        /*
-        //Hardcore logging
-        System.out.println("PUT /beers/?username=" + username + " --- with " + accountUpdated);
-        */
+
         try {
             Account account = mapper.readValue(accountUpdated,Account.class);
             for(Map.Entry<String, Account> entry: AccountData.getData().entrySet()) {
