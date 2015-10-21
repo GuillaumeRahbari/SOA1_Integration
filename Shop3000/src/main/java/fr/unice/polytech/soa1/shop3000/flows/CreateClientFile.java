@@ -16,10 +16,13 @@ public class CreateClientFile extends RouteBuilder {
     /**
      * This class create a process that will mock the fact we don't have a real input and put a fake client in the body.
      */
-    private ClientFileMock clientFileMock = new ClientFileMock();
+    private ClientFileMock clientFileMock;
+    private AddClientToDataBase addClientToDataBase;
 
-    private AddClientToDataBase addClientToDataBase = new AddClientToDataBase();
-
+    public CreateClientFile() {
+        this.clientFileMock = new ClientFileMock();
+        this.addClientToDataBase = new AddClientToDataBase();
+    }
 
     @Override
     public void configure() throws Exception {
@@ -37,7 +40,9 @@ public class CreateClientFile extends RouteBuilder {
                 .log("Begin process to add the client in the database")
                 .process(addClientToDataBase)
                 .log("Client added to the database")
-                .log("End of the process");
+                .log("End of the process")
+                .to(Endpoints.CATALOG_TEST);
+
 
     }
 }
