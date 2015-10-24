@@ -10,7 +10,7 @@ public class GetCatalogs extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from(Endpoint.CATALOG_TEST.getInstruction())
+        from(Endpoint.GET_CATALOG.getInstruction())
                 .log("Start get catalog Processing")
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy())

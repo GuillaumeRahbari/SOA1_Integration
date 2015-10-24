@@ -40,8 +40,8 @@ public class CreateClientFile extends RouteBuilder {
                 .log("Begin process to add the client in the database")
                 .process(addClientToDataBase)
                 .log("Client added to the database")
-                .log("End of the process")
-                .to(Endpoint.CATALOG_TEST.getInstruction());
+                .log("End of the process");
+              //  .to(Endpoint.GET_CATALOG.getInstruction());
 
 
     }

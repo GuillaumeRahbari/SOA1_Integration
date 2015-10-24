@@ -7,9 +7,9 @@ package fr.unice.polytech.soa1.shop3000.utils;
  */
 public enum Endpoint {
 
-    CLIENT_FILE_INPUT("file:camel/input"),
+    CLIENT_FILE_INPUT("file:camel/input/client_file"),
     CLIENT_DATABASE("direct:checkClient"),
-    CATALOG_TEST("direct:catalog"),
+    GET_CATALOG("file:camel/input/get_catalog"),
     BIKO_CATALOG("direct:bikoCatalog"),
     VOLLEY_CATALOG("direct:volleyCatalog"),
     BEER_CATALOG("direct:beerCatalog");
