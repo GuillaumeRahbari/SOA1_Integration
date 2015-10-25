@@ -22,7 +22,7 @@ public class CallExternalPartners extends RouteBuilder {
                 .log("Begin processing : Get Biko catalog")
                 .setHeader(Exchange.HTTP_METHOD,constant("GET"))
                 .setBody(constant(""))
-                .to("http://localhost:8181/cxf/biko/catalog")
+                .to("http://localhost:8181/cxf/biko/catalog?bridgeEndpoint=true")
                 .process(readResponseStream)
                 .log("${body}");
 
@@ -30,7 +30,7 @@ public class CallExternalPartners extends RouteBuilder {
                 .log("Begin processing : Get Volley catalog")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .to("http://localhost:8181/cxf/volley/catalog")
+                .to("http://localhost:8181/cxf/volley/catalog?bridgeEndpoint=true")
                 .process(readResponseStream)
                 .log("${body}");
 
@@ -38,7 +38,7 @@ public class CallExternalPartners extends RouteBuilder {
                 .log("Begin processing : Get Beer catalog")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .to("http://localhost:8181/cxf/shop/beers/all")
+                .to("http://localhost:8181/cxf/shop/beers/all?bridgeEndpoint=true")
                 .process(readResponseStream)
                 .log("${body}");
     }

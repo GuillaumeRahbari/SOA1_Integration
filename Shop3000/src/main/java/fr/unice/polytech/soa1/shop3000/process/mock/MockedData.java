@@ -9,4 +9,7 @@ public interface MockedData {
 
     String CLIENT_FIRST_NAME = "ClientFirstName";
     String CLEINT_LAST_NAME = "ClientLastName";
+
+    String ITEM_NAME = "MockedItem";
+    int ITEM_PRICE = 0;
 }

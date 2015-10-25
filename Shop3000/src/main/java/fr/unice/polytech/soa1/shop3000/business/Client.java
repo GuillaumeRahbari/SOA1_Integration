@@ -9,10 +9,12 @@ public class Client {
 
     private String firstName;
     private String lastName;
+    private Cart cart;
 
     public Client(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.cart = new Cart();
     }
 
     public String getFirstName() {
@@ -29,5 +31,13 @@ public class Client {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }
