@@ -20,22 +20,11 @@ public class CartFlows extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-            from(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .log("Begin add item to cart")
-                    .process(itemMock)
-                    .log("Client and item mocked in the exchange")
-                    .process(addItemToCart)
-                    .log("Item added to cart");
-
-
-
-
-
-
-            from(Endpoint.VALIDATE_CART.getInstruction())
-                    .log("Begin validate cart")
-                    .choice()
-                        .when();
-
-            }
+        from(Endpoint.ADD_ITEM_CART.getInstruction())
+                .log("Begin add item to cart")
+                .process(itemMock)
+                .log("Client and item mocked in the exchange")
+                .process(addItemToCart)
+                .log("Item added to cart");
+    }
 }
