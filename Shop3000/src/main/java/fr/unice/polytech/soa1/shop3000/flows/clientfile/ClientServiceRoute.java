@@ -16,7 +16,7 @@ public class ClientServiceRoute extends RouteBuilder{
         restConfiguration().component("servlet"); // feature:install camel-servlet + edit in the OSGi blueprint
 
         // Defining the resource to expose, and the used verb
-        rest("/clientFile/create")
+        rest("/clientFile")
                 .post()
                 .to(Endpoint.CLIENT_FILE_INPUT.getInstruction())
 
