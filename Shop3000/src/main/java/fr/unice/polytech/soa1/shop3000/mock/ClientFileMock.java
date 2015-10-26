@@ -11,6 +11,9 @@ import org.apache.camel.Processor;
  */
 public class ClientFileMock implements Processor {
 
+    private String name;
+
+
     /**
      * In this method we get a validate client with the mock.
      * And we set the "client" property with this validate client.
