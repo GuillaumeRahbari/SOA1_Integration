@@ -11,6 +11,7 @@ public class CartFlows extends RouteBuilder {
 
     private ItemMock itemMock;
     private AddItemToCart addItemToCart;
+    private CheckClientExistance checkClientExistance;
 
     public CartFlows() {
         this.itemMock = new ItemMock();
@@ -32,5 +33,16 @@ public class CartFlows extends RouteBuilder {
                     .choice()
                         .when();
 
+            from(Endpoint.CHECK_CLIENT.getInstruction())
+                    .log("Begin check client")
+                    .process(checkClientExistance)
+                    .choice()
+                        .when(simple("${header.result} == true"))
+                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                        .when(simple("${header.result} == false"))
+                            .process(addClient)
+                            .to(Endpoint.ADD_ITEM_CART.getInstruction());
             }
+
+
 }
