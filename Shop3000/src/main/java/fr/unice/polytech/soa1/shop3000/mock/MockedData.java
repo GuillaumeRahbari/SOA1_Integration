@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.process.mock;
+package fr.unice.polytech.soa1.shop3000.mock;
 
 /**
  * @author Quentin Cornevin

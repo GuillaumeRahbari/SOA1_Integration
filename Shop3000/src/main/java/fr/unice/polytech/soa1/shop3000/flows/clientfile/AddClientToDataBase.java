@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.process;
+package fr.unice.polytech.soa1.shop3000.flows.clientfile;
 
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;

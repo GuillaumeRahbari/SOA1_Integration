@@ -1,8 +1,7 @@
-package fr.unice.polytech.soa1.shop3000.flows;
+package fr.unice.polytech.soa1.shop3000.flows.clientfile;
 
 import fr.unice.polytech.soa1.shop3000.filter.ClientRegistered;
-import fr.unice.polytech.soa1.shop3000.process.AddClientToDataBase;
-import fr.unice.polytech.soa1.shop3000.process.mock.ClientFileMock;
+import fr.unice.polytech.soa1.shop3000.mock.ClientFileMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
 

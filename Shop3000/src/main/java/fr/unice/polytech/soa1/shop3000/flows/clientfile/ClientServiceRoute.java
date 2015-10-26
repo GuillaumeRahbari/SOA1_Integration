@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.flows.route;
+package fr.unice.polytech.soa1.shop3000.flows.clientfile;
 
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;

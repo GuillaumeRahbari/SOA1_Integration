@@ -1,7 +1,6 @@
-package fr.unice.polytech.soa1.shop3000.flows;
+package fr.unice.polytech.soa1.shop3000.flows.cart;
 
-import fr.unice.polytech.soa1.shop3000.process.AddItemToCart;
-import fr.unice.polytech.soa1.shop3000.process.mock.ItemMock;
+import fr.unice.polytech.soa1.shop3000.mock.ItemMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
 
@@ -27,7 +26,6 @@ public class CartFlows extends RouteBuilder {
                     .log("Client and item mocked in the exchange")
                     .process(addItemToCart)
                     .log("Item added to cart");
-
 
             from(Endpoint.VALIDATE_CART.getInstruction())
                     .log("Begin validate cart")

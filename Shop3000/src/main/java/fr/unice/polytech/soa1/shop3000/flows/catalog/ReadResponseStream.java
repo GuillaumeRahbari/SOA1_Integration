@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.process;
+package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

@@ -1,6 +1,5 @@
-package fr.unice.polytech.soa1.shop3000.flows;
+package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
-import fr.unice.polytech.soa1.shop3000.process.ReadResponseStream;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;

@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.flows.route;
+package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
@@ -15,6 +15,8 @@ public class CatalogServiceRoute extends RouteBuilder {
         rest("/catalog")
                 .get()
                 .to(Endpoint.GET_CATALOG.getInstruction());
+
+
     }
 
 }
