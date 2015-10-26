@@ -57,12 +57,8 @@ public class DaoUtils {
         }
         */
 
-
         String filePath = "data/"+dataFileName;
         String data = getData(filePath);
-
-        System.out.println("Loading " + dataFileName + ":\n\t" + data + "\n");
-
 
         try {
             return mapper.readValue(data, mapper.getTypeFactory().constructMapType(HashMap.class, keyType, valueType));

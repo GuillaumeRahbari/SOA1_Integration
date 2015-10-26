@@ -27,7 +27,6 @@ public class OrderService extends BaseService{
         for(Map.Entry<Long, Order> entry: OrderData.getData().entrySet()) {
             result.put(entryToJson(entry));
         }
-        System.out.println(CartData.getData().size());
         return Response.ok().entity(result.toString(2)).build();
     }
 

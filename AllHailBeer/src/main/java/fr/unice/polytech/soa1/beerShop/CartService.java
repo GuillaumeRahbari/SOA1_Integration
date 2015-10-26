@@ -38,7 +38,6 @@ public class CartService extends BaseService {
         for(Map.Entry<String, Cart> entry: CartData.getData().entrySet()) {
             result.put(entryToJson(entry));
         }
-        System.out.println(CartData.getData().size());
         return Response.ok().entity(result.toString(2)).build();
     }
 
@@ -56,8 +55,6 @@ public class CartService extends BaseService {
         if(result.length()>0){
             return Response.ok().entity(result.toString(2)).build();
         }
-
-        System.out.println(result);
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
@@ -88,7 +85,6 @@ public class CartService extends BaseService {
             if (entry.getValue().getOwner().equals(user)){
                 Long orderId = OrderData.add(new Order(entry.getValue(),cb));
                 CartData.delete(entry.getValue());
-                System.out.println(orderId);
                 return  Response.ok().entity(orderId).build();
             }
         }
