@@ -11,6 +11,9 @@ import org.apache.camel.Processor;
  */
 public class ClientFileMock implements Processor {
 
+    private String name;
+
+
     /**
      * Body mocked with a fake client
      * @param exchange
