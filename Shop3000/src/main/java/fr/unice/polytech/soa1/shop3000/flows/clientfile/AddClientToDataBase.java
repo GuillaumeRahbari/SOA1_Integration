@@ -18,7 +18,7 @@ public class AddClientToDataBase implements Processor {
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
-        Client client = exchange.getIn().getBody(Client.class);
+        Client client = (Client)exchange.getProperty("client");
         ClientStorage.addClient(client);
         exchange.getIn().setBody("Client added to database");
     }

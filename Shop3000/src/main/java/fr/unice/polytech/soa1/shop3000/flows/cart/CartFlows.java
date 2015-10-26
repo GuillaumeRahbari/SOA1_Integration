@@ -37,7 +37,7 @@ public class CartFlows extends RouteBuilder {
                 .process(checkClientInDatabase)
                 /** If the client is in the database then the item is added to the mocked cart otherwise an error is sent **/
                 .choice()
-                    .when(simple("${body.firstName} == null && ${body.lastName} == null"))
+                    .when(simple("${property.client}"))
                         .log("Client already exist")
                         .log("Client and item mocked in the exchange")
                         .process(addItemToCart)
@@ -46,45 +46,43 @@ public class CartFlows extends RouteBuilder {
                         // TODO Ask mosser to send errors as 404.
                         .log("Error : The client doesn't exist");
 
-        /** This flow check if the client is in the HailBeer System :
-         *      - if the client is in the system then the item are add to the cart
-         *      - otherwise we add a client to their system
-         */
-        from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
-                .log("Begin check client")
-                .process(checkClientExistenceBeer)
-                .choice()
-                .when(simple("${header.result} == true"))
-                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .when(simple("${header.result} == false"))
-                        .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
-        /**
-         * This flow check if the client is in the biko system then add the
-         */
-        from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
-                .log("Begin check client")
-                .setHeader(Exchange.HTTP_METHOD,constant("GET"))
-                .setBody(constant(""))
-                .to("http://localhost:8181/cxf/biko/clients/name/user1?bridgeEndpoint=true")
-                .process(checkClientExistenceBiko)
-                .choice()
-                .when(simple("${header.result} == true"))
-                .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                .when(simple("${header.result} == false"))
-                .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
+            from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
+                    .log("Begin check client")
+                    .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                    .setBody(constant(""))
+                    .to("http://localhost:8181/cxf/beers/account/{name}/{password}?bridgeEndpoint=true")
+                    .process(checkClientExistenceBeer)
+                    .choice()
+                        .when(simple("${header.result} == true"))
+                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                        .when(simple("${header.result} == false"))
+                            .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
-        /**
-         * This glow check if the client is in the volley system. if the client is in the system then the items are add in
-         * the cart of the volley store otherwise an error is sent.
-         */
-        from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
-                .log("Begin check client")
-                .process(checkClientExistenceVolley)
-                .choice()
-                    .when(simple("${header.result} == true"))
-                .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .when(simple("${header.result} == false"))
-                .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
-    }
+            from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
+                    .log("Begin check client")
+                    .setHeader(Exchange.HTTP_METHOD,constant("GET"))
+                    .setBody(constant(""))
+                    .to("http://localhost:8181/cxf/biko/clients/name/{name}?bridgeEndpoint=true")
+                    .process(checkClientExistenceBiko)
+                    .choice()
+                        .when(simple("${header.result} == true"))
+                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                        .when(simple("${header.result} == false"))
+                            .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
+
+            from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                    .log("Begin check client")
+                    .setHeader(Exchange.HTTP_METHOD,constant("GET"))
+                    .setBody(constant(""))
+                    .to("http://localhost:8181/cxf/volley/accounts/{name}?bridgeEndpoint=true")
+                    .process(checkClientExistenceVolley)
+                    .choice()
+                        .when(simple("${header.result} == true"))
+                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                        .when(simple("${header.result} == false"))
+                            .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
+            }
+
+
 }
