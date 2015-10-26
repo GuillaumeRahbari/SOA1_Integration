@@ -7,7 +7,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
 
 /**
- * Created by Quentin on 10/21/2015.
+ * @author Quentin Cornevin
+ * These flows calls the shops' services to get their catalog and formats the results
  */
 public class CallExternalPartners extends RouteBuilder {
 
@@ -24,6 +25,7 @@ public class CallExternalPartners extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        // Gets the Biko shop's catalog and formats the json to add the shop name
         from(Endpoint.BIKO_CATALOG.getInstruction())
                 .log("Begin processing : Get Biko catalog")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
@@ -34,6 +36,7 @@ public class CallExternalPartners extends RouteBuilder {
                 .process(readResponseStreamBiko)
                 .log("${body}");
 
+        // Gets the VolleyOnTheBeach shop's catalog and formats the json to add the shop name
         from(Endpoint.VOLLEY_CATALOG.getInstruction())
                 .log("Begin processing : Get Volley catalog")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
@@ -44,6 +47,7 @@ public class CallExternalPartners extends RouteBuilder {
                 .process(readResponseStreamVolley)
                 .log("${body}");
 
+        // Gets the AllHailBeer shop's catalog and formats the json to add the shop name
         from(Endpoint.BEER_CATALOG.getInstruction())
                 .log("Begin processing : Get Beer catalog")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))

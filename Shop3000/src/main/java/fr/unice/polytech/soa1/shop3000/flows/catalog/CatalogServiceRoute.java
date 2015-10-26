@@ -5,6 +5,7 @@ import org.apache.camel.builder.RouteBuilder;
 
 /**
  * Created by Quentin on 10/25/2015.
+ * This service allows to get a formatted catalog which is an aggregation of all the different shops' catalogs.
  */
 public class CatalogServiceRoute extends RouteBuilder {
 

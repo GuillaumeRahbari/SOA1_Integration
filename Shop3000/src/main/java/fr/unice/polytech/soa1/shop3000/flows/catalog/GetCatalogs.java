@@ -11,6 +11,7 @@ public class GetCatalogs extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        // This flow gets the different shops' catalogs and aggregates the results into one catalog
         from(Endpoint.GET_CATALOG.getInstruction())
                 .log("Start get catalog Processing")
                 .multicast()
