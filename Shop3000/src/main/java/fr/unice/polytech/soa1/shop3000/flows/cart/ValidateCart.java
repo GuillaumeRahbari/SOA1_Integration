@@ -14,6 +14,7 @@ public class ValidateCart extends RouteBuilder {
         from(Endpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
                 .log("body: ${body}")
+                // TODO extract payment info from body and set a property
                 .multicast()
                     .aggregationStrategy(new BooleanAndAggregationStrategy())
                     .log("multicasting")
@@ -25,6 +26,7 @@ public class ValidateCart extends RouteBuilder {
                     .log("merging")
                 .end()
                 .log("body: ${body}")
+                // TODO extract payment info from property and set body
                 .to(Endpoint.PAY.getInstruction());
     }
 }
