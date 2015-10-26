@@ -15,12 +15,16 @@ public class CartFlows extends RouteBuilder {
     private ItemMock itemMock;
     private AddItemToCart addItemToCart;
     private ReadResponseStream readResponseStream;
-    private CheckClientExistence checkClientExistence;
+    private CheckClientExistence checkClientExistenceBiko;
+    private CheckClientExistenceBeer checkClientExistenceBeer;
+    private CheckClientExistenceVolley checkClientExistenceVolley;
 
     public CartFlows() {
         this.itemMock = new ItemMock();
         this.addItemToCart = new AddItemToCart();
-        this.checkClientExistence = new CheckClientExistence("biko");
+        this.checkClientExistenceBiko = new CheckClientExistence("biko");
+        this.checkClientExistenceBeer = new CheckClientExistenceBeer();
+        this.checkClientExistenceVolley = new CheckClientExistenceVolley();
     }
 
 
@@ -45,7 +49,10 @@ public class CartFlows extends RouteBuilder {
 
             from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
                     .log("Begin check client")
-                    .process(checkClientExistence)
+                    .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                    .setBody(constant(""))
+                    .to("http://localhost:8181/cxf/beers/account/{name}/{password}?bridgeEndpoint=true")
+                    .process(checkClientExistenceBeer)
                     .choice()
                         .when(simple("${header.result} == true"))
                             .to(Endpoint.ADD_ITEM_CART.getInstruction())
@@ -56,8 +63,8 @@ public class CartFlows extends RouteBuilder {
                     .log("Begin check client")
                     .setHeader(Exchange.HTTP_METHOD,constant("GET"))
                     .setBody(constant(""))
-                    .to("http://localhost:8181/cxf/biko/clients/name/user1?bridgeEndpoint=true")
-                    .process(checkClientExistence)
+                    .to("http://localhost:8181/cxf/biko/clients/name/{name}?bridgeEndpoint=true")
+                    .process(checkClientExistenceBiko)
                     .choice()
                         .when(simple("${header.result} == true"))
                             .to(Endpoint.ADD_ITEM_CART.getInstruction())
@@ -66,7 +73,10 @@ public class CartFlows extends RouteBuilder {
 
             from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                     .log("Begin check client")
-                    .process(checkClientExistence)
+                    .setHeader(Exchange.HTTP_METHOD,constant("GET"))
+                    .setBody(constant(""))
+                    .to("http://localhost:8181/cxf/volley/accounts/{name}?bridgeEndpoint=true")
+                    .process(checkClientExistenceVolley)
                     .choice()
                         .when(simple("${header.result} == true"))
                             .to(Endpoint.ADD_ITEM_CART.getInstruction())
