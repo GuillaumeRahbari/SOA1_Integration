@@ -28,6 +28,11 @@ public class CartFlows extends RouteBuilder {
                     .process(addItemToCart)
                     .log("Item added to cart");
 
+
+
+
+
+
             from(Endpoint.VALIDATE_CART.getInstruction())
                     .log("Begin validate cart")
                     .choice()
