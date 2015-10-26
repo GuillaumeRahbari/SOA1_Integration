@@ -7,7 +7,9 @@
         http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd" >
 
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
-        <package>fr.unice.polytech.soa1.shop3000.flows</package>
+        <package>fr.unice.polytech.soa1.shop3000.flows.cart</package>
+        <package>fr.unice.polytech.soa1.shop3000.flows.catalog</package>
+        <package>fr.unice.polytech.soa1.shop3000.flows.clientfile</package>
     </camelContext>
 
 
