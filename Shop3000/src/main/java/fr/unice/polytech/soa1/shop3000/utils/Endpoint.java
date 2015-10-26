@@ -18,6 +18,7 @@ public enum Endpoint {
     ADD_TO_CART_VOLLEY_ON_THE_BEACH("direct:addToCartVolleyOnTheBeach"),
     ADD_TO_CART_BIKO("direct:addToCartBiko"),
     ADD_TO_CART_ALL_HAIL_BEER("direct:addToCartAllHailBeer"),
+    PAY("direct:pay"),
     CHECK_CLIENT_BEER("direct:checkClientBeer"),
     CHECK_CLIENT_BIKO("direct:checkClientBiko"),
     CHECK_CLIENT_VOLLEY("direct:checkClientVolley");

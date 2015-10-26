@@ -1,7 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
 import fr.unice.polytech.soa1.shop3000.flows.catalog.ReadResponseStream;
-import fr.unice.polytech.soa1.shop3000.flows.clientfile.AddClientToDataBase;
+import fr.unice.polytech.soa1.shop3000.flows.clientfile.CheckClientInDatabase;
 import fr.unice.polytech.soa1.shop3000.mock.ItemMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.Exchange;
@@ -14,10 +14,10 @@ public class CartFlows extends RouteBuilder {
 
     private ItemMock itemMock;
     private AddItemToCart addItemToCart;
-    private ReadResponseStream readResponseStream;
     private CheckClientExistence checkClientExistenceBiko;
     private CheckClientExistenceBeer checkClientExistenceBeer;
     private CheckClientExistenceVolley checkClientExistenceVolley;
+    private CheckClientInDatabase checkClientInDatabase;
 
     public CartFlows() {
         this.itemMock = new ItemMock();
@@ -33,6 +33,14 @@ public class CartFlows extends RouteBuilder {
             from(Endpoint.ADD_ITEM_CART.getInstruction())
                     .log("Begin add item to cart")
                     .process(itemMock)
+                    .process(checkClientInDatabase)
+                    .choice()
+                        .when(simple("${body.firstName} == null && ${body.lastName} == null"))
+                            .log("Client already exist")
+                        .otherwise()
+                            .log("The client doesn't exist")
+                            .log("Begin process to add the client in the database")
+                            .log("Client added to the database")
                     .log("Client and item mocked in the exchange")
                     .process(addItemToCart)
                     .log("Item added to cart");
