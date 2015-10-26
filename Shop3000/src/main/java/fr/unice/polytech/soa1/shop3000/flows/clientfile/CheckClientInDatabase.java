@@ -13,13 +13,18 @@ public class CheckClientInDatabase implements Processor {
 
     /**
      * Check if the client exists in the db.
-     * @param exchange A client containing a firstName, lastName, and a cart.
+     *
+     * @param exchange A client contains a firstName, lastName, and a cart.
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
+        // We get a client by the "client" property
         Client client = (Client)exchange.getProperty("client");
+        // We check if he exists in db.
         if (ClientStorage.checkInDB(client)) {
-           exchange.setProperty("client", null);
+            // if he is, we set the property "client" to null.
+            exchange.setProperty("client", null);
         }
+        // else we do nothing to have the "client" property equal to the client.
     }
 }
