@@ -47,42 +47,55 @@ public class CartFlows extends RouteBuilder {
                         .log("Error : The client doesn't exist");
 
 
-            from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
-                    .log("Begin check client")
-                    .setHeader(Exchange.HTTP_METHOD, constant("GET"))
-                    .setBody(constant(""))
-                    .to("http://localhost:8181/cxf/beers/account/{name}/{password}?bridgeEndpoint=true")
-                    .process(checkClientExistenceBeer)
-                    .choice()
-                        .when(simple("${header.result} == true"))
-                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                        .when(simple("${header.result} == false"))
-                            .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
+        /**
+         * This flow check if the client is already registered in the HailBeer system.
+         * If the client is not registered then we create the client in the system.
+         * And finally we add the item to the cart
+         */
+        from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
+                .log("Begin check client")
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .setBody(constant(""))
+                .to("http://localhost:8181/cxf/beers/account/{name}/{password}?bridgeEndpoint=true")
+                .process(checkClientExistenceBeer)
+                .choice()
+                    .when(simple("${header.result} == true"))
+                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                    .when(simple("${header.result} == false"))
+                        .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
-            from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
-                    .log("Begin check client")
-                    .setHeader(Exchange.HTTP_METHOD,constant("GET"))
-                    .setBody(constant(""))
-                    .to("http://localhost:8181/cxf/biko/clients/name/{name}?bridgeEndpoint=true")
-                    .process(checkClientExistenceBiko)
-                    .choice()
-                        .when(simple("${header.result} == true"))
-                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                        .when(simple("${header.result} == false"))
-                            .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
+        /**
+         * This flow check if the client is in the biko system, if not we create the client in the system and then
+         * we add the items to the the cart.
+         */
+        from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
+                .log("Begin check client")
+                .setHeader(Exchange.HTTP_METHOD,constant("GET"))
+                .setBody(constant(""))
+                .to("http://localhost:8181/cxf/biko/clients/name/{name}?bridgeEndpoint=true")
+                .process(checkClientExistenceBiko)
+                .choice()
+                    .when(simple("${header.result} == true"))
+                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                    .when(simple("${header.result} == false"))
+                        .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
 
-            from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
-                    .log("Begin check client")
-                    .setHeader(Exchange.HTTP_METHOD,constant("GET"))
-                    .setBody(constant(""))
-                    .to("http://localhost:8181/cxf/volley/accounts/{name}?bridgeEndpoint=true")
-                    .process(checkClientExistenceVolley)
-                    .choice()
-                        .when(simple("${header.result} == true"))
-                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                        .when(simple("${header.result} == false"))
-                            .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
-            }
+        /**
+         * This flow check if client is already registered in the volley system. Create the client otherwise.
+         * Then add the items to the cart.
+         */
+        from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                .log("Begin check client")
+                .setHeader(Exchange.HTTP_METHOD,constant("GET"))
+                .setBody(constant(""))
+                .to("http://localhost:8181/cxf/volley/accounts/{name}?bridgeEndpoint=true")
+                .process(checkClientExistenceVolley)
+                .choice()
+                    .when(simple("${header.result} == true"))
+                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                    .when(simple("${header.result} == false"))
+                        .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
+        }
 
 
 }
