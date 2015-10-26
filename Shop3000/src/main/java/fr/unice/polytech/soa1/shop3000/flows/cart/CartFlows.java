@@ -1,7 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
 import fr.unice.polytech.soa1.shop3000.flows.catalog.ReadResponseStream;
-import fr.unice.polytech.soa1.shop3000.flows.clientfile.AddClientToDataBase;
 import fr.unice.polytech.soa1.shop3000.mock.ItemMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.Exchange;
