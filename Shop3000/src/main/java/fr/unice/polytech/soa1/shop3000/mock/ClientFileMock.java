@@ -18,6 +18,6 @@ public class ClientFileMock implements Processor {
      */
     public void process(Exchange exchange) throws Exception {
         Client goodClient = new Client(MockedData.CLIENT_FIRST_NAME,MockedData.CLEINT_LAST_NAME);
-        exchange.getIn().setBody(goodClient);
+        exchange.setProperty("client", goodClient);
     }
 }
