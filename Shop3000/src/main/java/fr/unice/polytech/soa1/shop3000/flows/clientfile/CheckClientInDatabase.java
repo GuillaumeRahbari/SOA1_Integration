@@ -6,20 +6,23 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 /**
- * @author Quentin Cornevin
- *
- * This process add a client to the database
+ * Created by guillaume on 26/10/2015.
  */
-public class AddClientToDataBase implements Processor {
+public class CheckClientInDatabase implements Processor {
+
 
     /**
-     * This method add the client in the database
-     * @param exchange
+     * Check if the client exists in the db.
+     * @param exchange A client containing a firstName, lastName, and a cart.
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
         Client client = exchange.getIn().getBody(Client.class);
-        ClientStorage.addClient(client);
-        exchange.getIn().setBody("Client added to database");
+        if (ClientStorage.checkInDB(client)) {
+           exchange.getIn().setBody(new Client(null, null));
+        }
+        else {
+            exchange.getIn().setBody(client);
+        }
     }
 }
