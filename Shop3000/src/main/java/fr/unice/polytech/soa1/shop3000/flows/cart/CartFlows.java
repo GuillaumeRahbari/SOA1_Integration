@@ -1,6 +1,5 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
-import fr.unice.polytech.soa1.shop3000.flows.catalog.ReadResponseStream;
 import fr.unice.polytech.soa1.shop3000.flows.clientfile.CheckClientInDatabase;
 import fr.unice.polytech.soa1.shop3000.mock.ItemMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
@@ -31,12 +30,14 @@ public class CartFlows extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        /** This flow start the flow to add an item to the cart of a mocked client added in the itemMock **/
         from(Endpoint.ADD_ITEM_CART.getInstruction())
                 .log("Begin add item to cart")
                 .process(itemMock)
                 .process(checkClientInDatabase)
+                /** If the client is in the database then the item is added to the mocked cart otherwise an error is sent **/
                 .choice()
-                    .when(simple("${body.firstName} == null && ${body.lastName} == null"))
+                    .when(simple("${property.client}"))
                         .log("Client already exist")
                         .log("Client and item mocked in the exchange")
                         .process(addItemToCart)
@@ -45,15 +46,6 @@ public class CartFlows extends RouteBuilder {
                         // TODO Ask mosser to send errors as 404.
                         .log("Error : The client doesn't exist");
 
-
-
-        
-
-
-            from(Endpoint.VALIDATE_CART.getInstruction())
-                    .log("Begin validate cart")
-                    .choice()
-                        .when();
 
             from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
                     .log("Begin check client")

@@ -37,7 +37,7 @@ public class CreateClientFile extends RouteBuilder {
                 .log("Begin of the filter, it is the last step if the client is already in the database")
                 .process(checkClientInDatabase)
                 .choice()
-                    .when(simple("${body.firstName} == null && ${body.lastName} == null"))
+                    .when(simple("${property.client} == null"))
                             .log("Client already exist")
                     .otherwise()
                             .log("The client doesn't exist")
