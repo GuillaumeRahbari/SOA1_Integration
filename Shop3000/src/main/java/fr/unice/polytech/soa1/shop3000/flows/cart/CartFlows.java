@@ -25,29 +25,29 @@ public class CartFlows extends RouteBuilder {
         this.checkClientExistenceBiko = new CheckClientExistence("biko");
         this.checkClientExistenceBeer = new CheckClientExistenceBeer();
         this.checkClientExistenceVolley = new CheckClientExistenceVolley();
+        this.checkClientInDatabase = new CheckClientInDatabase();
     }
 
 
     @Override
     public void configure() throws Exception {
-            from(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .log("Begin add item to cart")
-                    .process(itemMock)
-                    .process(checkClientInDatabase)
-                    .choice()
-                        .when(simple("${body.firstName} == null && ${body.lastName} == null"))
-                            .log("Client already exist")
-                        .otherwise()
-                            .log("The client doesn't exist")
-                            .log("Begin process to add the client in the database")
-                            .log("Client added to the database")
-                    .log("Client and item mocked in the exchange")
-                    .process(addItemToCart)
-                    .log("Item added to cart");
+        from(Endpoint.ADD_ITEM_CART.getInstruction())
+                .log("Begin add item to cart")
+                .process(itemMock)
+                .process(checkClientInDatabase)
+                .choice()
+                    .when(simple("${body.firstName} == null && ${body.lastName} == null"))
+                        .log("Client already exist")
+                        .log("Client and item mocked in the exchange")
+                        .process(addItemToCart)
+                        .log("Item added to cart")
+                    .otherwise()
+                        // TODO Ask mosser to send errors as 404.
+                        .log("Error : The client doesn't exist");
 
 
 
-
+        
 
 
             from(Endpoint.VALIDATE_CART.getInstruction())

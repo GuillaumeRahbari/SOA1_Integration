@@ -16,13 +16,7 @@ public class AddItemToCart implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         Client client = exchange.getIn().getBody(Client.class);
-        if (client != null) {
-            System.out.println("Got a client : " + client);
-        }else System.out.println("No client");
         CatalogItem catalogItem = exchange.getIn().getBody(CatalogItem.class);
-        if (catalogItem != null) {
-            System.out.printf("Got a catalogItem : " + catalogItem);
-        }else System.out.println("No catalogItem");
 
 
         String shop = "ShopTest";//exchange.getIn();

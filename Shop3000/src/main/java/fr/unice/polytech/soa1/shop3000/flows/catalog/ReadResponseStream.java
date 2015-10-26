@@ -12,12 +12,20 @@ import java.io.InputStreamReader;
  */
 public class ReadResponseStream implements Processor {
 
+    private String shopName;
+
+    public ReadResponseStream(String shopName){
+        this.shopName = shopName;
+    }
+
     public void process(Exchange exchange) throws Exception {
         InputStream response = (InputStream) exchange.getIn().getBody();
         BufferedReader reader = new BufferedReader(new InputStreamReader(response));
         StringBuilder out = new StringBuilder();
+        out.append("{\"shopName\":\""+shopName+"\",\"items\":");
         String line;
         while ((line = reader.readLine()) != null) { out.append(line); }
+        out.append("}");
         reader.close();
         exchange.getIn().setBody(out.toString());
     }
