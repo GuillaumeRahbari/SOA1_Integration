@@ -14,7 +14,8 @@ public enum Endpoint {
     VOLLEY_CATALOG("direct:volleyCatalog"),
     BEER_CATALOG("direct:beerCatalog"),
     ADD_ITEM_CART("direct:addItemCart"),
-    VALIDATE_CART("direct:validateCart");
+    VALIDATE_CART("direct:validateCart"),
+    CHECK_CLIENT("direct:checkClient");
 
     private String instruction;
 
