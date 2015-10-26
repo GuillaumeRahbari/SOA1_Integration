@@ -1,25 +1,21 @@
-package fr.unice.polytech.soa1.shop3000.flows.clientfile;
+package fr.unice.polytech.soa1.shop3000.flows.cart;
 
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
- * Created by Quentin on 10/24/2015.
+ * Created by tom on 26/10/15.
  */
-public class ClientServiceRoute extends RouteBuilder{
-
+public class AddItemToCartRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-
         // Binding the REST domain specific language to the Servlet component
         restConfiguration().component("servlet"); // feature:install camel-servlet + edit in the OSGi blueprint
 
         // Defining the resource to expose, and the used verb
-        rest("/clientFile")
-                .post()
-                .to(Endpoint.CLIENT_FILE_INPUT.getInstruction())
-
-        ;
+        rest("/cart")
+                .put()
+                .to(Endpoint.ADD_ITEM_CART.getInstruction());
     }
 }
