@@ -46,11 +46,9 @@ public class AccountService extends BaseService {
 
         try {
             Account account1 = mapper.readValue(account,Account.class);
-            System.out.println("cc");
             if (AccountData.getData().containsKey(account1.getUsername())) {
                 return Response.status(Response.Status.CONFLICT).build();
             }else{
-                System.out.println("cc2");
                 AccountData.add(account1);
                 return  Response.ok().build();
             }
