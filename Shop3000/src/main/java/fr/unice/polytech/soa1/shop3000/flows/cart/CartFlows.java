@@ -27,20 +27,20 @@ public class CartFlows extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-            from(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .log("Begin add item to cart")
-                    .process(itemMock)
-                    .process(checkClientInDatabase)
-                    .choice()
-                        .when(simple("${body.firstName} == null && ${body.lastName} == null"))
-                            .log("Client already exist")
-                        .otherwise()
-                            .log("The client doesn't exist")
-                            .log("Begin process to add the client in the database")
-                            .log("Client added to the database")
-                    .log("Client and item mocked in the exchange")
-                    .process(addItemToCart)
-                    .log("Item added to cart");
+        from(Endpoint.ADD_ITEM_CART.getInstruction())
+                .log("Begin add item to cart")
+                .process(itemMock);
+                // TODO regler porbleme avec le process suivant. Bug sans savoir pk.
+                /*.process(checkClientInDatabase)
+                .choice()
+                    .when(simple("${body.firstName} == null && ${body.lastName} == null"))
+                        .log("Client already exist")
+                        .log("Client and item mocked in the exchange")
+                        .process(addItemToCart)
+                        .log("Item added to cart")
+                    .otherwise()
+                        // TODO Ask mosser to send errors as 404.
+                        .log("Error : The client doesn't exist");*/
 
 
 
@@ -48,7 +48,7 @@ public class CartFlows extends RouteBuilder {
                 .log("Begin check client")
                 .process(checkClientExistence)
                 .choice()
-                    .when(simple("${header.result} == true"))
+                .when(simple("${header.result} == true"))
                         .to(Endpoint.ADD_ITEM_CART.getInstruction())
                     .when(simple("${header.result} == false"))
                         .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
