@@ -44,19 +44,15 @@ public class CartFlows extends RouteBuilder {
                     .log("Item added to cart");
 
 
-        from(Endpoint.VALIDATE_CART.getInstruction())
-                .log("Begin validate cart")
-                .choice()
-                .when();
 
         from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
-                    .log("Begin check client")
-                    .process(checkClientExistence)
-                    .choice()
-                        .when(simple("${header.result} == true"))
-                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                        .when(simple("${header.result} == false"))
-                            .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
+                .log("Begin check client")
+                .process(checkClientExistence)
+                .choice()
+                    .when(simple("${header.result} == true"))
+                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                    .when(simple("${header.result} == false"))
+                        .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
         from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
                 .log("Begin check client")
