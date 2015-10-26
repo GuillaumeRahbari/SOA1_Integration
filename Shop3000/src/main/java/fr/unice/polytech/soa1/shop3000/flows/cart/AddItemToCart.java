@@ -15,15 +15,13 @@ public class AddItemToCart implements Processor {
 
     public void process(Exchange exchange) throws Exception {
 
-        Client client = exchange.getIn().getBody(Client.class);
-        CatalogItem catalogItem = exchange.getIn().getBody(CatalogItem.class);
+        Client client = (Client)exchange.getProperty("client");
+        CatalogItem catalogItem = (CatalogItem)exchange.getProperty("item");
+        String shopName = (String)exchange.getProperty("shopName");
 
-
-        String shop = "ShopTest";//exchange.getIn();
-
-        if (client.getCart().get(shop)==null) {
-            client.getCart().put(shop, new ArrayList<CatalogItem>());
+        if (client.getCart().get(shopName)==null) {
+            client.getCart().put(shopName, new ArrayList<CatalogItem>());
         }
-        client.getCart().get(shop).add(catalogItem);
+        client.getCart().get(shopName).add(catalogItem);
     }
 }

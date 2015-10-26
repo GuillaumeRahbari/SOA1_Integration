@@ -17,7 +17,7 @@ public class CheckClientInDatabase implements Processor {
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
-        Client client = exchange.getIn().getBody(Client.class);
+        Client client = (Client)exchange.getProperty("client");
         if (ClientStorage.checkInDB(client)) {
            exchange.getIn().setBody(new Client(null, null));
         }
