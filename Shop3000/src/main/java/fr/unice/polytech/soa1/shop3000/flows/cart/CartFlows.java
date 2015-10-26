@@ -36,7 +36,7 @@ public class CartFlows extends RouteBuilder {
                 .process(itemMock)
                 .process(checkClientInDatabase)
                 .choice()
-                    .when(simple("${body.firstName} == null && ${body.lastName} == null"))
+                    .when(simple("${property.client}"))
                         .log("Client already exist")
                         .log("Client and item mocked in the exchange")
                         .process(addItemToCart)
@@ -45,15 +45,6 @@ public class CartFlows extends RouteBuilder {
                         // TODO Ask mosser to send errors as 404.
                         .log("Error : The client doesn't exist");
 
-
-
-        
-
-
-            from(Endpoint.VALIDATE_CART.getInstruction())
-                    .log("Begin validate cart")
-                    .choice()
-                        .when();
 
             from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
                     .log("Begin check client")
