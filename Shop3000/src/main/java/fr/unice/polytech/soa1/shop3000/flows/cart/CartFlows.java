@@ -14,14 +14,17 @@ public class CartFlows extends RouteBuilder {
 
     private ItemMock itemMock;
     private AddItemToCart addItemToCart;
-    private ReadResponseStream readResponseStream;
-    private CheckClientExistence checkClientExistence;
+    private CheckClientExistence checkClientExistenceBiko;
+    private CheckClientExistenceBeer checkClientExistenceBeer;
+    private CheckClientExistenceVolley checkClientExistenceVolley;
     private CheckClientInDatabase checkClientInDatabase;
 
     public CartFlows() {
         this.itemMock = new ItemMock();
         this.addItemToCart = new AddItemToCart();
-        this.checkClientExistence = new CheckClientExistence("biko");
+        this.checkClientExistenceBiko = new CheckClientExistence("biko");
+        this.checkClientExistenceBeer = new CheckClientExistenceBeer();
+        this.checkClientExistenceVolley = new CheckClientExistenceVolley();
         this.checkClientInDatabase = new CheckClientInDatabase();
     }
 
@@ -44,30 +47,44 @@ public class CartFlows extends RouteBuilder {
 
 
 
-        from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
-                .log("Begin check client")
-                .process(checkClientExistence)
-                .choice()
-                .when(simple("${header.result} == true"))
-                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .when(simple("${header.result} == false"))
-                        .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
+        
 
-        from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
-                .log("Begin check client")
-                .setHeader(Exchange.HTTP_METHOD,constant("GET"))
-                .setBody(constant(""))
-                .to("http://localhost:8181/cxf/biko/clients/name/user1?bridgeEndpoint=true")
-                .process(checkClientExistence)
-                .choice()
-                .when(simple("${header.result} == true"))
-                .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                .when(simple("${header.result} == false"))
-                .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
+
+            from(Endpoint.VALIDATE_CART.getInstruction())
+                    .log("Begin validate cart")
+                    .choice()
+                        .when();
+
+            from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
+                    .log("Begin check client")
+                    .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                    .setBody(constant(""))
+                    .to("http://localhost:8181/cxf/beers/account/{name}/{password}?bridgeEndpoint=true")
+                    .process(checkClientExistenceBeer)
+                    .choice()
+                        .when(simple("${header.result} == true"))
+                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                        .when(simple("${header.result} == false"))
+                            .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
+
+            from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
+                    .log("Begin check client")
+                    .setHeader(Exchange.HTTP_METHOD,constant("GET"))
+                    .setBody(constant(""))
+                    .to("http://localhost:8181/cxf/biko/clients/name/{name}?bridgeEndpoint=true")
+                    .process(checkClientExistenceBiko)
+                    .choice()
+                        .when(simple("${header.result} == true"))
+                            .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                        .when(simple("${header.result} == false"))
+                            .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
 
             from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                     .log("Begin check client")
-                    .process(checkClientExistence)
+                    .setHeader(Exchange.HTTP_METHOD,constant("GET"))
+                    .setBody(constant(""))
+                    .to("http://localhost:8181/cxf/volley/accounts/{name}?bridgeEndpoint=true")
+                    .process(checkClientExistenceVolley)
                     .choice()
                         .when(simple("${header.result} == true"))
                             .to(Endpoint.ADD_ITEM_CART.getInstruction())
