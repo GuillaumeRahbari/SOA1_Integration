@@ -17,11 +17,7 @@ public class CheckClientExistence implements Processor {
     }
 
     public void process(Exchange exchange) throws Exception {
+        //test if client exist
         Client client = exchange.getIn().getBody(Client.class);
-
-
-
-
-        exchange.getIn().setHeader("result", ClientStorage.checkInDB(client));
     }
 }
