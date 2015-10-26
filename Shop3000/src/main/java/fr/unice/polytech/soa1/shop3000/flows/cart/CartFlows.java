@@ -22,6 +22,7 @@ public class CartFlows extends RouteBuilder {
         this.itemMock = new ItemMock();
         this.addItemToCart = new AddItemToCart();
         this.checkClientExistence = new CheckClientExistence("biko");
+        this.checkClientInDatabase = new CheckClientInDatabase();
     }
 
 
@@ -29,9 +30,8 @@ public class CartFlows extends RouteBuilder {
     public void configure() throws Exception {
         from(Endpoint.ADD_ITEM_CART.getInstruction())
                 .log("Begin add item to cart")
-                .process(itemMock);
-                // TODO regler porbleme avec le process suivant. Bug sans savoir pk.
-                /*.process(checkClientInDatabase)
+                .process(itemMock)
+                .process(checkClientInDatabase)
                 .choice()
                     .when(simple("${body.firstName} == null && ${body.lastName} == null"))
                         .log("Client already exist")
@@ -40,7 +40,7 @@ public class CartFlows extends RouteBuilder {
                         .log("Item added to cart")
                     .otherwise()
                         // TODO Ask mosser to send errors as 404.
-                        .log("Error : The client doesn't exist");*/
+                        .log("Error : The client doesn't exist");
 
 
 
