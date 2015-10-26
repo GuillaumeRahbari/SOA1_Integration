@@ -19,10 +19,7 @@ public class CheckClientInDatabase implements Processor {
     public void process(Exchange exchange) throws Exception {
         Client client = (Client)exchange.getProperty("client");
         if (ClientStorage.checkInDB(client)) {
-           exchange.getIn().setBody(new Client(null, null));
-        }
-        else {
-            exchange.getIn().setBody(client);
+           exchange.setProperty("client", null);
         }
     }
 }
