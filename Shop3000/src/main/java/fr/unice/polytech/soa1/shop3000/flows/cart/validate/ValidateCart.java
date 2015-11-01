@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.flows.cart;
+package fr.unice.polytech.soa1.shop3000.flows.cart.validate;
 
 import fr.unice.polytech.soa1.shop3000.flows.BooleanAndAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
