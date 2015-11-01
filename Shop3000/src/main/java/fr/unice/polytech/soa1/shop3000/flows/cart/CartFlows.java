@@ -32,7 +32,9 @@ public class CartFlows extends RouteBuilder {
     public void configure() throws Exception {
         /** This flow start the flow to add an item to the cart of a mocked client added in the itemMock **/
         from(Endpoint.ADD_ITEM_CART.getInstruction())
+                .log("${header.clientId}")
                 .log("Begin add item to cart")
+                .log("${body}")
                 .process(itemMock)
                 .process(checkClientInDatabase)
                 /** If the client is in the database then the item is added to the mocked cart otherwise an error is sent **/
