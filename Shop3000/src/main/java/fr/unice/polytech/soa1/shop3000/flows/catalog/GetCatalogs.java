@@ -9,6 +9,8 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class GetCatalogs extends RouteBuilder {
 
+    private JSonTransform jSonTransform = new JSonTransform();
+
     /**
      * This is the flow for the catalog. We make asynchrone request to the biko, volley and Hailbeer system, then we make
      * an aggregation of the several body with the aggregation strategy define in JoinAggregationStrategy
@@ -28,6 +30,7 @@ public class GetCatalogs extends RouteBuilder {
                     .to(Endpoint.VOLLEY_CATALOG.getInstruction())
                     .to(Endpoint.BEER_CATALOG.getInstruction())
                     .end()
+                .process(jSonTransform)
                     .log("${body}");
 
 

@@ -10,15 +10,21 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class CallExternalPartners extends RouteBuilder {
 
-    private ReadResponseStream readResponseStreamBiko;
-    private ReadResponseStream readResponseStreamVolley;
+    //private ReadResponseStream readResponseStreamBiko;
+    //private ReadResponseStream readResponseStreamVolley;
     private ReadResponseStream readResponseStreamBeer;
+    private TransformResponseBiko transformBiko;
+    private TransformResponseVolley transformVolley;
+    private TransformResponseBeer transformBeer;
 
 
     public CallExternalPartners() {
-        this.readResponseStreamBiko = new ReadResponseStream("biko");
-        this.readResponseStreamVolley = new ReadResponseStream("volleyonthebeach");
+        //this.readResponseStreamBiko = new ReadResponseStream("biko");
+        //this.readResponseStreamVolley = new ReadResponseStream("volleyonthebeach");
         this.readResponseStreamBeer = new ReadResponseStream("allhailbeer");
+        this.transformBiko = new TransformResponseBiko("biko");
+        this.transformVolley = new TransformResponseVolley("volleyonthebeach");
+        this.transformBeer = new TransformResponseBeer("allhailbeer");
     }
 
     /**
@@ -36,7 +42,8 @@ public class CallExternalPartners extends RouteBuilder {
                 .to("http://localhost:8181/cxf/biko/catalog?bridgeEndpoint=true")
                 .setProperty("shopName", constant("biko"))
                 //.unmarshal().json(JsonLibrary.Jackson,CatalogItem.class)
-                .process(readResponseStreamBiko)
+                .process(transformBiko)
+                //.process(readResponseStreamBiko)
                 .log("${body}");
 
         // Gets the VolleyOnTheBeach shop's catalog and formats the json to add the shop name
@@ -47,7 +54,8 @@ public class CallExternalPartners extends RouteBuilder {
                 .to("http://localhost:8181/cxf/volley/catalog?bridgeEndpoint=true")
                 .setProperty("shopName", constant("volleyonthebeach"))
                 //.unmarshal().json(JsonLibrary.Jackson, CatalogItem.class)
-                .process(readResponseStreamVolley)
+                .process(transformVolley)
+                //.process(readResponseStreamVolley)
                 .log("${body}");
 
         // Gets the AllHailBeer shop's catalog and formats the json to add the shop name
@@ -58,7 +66,8 @@ public class CallExternalPartners extends RouteBuilder {
                 .to("http://localhost:8181/cxf/shop/beers/all?bridgeEndpoint=true")
                 .setProperty("shopName", constant("allhailbeer"))
                 //.unmarshal().json(JsonLibrary.Jackson, CatalogItem.class)
-                .process(readResponseStreamBeer)
+                .process(transformBeer)
+                //.process(readResponseStreamBeer)
                 .log("${body}");
     }
 }
