@@ -25,31 +25,35 @@ public class CreateClientFile extends RouteBuilder {
         this.checkClientInDatabase = new CheckClientInDatabase();
     }
 
+    /**
+     * This flow is the one for the root /clientFile in method post.
+     * We check there if the client exists in the database via the property "client".
+     * If he exists we do nothing for now.
+     * If not, we add him to the database.
+     *
+     * @throws Exception
+     */
     @Override
     public void configure() throws Exception {
         from(Endpoint.CLIENT_FILE_INPUT.getInstruction())
                 .log("Start processing")
+                // Start a process to mock a client.
                 .process(clientFileMock)
                 .log("Fake client addded")
-                .log("Body : ")
-                .log("FirstName of the client : ${body.firstName}")
-                .log("LastName of the client : ${body.lastName}")
-                .log("Begin of the filter, it is the last step if the client is already in the database")
+                // start a process to check if the client is already in the database
                 .process(checkClientInDatabase)
+                .log("Checked of the client in Database")
                 .choice()
+                    // If the client already exists (the property "client" is set to null)
                     .when(simple("${property.client} == null"))
                             .log("Client already exist")
+                    // Otherwise the client doesn't exist and we add him in the database.
                     .otherwise()
                             .log("The client doesn't exist")
                             .log("Begin process to add the client in the database")
                             .process(addClientToDataBase)
                             .log("Client added to the database")
-                //.filter()
-                //.method(new ClientRegistered(), "filter")
-                //.log("After filter")
-                .log("${body}")
                 .log("End of the process");
-              //  .to(Endpoint.GET_CATALOG.getInstruction());
 
 
     }

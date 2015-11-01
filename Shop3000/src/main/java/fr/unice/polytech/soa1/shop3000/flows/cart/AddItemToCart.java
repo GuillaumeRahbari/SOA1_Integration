@@ -13,6 +13,12 @@ import java.util.ArrayList;
 public class AddItemToCart implements Processor {
 
 
+    /**
+     * This method gets the needed properties to add an item to the cart from the Exchange.
+     *
+     * @param exchange
+     * @throws Exception
+     */
     public void process(Exchange exchange) throws Exception {
 
         Client client = (Client)exchange.getProperty("client");

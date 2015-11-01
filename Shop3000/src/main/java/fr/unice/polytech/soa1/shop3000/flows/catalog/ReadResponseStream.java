@@ -19,6 +19,17 @@ public class ReadResponseStream implements Processor {
         this.shopName = shopName;
     }
 
+    /**
+     * This method take the body of the exchange andd add the name of the shop to create several JSON Object
+     * {"shopName":"A",Items:[....]}
+     * {"shopName":"B",Items:[....]}
+     * {"shopName":"C",Items:[....]}
+     *
+     * This work is in progress we want to put the JSON OBjects in a JSONArray
+     *
+     * @param exchange
+     * @throws Exception
+     */
     public void process(Exchange exchange) throws Exception {
         InputStream response = (InputStream) exchange.getIn().getBody();
         BufferedReader reader = new BufferedReader(new InputStreamReader(response));

@@ -1,10 +1,8 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
-import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.dataformat.JsonLibrary;
 
 /**
  * @author Quentin Cornevin
@@ -23,6 +21,11 @@ public class CallExternalPartners extends RouteBuilder {
         this.readResponseStreamBeer = new ReadResponseStream("allhailbeer");
     }
 
+    /**
+     * In this fail we create the request to the different system to get their catalog
+     *
+     * @throws Exception
+     */
     @Override
     public void configure() throws Exception {
         // Gets the Biko shop's catalog and formats the json to add the shop name

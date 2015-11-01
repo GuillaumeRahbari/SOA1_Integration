@@ -9,6 +9,11 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class CatalogServiceRoute extends RouteBuilder {
 
+    /**
+     * In this method we configure all the root to access the catalog.
+     *
+     * @throws Exception
+     */
     @Override
     public void configure() throws Exception {
         restConfiguration().component("servlet"); // feature:install camel-servlet + edit in the OSGi blueprint

@@ -11,13 +11,20 @@ import org.apache.camel.Processor;
  */
 public class ClientFileMock implements Processor {
 
+    private String name;
+
+
     /**
-     * Body mocked with a fake client
-     * @param exchange
+     * In this method we get a validate client with the mock.
+     * And we set the "client" property with this validate client.
+     *
+     * @param exchange Empty.
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
+        // We get a client from the mock file.
         Client goodClient = new Client(MockedData.CLIENT_FIRST_NAME,MockedData.CLEINT_LAST_NAME);
+        // We set the "client" property with the client we got from the mock.
         exchange.setProperty("client", goodClient);
     }
 }

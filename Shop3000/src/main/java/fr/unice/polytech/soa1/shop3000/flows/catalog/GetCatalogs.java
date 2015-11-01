@@ -9,6 +9,11 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class GetCatalogs extends RouteBuilder {
 
+    /**
+     * This is the flow for the catalog. We make asynchrone request to the biko, volley and Hailbeer system, then we make
+     * an aggregation of the several body with the aggregation strategy define in JoinAggregationStrategy
+     * @throws Exception
+     */
     @Override
     public void configure() throws Exception {
         // This flow gets the different shops' catalogs and aggregates the results into one catalog

@@ -13,13 +13,17 @@ import org.apache.camel.Processor;
 public class AddClientToDataBase implements Processor {
 
     /**
-     * This method add the client in the database
+     * This method add the client in the database.
+     *
      * @param exchange
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
+        // We get a client by the "client" property
         Client client = (Client)exchange.getProperty("client");
+        // We add the client in the db.
         ClientStorage.addClient(client);
+        // We set the body to tell the client is added.
         exchange.getIn().setBody("Client added to database");
     }
 }
