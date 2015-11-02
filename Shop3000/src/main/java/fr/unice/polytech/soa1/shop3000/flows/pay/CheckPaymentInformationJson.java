@@ -1,18 +1,29 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 
 /**
  * @author Marc Karassev
  */
-public class CheckPaymentInformationJson implements Processor {
+public class CheckPaymentInformationJson extends SuperProcessor {
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println((PaymentInformation) exchange.getProperty("paymentInformation"));
-        //PaymentInformation paymentInformation = objectMapper.readValue(exchange.getProperty("paymentInformation").toString(), PaymentInformation.class);
+
+        try {
+            PaymentInformation paymentInformation = objectMapper.readValue(
+                    extractExchangeProperty(exchange, PayRoute.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class);
+
+            exchange.setProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY,
+                    objectMapper.writeValueAsString(paymentInformation));
+        }
+        catch (JsonMappingException e) {
+            exchange.setProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY, "");
+        }
     }
 }

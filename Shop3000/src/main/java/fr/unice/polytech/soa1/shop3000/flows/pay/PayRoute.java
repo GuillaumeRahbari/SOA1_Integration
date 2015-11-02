@@ -9,6 +9,7 @@ import org.apache.camel.builder.RouteBuilder;
 public class PayRoute extends RouteBuilder {
 
     private static final String GET_CLIENT_FROM_REST_ENDPOINT = "direct:getClientFromRest";
+    static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation";
 
     private CheckPaymentInformationJson checkPaymentInformationJson = new CheckPaymentInformationJson();
 
@@ -21,7 +22,7 @@ public class PayRoute extends RouteBuilder {
             .to(GET_CLIENT_FROM_REST_ENDPOINT);
 
         from(GET_CLIENT_FROM_REST_ENDPOINT)
-            .setProperty("paymentInformation", body())
+            .setProperty(PAYMENT_INFORMATION_PROPERTY, body())
             .process(checkPaymentInformationJson)
             .log("client: ${header.clientID}")
             .setBody(simple("${body}\n${header.clientID}"))
