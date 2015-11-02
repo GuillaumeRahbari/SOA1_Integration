@@ -19,7 +19,9 @@ public class AddItemToCartRoute extends RouteBuilder {
                 .put()
                 .to(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction());
 
-
+        rest("/clients/createBiko")
+                .post()
+                .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction());
 
         from(Endpoint.CHECK_REQUEST_STATUS.getInstruction())
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
