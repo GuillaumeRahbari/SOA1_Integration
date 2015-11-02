@@ -27,9 +27,11 @@ public enum Endpoint {
     CHECK_CLIENT_BEER("direct:checkClientBeer"),
     CHECK_CLIENT_BIKO("direct:checkClientBiko"),
     CHECK_CLIENT_VOLLEY("direct:checkClientVolley"),
+    CREATE_CLIENT_VOLLEY_ON_THE_BEACH("direct:createClientVolley"),
+    CREATE_CLIENT_BIKO("direct:createClientBiko"),
+    CREATE_CLIENT_ALL_HAIL_BEER("direct:createClientBeer"),
     GET_CART("direct:getCart"),
     CHECK_REQUEST_STATUS("direct:checkRequestStatus"),
-
     /** Payment endpoints **/
     PAY("direct:pay");
 

@@ -13,9 +13,6 @@ public class CartFlows extends RouteBuilder {
 
     private ItemMock itemMock;
     private AddItemToCart addItemToCart;
-    private CheckClientExistence checkClientExistenceBiko;
-    private CheckClientExistenceBeer checkClientExistenceBeer;
-    private CheckClientExistenceVolley checkClientExistenceVolley;
     private CheckClientInDatabase checkClientInDatabase;
     private JsonToItem jsonToItem;
     private CheckRequestStatus checkRequestStatus;
@@ -23,9 +20,6 @@ public class CartFlows extends RouteBuilder {
     public CartFlows() {
         this.itemMock = new ItemMock();
         this.addItemToCart = new AddItemToCart();
-        this.checkClientExistenceBiko = new CheckClientExistence("biko");
-        this.checkClientExistenceBeer = new CheckClientExistenceBeer();
-        this.checkClientExistenceVolley = new CheckClientExistenceVolley();
         this.checkClientInDatabase = new CheckClientInDatabase();
         this.jsonToItem = new JsonToItem();
         this.checkRequestStatus = new CheckRequestStatus();
@@ -60,59 +54,7 @@ public class CartFlows extends RouteBuilder {
                 .log("Error : The client doesn't exist");*/
 
 
-        /**
-         * This flow check if the client is already registered in the HailBeer system.
-         * If the client is not registered then we create the client in the system.
-         * And finally we add the item to the cart
-         */
-        from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
-                .log("Begin check client")
-                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
-                .setBody(constant(""))
-                .setProperty("login",constant("test"))
-                .setProperty("password",constant("test"))
-                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.login}/${property.password}?bridgeEndpoint=true"))
-                .process(checkClientExistenceBeer)
-                .choice()
-                    .when(simple("${property.result} == true"))
-                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .when(simple("${property.result} == false"))
-                        .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
-
-        /**
-         * This flow check if the client is in the biko system, if not we create the client in the system and then
-         * we add the items to the the cart.
-         */
-        from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
-                .log("Begin check client")
-                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
-                .setBody(constant(""))
-                .setProperty("clientID", constant("user1"))
-                .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
-                .process(checkClientExistenceBiko)
-                .choice()
-                    .when(simple("${property.result} == true"))
-                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .when(simple("${property.result} == false"))
-                        .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
-
-        /**
-         * This flow check if client is already registered in the volley system. Create the client otherwise.
-         * Then add the items to the cart.
-         */
-        from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
-                .log("Begin check client")
-                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
-                .setBody(constant(""))
-                .setProperty("login",constant("jean"))
-                .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.login}?bridgeEndpoint=true"))
-                .process(checkClientExistenceVolley)
-                .choice()
-                    .when(simple("${property.result} == true"))
-                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                    .when(simple("${property.result} == false"))
-                        .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
-        }
+    }
 
 
 }
