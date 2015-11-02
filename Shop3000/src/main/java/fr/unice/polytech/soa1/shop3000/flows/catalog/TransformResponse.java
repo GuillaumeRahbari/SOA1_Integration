@@ -19,9 +19,10 @@ public abstract class TransformResponse extends SuperProcessor {
         this.shopName = shopName;
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
-        String out = extractBodyFromExchange(exchange);
-        JSONArray jarray = new JSONArray(out.toString());
+        String out = extractExchangeBody(exchange);
+        JSONArray jarray = new JSONArray(out);
 
         List<CatalogItem> items = parse(jarray);
 
