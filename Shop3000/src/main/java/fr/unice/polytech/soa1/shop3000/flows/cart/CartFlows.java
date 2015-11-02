@@ -17,6 +17,7 @@ public class CartFlows extends RouteBuilder {
     private CheckClientExistenceBeer checkClientExistenceBeer;
     private CheckClientExistenceVolley checkClientExistenceVolley;
     private CheckClientInDatabase checkClientInDatabase;
+    private JsonToItem jsonToItem;
 
     public CartFlows() {
         this.itemMock = new ItemMock();
@@ -25,6 +26,7 @@ public class CartFlows extends RouteBuilder {
         this.checkClientExistenceBeer = new CheckClientExistenceBeer();
         this.checkClientExistenceVolley = new CheckClientExistenceVolley();
         this.checkClientInDatabase = new CheckClientInDatabase();
+        this.jsonToItem = new JsonToItem();
     }
 
 
@@ -34,10 +36,12 @@ public class CartFlows extends RouteBuilder {
         from(Endpoint.ADD_ITEM_CART.getInstruction())
                 .log("${header.clientId}")
                 .log("Begin add item to cart")
-                .log("${body}")
-                .process(itemMock)
+         //       .process(jsonToItem);
+                .bean(AddItem.class, "addItemToCart(${header.clientId}, ${body})");
+
+/*                .process(itemMock)
                 .process(checkClientInDatabase)
-                /** If the client is in the database then the item is added to the mocked cart otherwise an error is sent **/
+                *//* If the client is in the database then the item is added to the mocked cart otherwise an error is sent *//*
                 .choice()
                     .when(simple("${property.client}"))
                         .log("Client already exist")
@@ -45,8 +49,11 @@ public class CartFlows extends RouteBuilder {
                         .process(addItemToCart)
                         .log("Item added to cart")
                     .otherwise()
-                        // TODO Ask mosser to send errors as 404.
-                        .log("Error : The client doesn't exist");
+                        // Ici on change la response
+                        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
+
+
+                .log("Error : The client doesn't exist");*/
 
 
         /**

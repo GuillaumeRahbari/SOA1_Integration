@@ -11,7 +11,7 @@ public class CatalogServiceRoute extends RouteBuilder {
 
     /**
      * In this method we configure all the root to access the catalog.
-     *
+
      * @throws Exception
      */
     @Override
