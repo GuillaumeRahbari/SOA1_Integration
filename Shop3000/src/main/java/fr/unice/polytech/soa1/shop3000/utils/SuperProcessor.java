@@ -57,6 +57,11 @@ public abstract class SuperProcessor implements Processor {
         return out.toString();
     }
 
+    /**
+     * Cast an Exchange object's body (that is exclusively a boolean) into a real boolean.
+     * @param exchange
+     * @return A boolean object of the Exchange object's body.
+     */
     public final boolean extractBodyFromExchangeBool(Exchange exchange){
         return (Boolean) exchange.getIn().getBody();
     }
