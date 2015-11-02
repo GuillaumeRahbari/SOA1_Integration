@@ -21,5 +21,15 @@ public class AddItemToCartRoute extends RouteBuilder {
         rest("clients/accountBiko")
                 .get()
                 .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction());
+
+
+        rest("clients/accountBeer")
+                .get()
+                .to(Endpoint.CHECK_CLIENT_BEER.getInstruction());
+
+
+        rest("clients/accountVolley")
+                .get()
+                .to(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction());
     }
 }
