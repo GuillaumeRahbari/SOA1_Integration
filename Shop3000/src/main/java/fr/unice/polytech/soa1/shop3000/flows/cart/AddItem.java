@@ -41,7 +41,7 @@ public class AddItem {
 
     /**
      * This function is really the one adding a CatalogItem into the client cart.
-     * 
+     *
      * @param client The client we want to add items in his cart.
      * @param catalogItem The items we want to add in the client cart.
      */
