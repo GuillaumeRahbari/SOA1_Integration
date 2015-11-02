@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.business;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.unice.polytech.soa1.shop3000.business.customization.Customization;
 
 /**
@@ -17,7 +19,9 @@ public class CatalogItem {
     public CatalogItem(){
     };
 
-    public CatalogItem(String name, double price){
+    @JsonCreator
+    public CatalogItem(@JsonProperty(value = "name", required = true) String name,
+                       @JsonProperty(value = "price", required = true) double price){
         this.name = name;
         this.price = price;
     }

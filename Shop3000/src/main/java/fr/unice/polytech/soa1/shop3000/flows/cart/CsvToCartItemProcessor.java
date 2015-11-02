@@ -4,14 +4,21 @@ import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
- * Created by tom on 02/11/15.
+ *This class is used to convert a Map containing on line of the CSV input file and
+ * convert it to a CatalogItem
  */
 public class CsvToCartItemProcessor implements Processor{
 
+    /**
+     * Create a new CatalogItem matching with the data in the Map contained by the Body
+     * and sets the Body with the new CatalogItem.
+     *
+     * @param exchange must contain a Map<String,Object> as body
+     * @throws Exception
+     */
     public void process(Exchange exchange) throws Exception {
 
         Map<String,Object> bodyData = (Map<String, Object>) exchange.getIn().getBody();
@@ -23,17 +30,11 @@ public class CsvToCartItemProcessor implements Processor{
     }
 
     private CatalogItem buildCatalogItem(Map<String, Object> data){
-        System.out.println("\nNew CatalogItem  :\n");
         CatalogItem catalogItem = new CatalogItem();
-
-        System.out.println("\nDATA : " + data);
 
         catalogItem.setName((String) data.get("name"));
         catalogItem.setDescription((String) data.get("description"));
-        System.out.println("\nDouble : " + Double.parseDouble((String) data.get("price")));
         catalogItem.setPrice(Double.parseDouble((String) data.get("price")));
-
-        System.out.println("\nITEM : " + catalogItem);
 
         return catalogItem;
     }
