@@ -10,6 +10,7 @@
         <package>fr.unice.polytech.soa1.shop3000.flows.cart</package>
         <package>fr.unice.polytech.soa1.shop3000.flows.catalog</package>
         <package>fr.unice.polytech.soa1.shop3000.flows.clientfile</package>
+        <package>fr.unice.polytech.soa1.shop3000.flows.pay</package>
     </camelContext>
 
 

@@ -13,4 +13,8 @@ public class BeerCustom extends Customization {
         this.isClientCustomization = isClientCustomization;
     }
 
+    public String toString(){
+        return "{\"clientCustom\":\""+ (isClientCustomization?"true":"false") + "\"}";
+    }
+
 }

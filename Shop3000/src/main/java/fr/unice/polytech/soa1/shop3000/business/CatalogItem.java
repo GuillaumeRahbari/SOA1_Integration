@@ -19,11 +19,11 @@ public class CatalogItem {
         this.price = price;
     }
 
-    public CatalogItem(String name, double price, String description, Customization customization){
+    public CatalogItem(String name, double price, String description){
         this.name = name;
         this.price = price;
         this.description = description;
-        this.customization = customization;
+        //this.customization = customization;
     }
 
     public String getName() {
@@ -56,6 +56,14 @@ public class CatalogItem {
 
     public void setCustomization(Customization customization) {
         this.customization = customization;
+    }
+
+    public String toString() {
+        String s = "{\"name\":\"" + name
+                + "\", \"price\":" + price
+                + ", \"description\":\"" + description + "\"}";
+                //+ "\", \"Customization\":" + customization;
+        return s;
     }
 
 }

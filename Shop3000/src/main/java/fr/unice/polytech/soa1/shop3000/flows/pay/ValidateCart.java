@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.flows.cart;
+package fr.unice.polytech.soa1.shop3000.flows.pay;
 
 import fr.unice.polytech.soa1.shop3000.flows.BooleanAndAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
@@ -15,18 +15,18 @@ public class ValidateCart extends RouteBuilder {
                 .log("starting cart validation")
                 .log("body: ${body}")
                 // TODO extract payment info from body and set a property
+                /*
                 .multicast()
                     .aggregationStrategy(new BooleanAndAggregationStrategy())
                     .log("multicasting")
-                    /*
                     .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction())
                     .to(Endpoint.ADD_TO_CART_BIKO.getInstruction())
                     .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction())
-                    */
-                    .log("merging")
+                .log("merging")
                 .end()
-                .log("body: ${body}")
+                */
+                .log("body: ${body}");
                 // TODO extract payment info from property and set body
-                .to(Endpoint.PAY.getInstruction());
+                //.to(Endpoint.PAY.getInstruction());
     }
 }
