@@ -12,11 +12,10 @@ import org.codehaus.jettison.json.JSONObject;
 public class CheckClientExistenceBeer extends SuperProcessor {
     public void process(Exchange exchange) throws Exception {
         // test if client exist
-        String body = extractBodyFromExchange(exchange);
-        System.out.println(body);
+        String body = extractExchangeBody(exchange);
         String loginToTest = (String)exchange.getProperty("login");
         String login = new JSONArray(body).getJSONObject(0).getJSONObject(loginToTest).getString("username");
-        System.out.println(login);
+
         if(loginToTest.equals(login)) {
             exchange.setProperty("result", true);
         }else {

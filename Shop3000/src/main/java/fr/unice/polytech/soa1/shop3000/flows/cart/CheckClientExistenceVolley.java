@@ -13,7 +13,7 @@ public class CheckClientExistenceVolley extends SuperProcessor{
 
     public void process(Exchange exchange) throws Exception {
         String loginToTest = (String)exchange.getProperty("login");
-        String body = extractBodyFromExchange(exchange);
+        String body = extractExchangeBody(exchange);
         String login = new JSONObject(body).getString("login");
         if(loginToTest.equals(login)) {
             exchange.setProperty("result", true);

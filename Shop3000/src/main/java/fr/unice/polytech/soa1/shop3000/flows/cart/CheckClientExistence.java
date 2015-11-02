@@ -25,7 +25,7 @@ public class CheckClientExistence extends SuperProcessor {
     public void process(Exchange exchange) throws Exception {
         //test if client exist
         String nameToTest = (String)exchange.getProperty("clientID");
-        String body = extractBodyFromExchange(exchange);
+        String body = extractExchangeBody(exchange);
         JSONObject jObject = new JSONObject(body);
         String name = jObject.getString("name");
 

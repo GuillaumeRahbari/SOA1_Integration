@@ -17,19 +17,5 @@ public class AddItemToCartRoute extends RouteBuilder {
         rest("{clientID}/cart")
                 .put()
                 .to(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction());
-
-        rest("clients/accountBiko")
-                .get()
-                .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction());
-
-
-        rest("clients/accountBeer")
-                .get()
-                .to(Endpoint.CHECK_CLIENT_BEER.getInstruction());
-
-
-        rest("clients/accountVolley")
-                .get()
-                .to(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction());
     }
 }
