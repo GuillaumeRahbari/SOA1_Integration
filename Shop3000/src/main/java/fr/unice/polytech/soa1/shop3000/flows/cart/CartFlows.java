@@ -37,7 +37,7 @@ public class CartFlows extends RouteBuilder {
                 .log("${header.clientId}")
                 .log("Begin add item to cart")
          //       .process(jsonToItem);
-                .bean(AddItem.class, "addItemToCart(${header.clientId}, ${body})");
+                .bean(AddItem.class, "addItemToCart(${header.clientId}, ${property.item})");
 
 /*                .process(itemMock)
                 .process(checkClientInDatabase)
