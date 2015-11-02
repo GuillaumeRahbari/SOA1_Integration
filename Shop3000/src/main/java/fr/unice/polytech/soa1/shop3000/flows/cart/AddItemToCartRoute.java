@@ -16,6 +16,10 @@ public class AddItemToCartRoute extends RouteBuilder {
         // Defining the resource to expose, and the used verb
         rest("{clientID}/cart")
                 .put()
-                .to(Endpoint.ADD_ITEM_CART.getInstruction());
+                .to(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction());
+
+        rest("clients/accountBiko")
+                .get()
+                .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction());
     }
 }
