@@ -10,7 +10,9 @@ public class Unmarshaller extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        from(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction());
+        from(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction())
+                
+        .to(Endpoint.ADD_ITEM_CART.getInstruction());
 
     }
 }
