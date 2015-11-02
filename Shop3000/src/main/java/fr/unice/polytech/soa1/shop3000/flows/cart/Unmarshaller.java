@@ -17,11 +17,15 @@ public class Unmarshaller extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+        /**
+         * This route is here to unmarshall the json before go to the business layer.
+         * We do this with the process JsonUnmarshaller.
+         * It redirects to the ADD_ITEM_CART endpoint.
+         */
         from(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction())
                 .log("DEbut du process")
                 .process(jsonUnmarshaller)
-
-        .to(Endpoint.ADD_ITEM_CART.getInstruction());
+                .to(Endpoint.ADD_ITEM_CART.getInstruction());
 
     }
 }
