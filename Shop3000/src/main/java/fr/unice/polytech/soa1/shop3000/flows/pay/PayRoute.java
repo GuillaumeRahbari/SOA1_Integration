@@ -5,6 +5,10 @@ import org.apache.camel.builder.RouteBuilder;
 
 /**
  * @author Marc Karassev
+ *
+ * Endpoint for the payment flow.
+ * The route is {host}:{port}/{appname}/{clientID}/payment and the expected method is POST
+ * Expects a JSON in POST body representing a PaymentInformation object.
  */
 public class PayRoute extends RouteBuilder {
 
@@ -23,6 +27,7 @@ public class PayRoute extends RouteBuilder {
             .to(GET_CLIENT_FROM_REST_ENDPOINT);
 
         from(GET_CLIENT_FROM_REST_ENDPOINT)
+            .log("extracting POST data")
             .setProperty(PAYMENT_INFORMATION_PROPERTY, body())
             .process(jsonPaymentInformationExtractor)
             .setProperty(CLIENT_ID_PROPERTY, constant("${header.clientID}"))
