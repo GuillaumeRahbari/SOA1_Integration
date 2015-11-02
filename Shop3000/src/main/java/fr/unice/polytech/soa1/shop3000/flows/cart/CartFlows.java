@@ -19,6 +19,7 @@ public class CartFlows extends RouteBuilder {
     private CheckClientInDatabase checkClientInDatabase;
     private JsonToItem jsonToItem;
     private CreateClientBiko createClientBiko;
+    private CheckRequestStatus checkRequestStatus;
 
     public CartFlows() {
         this.itemMock = new ItemMock();
@@ -29,6 +30,7 @@ public class CartFlows extends RouteBuilder {
         this.checkClientInDatabase = new CheckClientInDatabase();
         this.jsonToItem = new JsonToItem();
         this.createClientBiko = new CreateClientBiko();
+        this.checkRequestStatus = new CheckRequestStatus();
     }
 
 
@@ -39,7 +41,9 @@ public class CartFlows extends RouteBuilder {
                 .log("${header.clientId}")
                 .log("Begin add item to cart")
          //       .process(jsonToItem);
-                .bean(AddItem.class, "addItemToCart(${header.clientId}, ${property.item})");
+                .bean(AddItem.class, "addItemToCart(${header.clientId}, ${property.item})")
+                .process(checkRequestStatus)
+                .to(Endpoint.CHECK_REQUEST_STATUS.getInstruction());
 
 /*                .process(itemMock)
                 .process(checkClientInDatabase)

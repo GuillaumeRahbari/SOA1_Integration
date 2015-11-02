@@ -57,5 +57,9 @@ public abstract class SuperProcessor implements Processor {
         return out.toString();
     }
 
+    public final boolean extractBodyFromExchangeBool(Exchange exchange){
+        return (Boolean) exchange.getIn().getBody();
+    }
+
     public abstract void process(Exchange exchange) throws Exception;
 }
