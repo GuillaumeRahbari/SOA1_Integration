@@ -17,6 +17,27 @@ import java.io.InputStreamReader;
 public abstract class SuperProcessor implements Processor {
 
     /**
+     * Converts an Exchange object's body into a String.
+     *
+     * @param exchange the Exchange object from which the body is to be converted
+     * @return the resulting string
+     */
+    public final String extractExchangeBody(Exchange exchange) {
+        return getStringFromInputStream((InputStream) exchange.getIn().getBody());
+    }
+
+    /**
+     * Converts an Exchange object's property into a String.
+     *
+     * @param exchange the Exchange object from which a property is to be converted
+     * @param property the Exchange object's property to convert
+     * @return the resulting string
+     */
+    public final String extractExchangeProperty(Exchange exchange, String property) {
+        return getStringFromInputStream((InputStream) exchange.getProperty(property));
+    }
+
+    /**
      * Converts an InputStream into a String.
      *
      * @param inputStream the InputStream to convert
