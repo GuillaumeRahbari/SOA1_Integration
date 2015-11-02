@@ -1,22 +1,17 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Laureen Ginier
  * Read the response and formats it into a list of POJO
  */
-public abstract class TransformResponse implements Processor {
+public abstract class TransformResponse extends SuperProcessor {
 
     private String shopName;
 
@@ -25,13 +20,7 @@ public abstract class TransformResponse implements Processor {
     }
 
     public void process(Exchange exchange) throws Exception {
-        InputStream response = (InputStream) exchange.getIn().getBody();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response));
-        StringBuilder out = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) { out.append(line); }
-        reader.close();
-
+        String out = extractBodyFromExchange(exchange);
         JSONArray jarray = new JSONArray(out.toString());
 
         List<CatalogItem> items = parse(jarray);

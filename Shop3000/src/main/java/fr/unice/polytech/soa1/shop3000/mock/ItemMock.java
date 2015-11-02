@@ -28,6 +28,7 @@ public class ItemMock implements Processor {
     public void process(Exchange exchange) throws Exception {
         CatalogItem catalogItem = new CatalogItem(MockedData.ITEM_NAME,MockedData.ITEM_PRICE);
         //exchange.getIn().setBody(catalogItem);
+
         exchange.setProperty("item", catalogItem);
         Client client = ClientStorage.read("Quentin");
         //exchange.getIn().setBody(client);

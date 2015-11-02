@@ -14,6 +14,7 @@ public enum Endpoint {
     VOLLEY_CATALOG("direct:volleyCatalog"),
     BEER_CATALOG("direct:beerCatalog"),
     ADD_ITEM_CART("direct:addItemCart"),
+    UNMARSHALL_JSON_ITEM("direct:unmarshallJsonItem"),
     VALIDATE_CART("direct:validateCart"),
     ADD_TO_CART_VOLLEY_ON_THE_BEACH("direct:addToCartVolleyOnTheBeach"),
     ADD_TO_CART_BIKO("direct:addToCartBiko"),

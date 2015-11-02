@@ -30,7 +30,7 @@ public class ClientStorage {
      * @param client
      */
     public static void addClient(Client client) {
-        clientStorage.put(client.getFirstName(),client);
+        clientStorage.put(client.getFirstName(), client);
     }
 
     public static Collection<Client> findAll() {

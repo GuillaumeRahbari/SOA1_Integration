@@ -14,9 +14,9 @@ public class AddItemToCartRoute extends RouteBuilder {
         restConfiguration().component("servlet"); // feature:install camel-servlet + edit in the OSGi blueprint
 
         // Defining the resource to expose, and the used verb
-        rest("clientID/cart")
+        rest("{clientID}/cart")
                 .put()
-                .to(Endpoint.ADD_ITEM_CART.getInstruction());
+                .to(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction());
 
         rest("clients/accountBiko")
                 .get()
