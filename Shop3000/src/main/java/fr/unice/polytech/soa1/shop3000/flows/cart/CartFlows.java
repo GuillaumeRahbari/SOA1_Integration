@@ -18,6 +18,7 @@ public class CartFlows extends RouteBuilder {
     private CheckClientExistenceVolley checkClientExistenceVolley;
     private CheckClientInDatabase checkClientInDatabase;
     private JsonToItem jsonToItem;
+    private CheckRequestStatus checkRequestStatus;
 
     public CartFlows() {
         this.itemMock = new ItemMock();
@@ -27,6 +28,7 @@ public class CartFlows extends RouteBuilder {
         this.checkClientExistenceVolley = new CheckClientExistenceVolley();
         this.checkClientInDatabase = new CheckClientInDatabase();
         this.jsonToItem = new JsonToItem();
+        this.checkRequestStatus = new CheckRequestStatus();
     }
 
 
@@ -37,7 +39,9 @@ public class CartFlows extends RouteBuilder {
                 .log("${header.clientId}")
                 .log("Begin add item to cart")
          //       .process(jsonToItem);
-                .bean(AddItem.class, "addItemToCart(${header.clientId}, ${property.item})");
+                .bean(AddItem.class, "addItemToCart(${header.clientId}, ${property.item})")
+                .process(checkRequestStatus)
+                .to(Endpoint.CHECK_REQUEST_STATUS.getInstruction());
 
 /*                .process(itemMock)
                 .process(checkClientInDatabase)
@@ -65,8 +69,8 @@ public class CartFlows extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("login",constant("test"))
-                .setProperty("password",constant("test"))
+                .setProperty("login", constant("test"))
+                .setProperty("password", constant("test"))
                 .recipientList(simple("http://localhost:8181/cxf/beers/account/$(property.login}" +
                         "/${property.password}?bridgeEndpoint=true"))
                 .process(checkClientExistenceBeer)
@@ -82,7 +86,7 @@ public class CartFlows extends RouteBuilder {
          */
         from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
                 .log("Begin check client")
-                .setHeader(Exchange.HTTP_METHOD,constant("GET"))
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
                 .setProperty("clientID", constant("user1"))
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
@@ -101,7 +105,7 @@ public class CartFlows extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("login",constant("jean"))
+                .setProperty("login", constant("jean"))
                 .to("http://localhost:8181/cxf/volley/accounts/${property.login}?bridgeEndpoint=true")
                 .process(checkClientExistenceVolley)
                 .choice()
