@@ -22,7 +22,8 @@ public enum Endpoint {
     PAY("direct:pay"),
     CHECK_CLIENT_BEER("direct:checkClientBeer"),
     CHECK_CLIENT_BIKO("direct:checkClientBiko"),
-    CHECK_CLIENT_VOLLEY("direct:checkClientVolley");
+    CHECK_CLIENT_VOLLEY("direct:checkClientVolley"),
+    CSV_INPUT_DIRECTORY("file:camel/input");
 
     private String instruction;
 
