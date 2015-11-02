@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 
 /**
  * Created by Quentin on 10/21/2015.
+ * Read the response, formats it into a json string and add the shop name
  */
 public class ReadResponseStream implements Processor {
 

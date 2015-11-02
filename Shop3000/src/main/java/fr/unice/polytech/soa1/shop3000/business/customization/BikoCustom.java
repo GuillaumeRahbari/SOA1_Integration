@@ -17,4 +17,14 @@ public class BikoCustom extends Customization {
         this.components = components;
     }
 
+    public String toString(){
+        String s = "{\"components\": {";
+        s += "\"name\":\"" + components.get(0) + "\"";
+        for(int i = 1; i < components.size(); i++) {
+            s += ", \"name\":\"" + components.get(i) + "\"";
+        }
+        s += "}";
+        return s;
+    }
+
 }
