@@ -23,5 +23,11 @@ public class AddItemToCartRoute extends RouteBuilder {
 
         from(Endpoint.CHECK_REQUEST_STATUS.getInstruction())
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
+
+
+        // Expose the cart of a given client
+        rest("{clientID}/cart")
+                .get()
+                .to(Endpoint.GET_CART.getInstruction());
     }
 }
