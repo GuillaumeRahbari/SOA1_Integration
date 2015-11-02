@@ -69,10 +69,9 @@ public class CartFlows extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("login", constant("test"))
-                .setProperty("password", constant("test"))
-                .recipientList(simple("http://localhost:8181/cxf/beers/account/$(property.login}" +
-                        "/${property.password}?bridgeEndpoint=true"))
+                .setProperty("login",constant("test"))
+                .setProperty("password",constant("test"))
+                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.login}/${property.password}?bridgeEndpoint=true"))
                 .process(checkClientExistenceBeer)
                 .choice()
                     .when(simple("${property.result} == true"))
@@ -92,10 +91,10 @@ public class CartFlows extends RouteBuilder {
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
                 .process(checkClientExistenceBiko)
                 .choice()
-                .when(simple("${property.result} == true"))
-                .to(Endpoint.ADD_ITEM_CART.getInstruction())
-                .when(simple("${property.result} == false"))
-                .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
+                    .when(simple("${property.result} == true"))
+                        .to(Endpoint.ADD_ITEM_CART.getInstruction())
+                    .when(simple("${property.result} == false"))
+                        .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
 
         /**
          * This flow check if client is already registered in the volley system. Create the client otherwise.
@@ -105,8 +104,8 @@ public class CartFlows extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("login", constant("jean"))
-                .to("http://localhost:8181/cxf/volley/accounts/${property.login}?bridgeEndpoint=true")
+                .setProperty("login",constant("jean"))
+                .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.login}?bridgeEndpoint=true"))
                 .process(checkClientExistenceVolley)
                 .choice()
                     .when(simple("${property.result} == true"))

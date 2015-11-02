@@ -21,10 +21,5 @@ public class AddItemToCartRoute extends RouteBuilder {
 
         from(Endpoint.CHECK_REQUEST_STATUS.getInstruction())
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
-
-
-        rest("clients/accountBiko")
-                .get()
-                .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction());
     }
 }
