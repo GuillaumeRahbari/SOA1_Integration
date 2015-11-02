@@ -19,6 +19,8 @@ public class AddItemToCartRoute extends RouteBuilder {
                 .put()
                 .to(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction());
 
+
+
         from(Endpoint.CHECK_REQUEST_STATUS.getInstruction())
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
     }
