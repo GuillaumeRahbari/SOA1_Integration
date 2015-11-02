@@ -9,9 +9,10 @@ import org.apache.camel.builder.RouteBuilder;
 public class PayRoute extends RouteBuilder {
 
     private static final String GET_CLIENT_FROM_REST_ENDPOINT = "direct:getClientFromRest";
-    static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation";
+    static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
+                        CLIENT_ID_PROPERTY = "clientID";
 
-    private CheckPaymentInformationJson checkPaymentInformationJson = new CheckPaymentInformationJson();
+    private JsonPaymentInformationExtractor jsonPaymentInformationExtractor = new JsonPaymentInformationExtractor();
 
     @Override
     public void configure() throws Exception {
@@ -23,10 +24,9 @@ public class PayRoute extends RouteBuilder {
 
         from(GET_CLIENT_FROM_REST_ENDPOINT)
             .setProperty(PAYMENT_INFORMATION_PROPERTY, body())
-            .process(checkPaymentInformationJson)
-            .log("client: ${header.clientID}")
-            .setBody(simple("${body}\n${header.clientID}"))
-            .log("body: ${body}")
+            .process(jsonPaymentInformationExtractor)
+            .setProperty(CLIENT_ID_PROPERTY, constant("${header.clientID}"))
+            .log("client: ${" + CLIENT_ID_PROPERTY + "}")
             .to(Endpoint.VALIDATE_CART.getInstruction());
     }
 }

@@ -8,8 +8,10 @@ import org.apache.camel.Exchange;
 
 /**
  * @author Marc Karassev
+ *
+ *
  */
-public class CheckPaymentInformationJson extends SuperProcessor {
+public class JsonPaymentInformationExtractor extends SuperProcessor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
