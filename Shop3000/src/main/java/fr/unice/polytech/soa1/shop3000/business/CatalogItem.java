@@ -14,6 +14,9 @@ public class CatalogItem {
     private String description;
     private Customization customization;
 
+    public CatalogItem(){
+    };
+
     public CatalogItem(String name, double price){
         this.name = name;
         this.price = price;
