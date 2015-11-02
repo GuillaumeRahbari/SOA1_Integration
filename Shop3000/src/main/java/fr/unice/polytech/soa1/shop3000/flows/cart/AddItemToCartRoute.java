@@ -17,5 +17,9 @@ public class AddItemToCartRoute extends RouteBuilder {
         rest("clientID/cart")
                 .put()
                 .to(Endpoint.ADD_ITEM_CART.getInstruction());
+
+        rest("clients/accountBiko")
+                .get()
+                .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction());
     }
 }
