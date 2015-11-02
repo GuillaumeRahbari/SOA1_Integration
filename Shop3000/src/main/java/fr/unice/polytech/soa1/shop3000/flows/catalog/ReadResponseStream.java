@@ -28,6 +28,7 @@ public class ReadResponseStream extends SuperProcessor {
      * @param exchange
      * @throws Exception
      */
+    @Override
     public void process(Exchange exchange) throws Exception {
         String out = "{\"shopName\":\"" + shopName + "\",\"items\":"
                 + getStringFromInputStream((InputStream) exchange.getIn().getBody()) + "}";

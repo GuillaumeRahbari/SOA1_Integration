@@ -20,6 +20,7 @@ public abstract class TransformResponse extends SuperProcessor {
         this.shopName = shopName;
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         String out = getStringFromInputStream((InputStream) exchange.getIn().getBody());
         JSONArray jarray = new JSONArray(out);
