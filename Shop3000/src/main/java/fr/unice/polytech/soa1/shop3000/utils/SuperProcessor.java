@@ -11,20 +11,19 @@ import java.io.InputStreamReader;
 /**
  * @author Marc Karassev
  *
- * Abstract class for class implementing Processor in order to provide a static method which goal is to convert an
- * Exchange object's body into a String.
+ * Abstract class for class implementing Processor in order to provide a final method which goal is to convert an
+ * InputStream into a String for extracting an Exchange object's body into a String for example.
  */
 public abstract class SuperProcessor implements Processor {
 
     /**
-     * Converts a an Exchange object's body into a String.
+     * Converts an InputStream into a String.
      *
-     * @param exchange the Exchange object to convert
+     * @param inputStream the InputStream to convert
      * @return the resulting String
      */
-    public final String extractBodyFromExchange(Exchange exchange) {
-        InputStream response = (InputStream) exchange.getIn().getBody();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response));
+    public final String getStringFromInputStream(InputStream inputStream) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder out = new StringBuilder();
         String line;
 

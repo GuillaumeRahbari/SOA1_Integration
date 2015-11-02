@@ -5,6 +5,7 @@ import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.codehaus.jettison.json.JSONArray;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -20,8 +21,8 @@ public abstract class TransformResponse extends SuperProcessor {
     }
 
     public void process(Exchange exchange) throws Exception {
-        String out = extractBodyFromExchange(exchange);
-        JSONArray jarray = new JSONArray(out.toString());
+        String out = getStringFromInputStream((InputStream) exchange.getIn().getBody());
+        JSONArray jarray = new JSONArray(out);
 
         List<CatalogItem> items = parse(jarray);
 

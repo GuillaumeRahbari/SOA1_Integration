@@ -3,6 +3,8 @@ package fr.unice.polytech.soa1.shop3000.flows.catalog;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 
+import java.io.InputStream;
+
 /**
  * Created by Quentin on 10/21/2015.
  * Read the response, formats it into a json string and add the shop name
@@ -27,7 +29,8 @@ public class ReadResponseStream extends SuperProcessor {
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
-        String out = "{\"shopName\":\"" + shopName + "\",\"items\":" + extractBodyFromExchange(exchange) + "}";
+        String out = "{\"shopName\":\"" + shopName + "\",\"items\":"
+                + getStringFromInputStream((InputStream) exchange.getIn().getBody()) + "}";
 
         exchange.getIn().setBody(out);
     }
