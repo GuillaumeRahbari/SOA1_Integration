@@ -1,9 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
-import jdk.nashorn.api.scripting.JSObject;
 import org.apache.camel.Exchange;
 import org.codehaus.jettison.json.*;
-import org.apache.camel.Processor;
 
 
 /**

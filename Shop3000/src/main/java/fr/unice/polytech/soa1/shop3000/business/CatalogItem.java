@@ -14,6 +14,9 @@ public class CatalogItem {
     private double price;
     private String description;
 
+    public CatalogItem(){
+    };
+
     @JsonCreator
     public CatalogItem(@JsonProperty(value = "name", required = true) String name,
                        @JsonProperty(value = "price", required = true) double price){

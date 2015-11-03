@@ -2,9 +2,7 @@ package fr.unice.polytech.soa1.shop3000.flows.cart;
 
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Created by user on 26/10/2015.
