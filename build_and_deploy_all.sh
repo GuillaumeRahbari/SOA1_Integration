@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 echo "assuming servicemix is already running and that you have an apache-servicemix-6.0.0 folder in your home folder"
 echo "also, this script must be run at the SOA1_Integration root directory"
 

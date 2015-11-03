@@ -15,16 +15,17 @@ import java.util.List;
 
 /**
  * @author Laureen Ginier
+ * Parse the json array of items coming from AllHailBeer shop and map it to a list of CatalogItem.
  */
-public class TransformResponseBeer implements Processor {
-
-    private String shopName;
+public class TransformResponseBeer extends TransformResponse {
 
     public TransformResponseBeer(String shopName) {
-        this.shopName = shopName;
+        super(shopName);
     }
 
-    public List<CatalogItem> parse(JSONArray jarray) throws Exception {
+    @Override
+    public List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception {
+        JSONArray jarray = new JSONArray(jsonString);
         List<CatalogItem> items = new ArrayList<CatalogItem>();
         for(int i = 0; i < jarray.length(); i++) {
             JSONObject obj = jarray.getJSONObject(i);
@@ -36,39 +37,9 @@ public class TransformResponseBeer implements Processor {
                 String descr = "Titration: " + jobj.getString("titration")
                         + ", gout: " + jobj.getString("gout")
                         + ", cereale: " + jobj.getString("cereale");
-                String custom = jobj.getString("user");
-                boolean customization = !"".equals(custom);
-
                 items.add(new CatalogItem(name, Double.parseDouble(price), descr));
             }
-
         }
         return items;
-    }
-
-    public void process(Exchange exchange) throws Exception {
-        InputStream response = (InputStream) exchange.getIn().getBody();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response));
-        StringBuilder out = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) { out.append(line); }
-        reader.close();
-
-        JSONArray jarray = new JSONArray(out.toString());
-
-        List<CatalogItem> items = parse(jarray);
-
-        StringBuilder jsonstring = new StringBuilder();
-        jsonstring.append("{\"shopName\":\""+shopName+"\", \"items\":[");
-
-        boolean first = true;
-        for(CatalogItem item : items){
-            jsonstring.append(first ? "" : ",");
-            first = false;
-            jsonstring.append(item.toJsonString());
-        }
-        jsonstring.append("]}");
-
-        exchange.getIn().setBody(jsonstring.toString());
     }
 }
