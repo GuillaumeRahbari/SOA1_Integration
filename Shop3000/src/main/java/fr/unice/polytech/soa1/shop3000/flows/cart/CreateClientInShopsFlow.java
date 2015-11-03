@@ -25,5 +25,14 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setProperty("username",constant("test"))
                 .process(createClientBiko)
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"));
+
+        from(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
+                .log("Begin create beer client")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setBody(constant(""))
+                .setProperty("username",constant("nab"))
+                .setProperty("password",constant("nab"))
+                .process(createClientBiko)
+                .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"));
     }
 }
