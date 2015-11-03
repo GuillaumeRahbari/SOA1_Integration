@@ -10,9 +10,13 @@ import org.apache.camel.builder.RouteBuilder;
 public class CreateClientInShopsFlow extends RouteBuilder {
 
     private CreateClientBiko createClientBiko;
+    private CreateClientBeer createClientBeer;
+    private CreateClientVolley createClientVolley;
 
     public CreateClientInShopsFlow(){
         this.createClientBiko = new CreateClientBiko();
+        this.createClientBeer = new CreateClientBeer();
+        this.createClientVolley = new CreateClientVolley();
     }
 
     @Override
@@ -31,7 +35,16 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setBody(constant(""))
                 .setProperty("username",constant("nab"))
                 .setProperty("password",constant("nab"))
-                .process(createClientBiko)
+                .process(createClientBeer)
                 .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"));
+
+        from(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
+                .log("Begin create volley client")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setBody(constant(""))
+                .setProperty("login",constant("nab"))
+                .setProperty("password",constant("nab"))
+                .process(createClientVolley)
+                .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"));
     }
 }
