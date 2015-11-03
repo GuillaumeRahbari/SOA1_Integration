@@ -1,14 +1,14 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
-
-import java.util.ArrayList;
+import fr.unice.polytech.soa1.shop3000.business.CatalogItemVolley;
 import java.util.List;
 
 /**
  * @author Laureen Ginier
+ * Map the json array of items coming from VolleyOnTheBeach shop to a list of CatalogItem.
  */
 public class TransformResponseVolley extends TransformResponse {
 
@@ -17,15 +17,7 @@ public class TransformResponseVolley extends TransformResponse {
     }
 
     @Override
-    public List<CatalogItem> parse(JSONArray jarray) throws Exception {
-        List<CatalogItem> items = new ArrayList<CatalogItem>();
-        for(int i = 0; i < jarray.length(); i++) {
-            JSONObject jobj = jarray.getJSONObject(i);
-            String name = jobj.getString("name");
-            String price = jobj.getString("price");
-            String descr = jobj.getString("description");
-            items.add(new CatalogItem(name, Double.parseDouble(price), descr));
-        }
-        return items;
+    public List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception {
+        return new ObjectMapper().readValue(jsonString, new TypeReference<List<CatalogItemVolley>>() { });
     }
 }

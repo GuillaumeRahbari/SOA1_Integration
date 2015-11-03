@@ -16,6 +16,7 @@ public enum Endpoint {
     BIKO_CATALOG("direct:bikoCatalog"),
     VOLLEY_CATALOG("direct:volleyCatalog"),
     BEER_CATALOG("direct:beerCatalog"),
+    CSV_INPUT_DIRECTORY("file:camel/input"),
 
     /** Cart endpoints **/
     ADD_ITEM_CART("direct:addItemCart"),
@@ -27,6 +28,7 @@ public enum Endpoint {
     CHECK_CLIENT_BEER("direct:checkClientBeer"),
     CHECK_CLIENT_BIKO("direct:checkClientBiko"),
     CHECK_CLIENT_VOLLEY("direct:checkClientVolley"),
+
     CREATE_CLIENT_VOLLEY_ON_THE_BEACH("direct:createClientVolley"),
     CREATE_CLIENT_BIKO("direct:createClientBiko"),
     CREATE_CLIENT_ALL_HAIL_BEER("direct:createClientBeer"),
@@ -34,7 +36,6 @@ public enum Endpoint {
     CHECK_REQUEST_STATUS("direct:checkRequestStatus"),
     /** Payment endpoints **/
     PAY("direct:pay");
-
 
     private String instruction;
 

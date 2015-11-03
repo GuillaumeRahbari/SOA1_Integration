@@ -2,7 +2,6 @@ package fr.unice.polytech.soa1.shop3000.flows.cart;
 
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.Exchange;
-import org.apache.camel.Route;
 import org.apache.camel.builder.RouteBuilder;
 
 /**

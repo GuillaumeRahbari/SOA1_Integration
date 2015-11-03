@@ -1,15 +1,8 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
-import fr.unice.polytech.soa1.shop3000.business.Client;
-import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.codehaus.jettison.json.*;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * Created by Nabil on 26/10/2015.

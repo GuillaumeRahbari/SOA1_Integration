@@ -1,15 +1,21 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author Laureen Ginier
+ * Parse the json array of items coming from AllHailBeer shop and map it to a list of CatalogItem.
  */
 public class TransformResponseBeer extends TransformResponse {
 
@@ -18,7 +24,8 @@ public class TransformResponseBeer extends TransformResponse {
     }
 
     @Override
-    public List<CatalogItem> parse(JSONArray jarray) throws Exception {
+    public List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception {
+        JSONArray jarray = new JSONArray(jsonString);
         List<CatalogItem> items = new ArrayList<CatalogItem>();
         for(int i = 0; i < jarray.length(); i++) {
             JSONObject obj = jarray.getJSONObject(i);
@@ -32,7 +39,6 @@ public class TransformResponseBeer extends TransformResponse {
                         + ", cereale: " + jobj.getString("cereale");
                 items.add(new CatalogItem(name, Double.parseDouble(price), descr));
             }
-
         }
         return items;
     }
