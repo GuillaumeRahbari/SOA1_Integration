@@ -7,14 +7,15 @@ import org.apache.camel.builder.RouteBuilder;
 /**
  * Created by tom on 26/10/15.
  */
-public class AddItemToCartRoute extends RouteBuilder {
+public class CartRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        // Binding the REST domain specific language to the Servlet component
-        restConfiguration().component("servlet"); // feature:install camel-servlet + edit in the OSGi blueprint
+        restConfiguration().component("servlet");
 
-        // Defining the resource to expose, and the used verb
+        /**
+         * {@link CartFlows}
+         */
         rest("{clientID}/cart")
                 .put()
                 .to(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction());

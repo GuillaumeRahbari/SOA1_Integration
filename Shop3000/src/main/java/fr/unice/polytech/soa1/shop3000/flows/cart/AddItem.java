@@ -28,7 +28,7 @@ public class AddItem {
         if (client != null){
             addItemToCart(client,catalogItem);
             return true;
-        };
+        }
         return false;
     }
 

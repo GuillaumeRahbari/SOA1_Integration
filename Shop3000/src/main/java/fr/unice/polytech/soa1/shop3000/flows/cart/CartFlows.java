@@ -22,6 +22,10 @@ public class CartFlows extends RouteBuilder {
                 .log("Begin add item to cart")
                 .bean(AddItem.class, "addItemToCart(${header.clientId}, ${property.item})")
                 .process(checkRequestStatus)
+
+                /**
+                 * {@link CartRoute}
+                 */
                 .to(Endpoint.CHECK_REQUEST_STATUS.getInstruction());
     }
 
