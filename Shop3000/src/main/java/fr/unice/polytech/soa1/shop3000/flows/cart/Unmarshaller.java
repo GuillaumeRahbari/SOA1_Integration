@@ -23,18 +23,23 @@ public class Unmarshaller extends RouteBuilder {
         /**
          * This route is here to unmarshall the json before go to the business layer.
          * We do this with the process JsonUnmarshaller.
-         * It redirects to the ADD_ITEM_CART endpoint.
+         * The flow come from {@link CartRoute}
          */
         from(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction())
                 .log("DEbut du process")
+                /** {@link JsonUnmarshaller} TODO : Faut mettre le process en privé dans la classe **/
                 .process(jsonUnmarshaller)
-                .to(Endpoint.ADD_ITEM_CART.getInstruction());
+
+                /** It redirects to {@link CartFlows} **/
+                 .to(Endpoint.ADD_ITEM_CART.getInstruction());
 
 
         /**
          * This route is here to unmarshall the csv file before go to the business layer.
          * We do this with the process CsvToCartItemProcessor.
          * It redirects to the ADD_ITEM_CART endpoint.
+         *
+         * TODO : Sortir la méthode private BuildCsvFormat car elle peut être utilise ailleur
          */
         from(Endpoint.CSV_INPUT_DIRECTORY.getInstruction())
                 .log("Handling a csv File : ${file:name}")
@@ -59,4 +64,6 @@ public class Unmarshaller extends RouteBuilder {
         format.setUseMaps(true);
         return format;
     }
+
+
 }

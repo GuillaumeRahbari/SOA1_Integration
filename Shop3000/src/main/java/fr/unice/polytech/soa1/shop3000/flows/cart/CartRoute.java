@@ -14,7 +14,7 @@ public class CartRoute extends RouteBuilder {
         restConfiguration().component("servlet");
 
         /**
-         * {@link CartFlows}
+         * {@link Unmarshaller}
          */
         rest("{clientID}/cart")
                 .put()
