@@ -27,6 +27,7 @@ public class CartRoute extends RouteBuilder {
          * Comes from {@link CartFlows}
          */
         from(Endpoint.CHECK_REQUEST_STATUS.getInstruction())
+                .log("ok")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
 
 

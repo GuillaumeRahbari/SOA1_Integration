@@ -1,6 +1,10 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.CsvDataFormat;
 
@@ -9,11 +13,11 @@ import org.apache.camel.model.dataformat.CsvDataFormat;
  */
 public class Unmarshaller extends RouteBuilder {
 
-    private JsonUnmarshaller jsonUnmarshaller;
+    private JsonToItem jsonUnmarshaller;
     private CsvToCartItemProcessor csvToCartItemProcessor;
 
     public Unmarshaller () {
-        jsonUnmarshaller = new JsonUnmarshaller();
+        jsonUnmarshaller = new JsonToItem();
         csvToCartItemProcessor = new CsvToCartItemProcessor();
     }
 
@@ -27,7 +31,7 @@ public class Unmarshaller extends RouteBuilder {
          */
         from(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction())
                 .log("DEbut du process")
-                /** {@link JsonUnmarshaller} TODO : Faut mettre le process en privé dans la classe **/
+                /** {@link JsonToItem} **/
                 .process(jsonUnmarshaller)
 
                 /** It redirects to {@link CartFlows} **/
@@ -63,6 +67,30 @@ public class Unmarshaller extends RouteBuilder {
         format.setSkipHeaderRecord(true);
         format.setUseMaps(true);
         return format;
+    }
+
+
+
+
+
+
+    private class JsonToItem extends SuperProcessor {
+
+        /**
+         * This process unmarshalls the json body and creates a property item with the object.
+         * @param exchange This Exchange object has a body containing a CatalogItem.
+         * @throws Exception
+         */
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            // Read the exchange body.
+            String body = extractExchangeBody(exchange);
+            // Mapping of the body into the object CatalogItem.
+            ObjectMapper mapper = new ObjectMapper();
+            CatalogItem catalogItem = mapper.readValue(body, CatalogItem.class);
+            // Set of the item property with the CatalogItem object
+            exchange.setProperty("item", catalogItem);
+        }
     }
 
 
