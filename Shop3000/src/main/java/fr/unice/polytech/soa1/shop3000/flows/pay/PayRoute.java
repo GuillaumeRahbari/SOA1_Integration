@@ -1,6 +1,5 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
-import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
 
 /**

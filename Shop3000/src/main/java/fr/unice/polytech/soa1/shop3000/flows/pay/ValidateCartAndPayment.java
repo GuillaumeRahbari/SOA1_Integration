@@ -1,6 +1,5 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
-import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -14,7 +13,7 @@ public class ValidateCartAndPayment extends RouteBuilder {
         /** Flow checking payment information.
          *  Expects a property "paymentInformation" with a JSON representing a PaymentInformation object.
          */
-        // TODO
+        // TODO choice()
 
         from(Endpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
