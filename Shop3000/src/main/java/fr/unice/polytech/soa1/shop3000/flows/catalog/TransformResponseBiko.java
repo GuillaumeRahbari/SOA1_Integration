@@ -1,14 +1,23 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.business.CatalogItemBiko;
+import org.apache.camel.Exchange;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Laureen Ginier
+ * Map the json array of items coming from Biko shop to a list of CatalogItem.
  */
 public class TransformResponseBiko extends TransformResponse {
 
@@ -17,15 +26,7 @@ public class TransformResponseBiko extends TransformResponse {
     }
 
     @Override
-    public List<CatalogItem> parse(JSONArray jarray) throws Exception {
-        List<CatalogItem> items = new ArrayList<CatalogItem>();
-        for(int i = 0; i < jarray.length(); i++) {
-            JSONObject jobj = jarray.getJSONObject(i);
-            String name = jobj.getString("name");
-            String price = jobj.getString("price");
-            String descr = jobj.getString("color");
-            items.add(new CatalogItem(name, Double.parseDouble(price), descr));
-        }
-        return items;
+    public List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception {
+        return new ObjectMapper().readValue(jsonString, new TypeReference<List<CatalogItemBiko>>() { });
     }
 }

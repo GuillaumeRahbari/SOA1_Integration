@@ -1,19 +1,23 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
-import org.codehaus.jettison.json.JSONArray;
+import org.apache.camel.Processor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
 /**
  * @author Laureen Ginier
- * Read the response and formats it into a list of POJO
+ * Read the response, which is a json array of items from a shop, and formats it into a json string
+ * containing the origin shop's name and the list of standardized CatalogItems.
  */
 public abstract class TransformResponse extends SuperProcessor {
 
-    private String shopName;
+    protected String shopName;
 
     public TransformResponse(String shopName){
         this.shopName = shopName;
@@ -21,25 +25,15 @@ public abstract class TransformResponse extends SuperProcessor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String out = extractExchangeBody(exchange);
-        JSONArray jarray = new JSONArray(out);
+		String out = extractExchangeBody(exchange);
 
-        List<CatalogItem> items = parse(jarray);
+        ObjectMapper mapper = new ObjectMapper();
+        List<CatalogItem> items = mapToCatalogItem(out);
 
-        StringBuilder jsonstring = new StringBuilder();
-        jsonstring.append("{\"shopName\":\""+shopName+"\", \"items\":");
-        jsonstring.append("[");
-
-        boolean first = true;
-        for(CatalogItem item : items){
-            jsonstring.append(first ? "" : ",");
-            first = false;
-            jsonstring.append(item.toString());
-        }
-        jsonstring.append("]}");
-
-        exchange.getIn().setBody(jsonstring.toString());
+        String jsonString = "{\"shopName\":\""+shopName+"\", \"items\":"
+                + mapper.writeValueAsString(items) + "}";
+        exchange.getIn().setBody(jsonString);
     }
 
-    public abstract List<CatalogItem> parse(JSONArray jarray) throws Exception;
+    public abstract List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception;
 }

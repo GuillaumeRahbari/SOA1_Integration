@@ -2,7 +2,6 @@ package fr.unice.polytech.soa1.shop3000.business;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.unice.polytech.soa1.shop3000.business.customization.Customization;
 
 /**
  * @author: Laureen Ginier on 21/10/15.
@@ -14,7 +13,9 @@ public class CatalogItem {
     private String name;
     private double price;
     private String description;
-    private Customization customization;
+
+    public CatalogItem(){
+    };
 
     @JsonCreator
     public CatalogItem(@JsonProperty(value = "name", required = true) String name,
@@ -23,11 +24,16 @@ public class CatalogItem {
         this.price = price;
     }
 
-    public CatalogItem(String name, double price, String description){
+    /**
+     * Constructor of a shop3000 catalog
+     * @param name name of the item
+     * @param price price of the item
+     * @param description description of the item
+     */
+    public CatalogItem(String name, double price, String description) {
         this.name = name;
         this.price = price;
         this.description = description;
-        //this.customization = customization;
     }
 
     public String getName() {
@@ -54,19 +60,14 @@ public class CatalogItem {
         this.description = description;
     }
 
-    public Customization getCustomization() {
-        return customization;
-    }
-
-    public void setCustomization(Customization customization) {
-        this.customization = customization;
-    }
-
-    public String toString() {
+    /**
+     * Returns the json string representing the CatalogItem.
+     * @return valid json string
+     */
+    public String toJsonString() {
         String s = "{\"name\":\"" + name
                 + "\", \"price\":" + price
                 + ", \"description\":\"" + description + "\"}";
-                //+ "\", \"Customization\":" + customization;
         return s;
     }
 

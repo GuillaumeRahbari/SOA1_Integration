@@ -11,15 +11,14 @@ public class ClientServiceRoute extends RouteBuilder{
 
     @Override
     public void configure() throws Exception {
+        restConfiguration().component("servlet");
 
-        // Binding the REST domain specific language to the Servlet component
-        restConfiguration().component("servlet"); // feature:install camel-servlet + edit in the OSGi blueprint
-
-        // Defining the resource to expose, and the used verb
+        /**
+         * This flow create a client in the shop3000 database
+         *
+         */
         rest("/clientFile")
                 .post()
-                .to(Endpoint.CLIENT_FILE_INPUT.getInstruction())
-
-        ;
+                .to(Endpoint.CLIENT_FILE_INPUT.getInstruction());
     }
 }
