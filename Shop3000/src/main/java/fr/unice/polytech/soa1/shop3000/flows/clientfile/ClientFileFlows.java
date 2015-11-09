@@ -1,9 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.clientfile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
-import fr.unice.polytech.soa1.shop3000.mock.ClientFileMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
