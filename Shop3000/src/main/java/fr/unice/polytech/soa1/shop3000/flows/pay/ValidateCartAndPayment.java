@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
@@ -35,16 +36,14 @@ public class ValidateCartAndPayment extends RouteBuilder {
                 .log("starting cart validation")
                 .log("body: ${body}")
                 // TODO extract payment info from body and set a property
-                /*
                 .multicast()
-                    .aggregationStrategy(new BooleanAndAggregationStrategy())
+                    .aggregationStrategy(new JoinAggregationStrategy()) // TODO c'etait une autre strat d'aggreg
                     .log("multicasting")
-                    .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction())
-                    .to(Endpoint.ADD_TO_CART_BIKO.getInstruction())
-                    .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction())
+                    .to(Endpoint.CHECK_CLIENT_BEER.getInstruction())
+                    .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
+                    .to(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .log("merging")
                 .end()
-                */
                 .log("body: ${body}");
                 // TODO extract payment info from property and set body
                 //.to(Endpoint.PAY.getInstruction());

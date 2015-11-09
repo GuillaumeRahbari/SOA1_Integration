@@ -72,8 +72,8 @@ public class CheckClientFlow extends RouteBuilder {
                 /** @{Link CheckClientExistenceVolley} **/
                 .process(checkClientExistenceVolley)
                 .choice()
-                    .when(simple("${property.result} == true"))
-                    .when(simple("${property.result} == false"))
+                .when(simple("${property.result} == true"))
+                .when(simple("${property.result} == false"))
                 .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction());
     }
 }
