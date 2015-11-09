@@ -10,6 +10,7 @@ import org.apache.camel.builder.RouteBuilder;
 /**
  * @author Marc Karassev
  *
+ * Builds routes responsible for unmarshalling data from payment requests.
  */
 public class PayUnmarshaller extends RouteBuilder {
 
@@ -34,6 +35,10 @@ public class PayUnmarshaller extends RouteBuilder {
                 .to(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction());
     }
 
+    /**
+     * Process responsible for extracting a PaymentInformation object from a JSON expected to be in a
+     * "paymentInformation" exchange property.
+     */
     private class JsonPaymentInformationExtractor extends SuperProcessor {
 
         @Override
