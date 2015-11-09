@@ -34,6 +34,9 @@ public class GetCatalogs extends RouteBuilder {
                     .log("${body}");
 
 
+        from(Endpoint.GET_BEST_SELLER.getInstruction())
+                .log("Begin Get BestSeller");
+
 
     }
 }

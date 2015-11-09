@@ -18,10 +18,20 @@ public class CatalogServiceRoute extends RouteBuilder {
     public void configure() throws Exception {
         restConfiguration().component("servlet"); // feature:install camel-servlet + edit in the OSGi blueprint
 
+        /**
+         * {@link GetCatalogs#configure()}
+         */
         rest("/catalog")
                 .get()
                 .to(Endpoint.GET_CATALOG.getInstruction());
 
+
+        /**
+         * {@link GetCatalogs#configure()}
+         */
+        rest("/catalog/bestSeller")
+                .get()
+                .to(Endpoint.GET_BEST_SELLER.getInstruction());
 
     }
 
