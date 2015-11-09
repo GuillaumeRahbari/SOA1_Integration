@@ -30,6 +30,7 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .process(createClientBiko)
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"));
 
+
         from(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
                 .log("Begin create beer client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))

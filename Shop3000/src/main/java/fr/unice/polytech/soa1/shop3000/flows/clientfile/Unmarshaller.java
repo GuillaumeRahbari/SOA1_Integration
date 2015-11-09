@@ -25,6 +25,9 @@ public class Unmarshaller extends RouteBuilder {
             .log("Avant le process")
             .process(jsonToClient)
             .log("Après le process")
+                /**
+                 * {@link ClientFileFlows#configure()}
+                 */
             .to(Endpoint.CREATE_CLIENT_FILE.getInstruction());
     }
 
@@ -33,7 +36,7 @@ public class Unmarshaller extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             String body = extractExchangeBody(exchange);
-            System.out.println(body);
+            System.out.println(body); // <-- NEWBIE !
             ObjectMapper mapper = new ObjectMapper();
             Client client = mapper.readValue(body,Client.class);
             System.out.println(client);

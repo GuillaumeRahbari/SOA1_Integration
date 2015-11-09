@@ -5,10 +5,11 @@ package fr.unice.polytech.soa1.shop3000.flows.pay;
  *
  * Endpoints of pay flows enumeration.
  */
-public enum Endpoint {
+public enum PayEndpoint {
 
-    VALIDATE_PAYMENT_INFORMATION("direct:validatePaymentInformation"), //TODO c'est une queue
-    VALIDATE_CART("direct:validateCart"),  // TODO : c'était une queue
+    UNMARSHAL("direct:unmarshalPaymentData"),
+    VALIDATE_PAYMENT_INFORMATION("direct:validatePaymentInformation"),
+    VALIDATE_CART("direct:validateCart"),
     CHECK_CLIENT_BEER("direct:checkClientBeer"),
     CHECK_CLIENT_BIKO("direct:checkClientBiko"),
     CHECK_CLIENT_VOLLEY("direct:checkClientVolley"),
@@ -16,7 +17,7 @@ public enum Endpoint {
 
     private String instruction;
 
-    private Endpoint(String instruction) {
+    private PayEndpoint(String instruction) {
         this.instruction = instruction;
     }
 

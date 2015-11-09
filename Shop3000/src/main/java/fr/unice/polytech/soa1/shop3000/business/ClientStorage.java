@@ -20,8 +20,8 @@ public class ClientStorage {
         return clientStorage.get(firstName);
     }
 
-    public static void delete(String firstName) {
-        clientStorage.remove(firstName);
+    public static boolean delete(String firstName) {
+        return clientStorage.remove(firstName) == null ? false : true;
     }
 
     /**

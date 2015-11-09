@@ -13,6 +13,7 @@ public enum Endpoint {
     DELETE_CLIENT_FILE("direct:deleteClientFile"),
     CLIENT_DATABASE("direct:checkClient"),
     CLIENT_UNMARSHALL("direct:unmarshallClient"),
+    SEND_STATUS("direct:sendStatus"),
 
 
     /** Catalog Endpoints **/
