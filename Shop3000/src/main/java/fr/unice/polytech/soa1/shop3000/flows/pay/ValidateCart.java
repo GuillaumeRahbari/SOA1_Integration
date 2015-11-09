@@ -6,15 +6,14 @@ import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
-import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
  * @author Marc Karassev
  *
- * Builds routes responsible for checking payment information and cart contents.
+ * Builds routes responsible for checking cart content.
  */
-public class ValidateCartAndPayment extends RouteBuilder {
+public class ValidateCart extends RouteBuilder {
 
     public static final String CART_PROPERTY = "cart";
 
@@ -22,23 +21,6 @@ public class ValidateCartAndPayment extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-
-        /** Flow checking payment information.
-         *  Expects a property "paymentInformation" with a JSON representing a PaymentInformation object.
-         */
-        from(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction())
-                .log("starting payment information checking")
-                .choice()
-                    .when(exchange -> exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY)
-                            .equals(PayUnmarshaller.BAD_INFORMATION))
-                        .log("bad payment information")
-                        /** {@link PayRoute#configure() next} route builder **/
-                        .to(PayEndpoint.BAD_PAYMENT_INFORMATION_ENDPOINT.getInstruction())
-                    .otherwise()
-                        .log("good payment information")
-                        /** {@link ValidateCartAndPayment#configure() next} route builder **/
-                        .to(PayEndpoint.EXTRACT_CART.getInstruction())
-                .endChoice();
 
         /**
          * Flow extracting cart.
@@ -53,7 +35,7 @@ public class ValidateCartAndPayment extends RouteBuilder {
                         .to(PayEndpoint.BAD_CLIENT_ID.getInstruction())
                     .otherwise()
                         .log("client id OK")
-                        /** {@link ValidateCartAndPayment#configure() next} route builder **/
+                        /** {@link ValidateCart#configure() next} route builder **/
                         .to(PayEndpoint.VALIDATE_CART.getInstruction())
                 .endChoice();
 
@@ -74,7 +56,6 @@ public class ValidateCartAndPayment extends RouteBuilder {
                 .log("body: ${body}");
                 // TODO extract payment info from property and set body
                 //.to(PayEndpoint.PAY.getInstruction());
-
 
         /**
          * This flow handle the best seller
