@@ -3,6 +3,8 @@ package fr.unice.polytech.soa1.shop3000.flows.catalog;
 import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -40,7 +42,18 @@ public class GetCatalogs extends RouteBuilder {
 
         from(Endpoint.GET_BEST_SELLER.getInstruction())
                 .log("Begin Get BestSeller");
+    }
 
+    /**
+     * @author Laureen Ginier
+     * Encapsulate the exchange into '[]' to have a valid json array
+     */
+    private class ToJSonArray implements Processor {
 
+        public void process(Exchange exchange) throws Exception {
+            String response = (String) exchange.getIn().getBody();
+            String jsonResponse = "[" + response + "]";
+            exchange.getIn().setBody(jsonResponse);
+        }
     }
 }
