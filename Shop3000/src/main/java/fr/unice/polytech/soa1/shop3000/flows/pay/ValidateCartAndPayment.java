@@ -43,6 +43,8 @@ public class ValidateCartAndPayment extends RouteBuilder {
                 .log("body: ${body}")
                 // TODO extract payment info from body and set a property
 
+                .wireTap(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
+
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy()) // TODO c'etait une autre strat d'aggreg
                     .log("multicasting")
@@ -54,5 +56,13 @@ public class ValidateCartAndPayment extends RouteBuilder {
                 .log("body: ${body}");
                 // TODO extract payment info from property and set body
                 //.to(PayEndpoint.PAY.getInstruction());
+
+
+        /**
+         * This flow handle the best seller
+         */
+        from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
+                .log("Here we update the number of item sells for the best seller");
+
     }
 }

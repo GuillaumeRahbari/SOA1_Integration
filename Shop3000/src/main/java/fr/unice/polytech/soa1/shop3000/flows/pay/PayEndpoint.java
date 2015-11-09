@@ -13,6 +13,7 @@ public enum PayEndpoint {
     CHECK_CLIENT_BEER("direct:checkClientBeer"),
     CHECK_CLIENT_BIKO("direct:checkClientBiko"),
     CHECK_CLIENT_VOLLEY("direct:checkClientVolley"),
+    UPDATE_BEST_SELLER("direct:updateBestSeller"),
     PAY("direct:pay");
 
     private String instruction;
