@@ -12,12 +12,10 @@ public class CreateClientVolley extends SuperProcessor{
     public void process(Exchange exchange) throws Exception {
         String login = (String)exchange.getProperty("clientID");
         //String password = (String)exchange.getProperty("password");
-
-
         JSONObject jObject = new JSONObject();
         jObject.put("name", login);
         jObject.put("password", login);
-        System.out.println(jObject.toString());
+        //System.out.println(jObject.toString());
         exchange.getIn().setBody(jObject.toString());
     }
 }
