@@ -18,7 +18,7 @@ public class ValidateCartAndPayment extends RouteBuilder {
         /** Flow checking payment information.
          *  Expects a property "paymentInformation" with a JSON representing a PaymentInformation object.
          */
-        from(Endpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction())
+        from(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction())
                 .log("starting payment information checking")
                 .choice()
                     .when(new Predicate() {
@@ -31,27 +31,27 @@ public class ValidateCartAndPayment extends RouteBuilder {
                         .to(BAD_PAYMENT_INFORMATION_ENDPOINT)
                     .otherwise()
                         .log("good information")
-                        .to(Endpoint.VALIDATE_CART.getInstruction())
+                        .to(PayEndpoint.VALIDATE_CART.getInstruction())
                 .endChoice();
 
         from(BAD_PAYMENT_INFORMATION_ENDPOINT)
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
                 .setBody(constant("Bad payment information."));
 
-        from(Endpoint.VALIDATE_CART.getInstruction())
+        from(PayEndpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
                 .log("body: ${body}")
                 // TODO extract payment info from body and set a property
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy()) // TODO c'etait une autre strat d'aggreg
                     .log("multicasting")
-                    .to(Endpoint.CHECK_CLIENT_BEER.getInstruction())
-                  //  .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
-                  //  .to(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
+                  //  .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                  //  .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .log("merging")
                 .end()
                 .log("body: ${body}");
                 // TODO extract payment info from property and set body
-                //.to(Endpoint.PAY.getInstruction());
+                //.to(PayEndpoint.PAY.getInstruction());
     }
 }

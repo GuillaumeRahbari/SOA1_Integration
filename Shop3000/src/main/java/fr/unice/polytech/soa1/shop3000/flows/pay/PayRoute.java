@@ -5,7 +5,7 @@ import org.apache.camel.builder.RouteBuilder;
 /**
  * @author Marc Karassev
  *
- * Endpoint for the payment flow.
+ * PayEndpoint for the payment flow.
  * The route is {host}:{port}/{appname}/{clientID}/payment and the expected method is POST
  * Expects a JSON in POST body representing a PaymentInformation object.
  */
@@ -32,6 +32,6 @@ public class PayRoute extends RouteBuilder {
                 .setProperty(CLIENT_ID_PROPERTY, simple("${header.clientId}"))
                 .log("client: ${property." + CLIENT_ID_PROPERTY + "}")
                 /** {@link ValidateCartAndPayment#configure() next} flow **/
-                .to(Endpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction());
+                .to(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction());
     }
 }
