@@ -22,6 +22,7 @@ public enum Endpoint {
     VOLLEY_CATALOG("direct:volleyCatalog"),
     BEER_CATALOG("direct:beerCatalog"),
     CSV_INPUT_DIRECTORY("file:csvInputDirectory"),
+    GET_BEST_SELLER("direct:getBestSeller"),
 
     /** Cart endpoints **/
     ADD_ITEM_CART("direct:addItemCart"),

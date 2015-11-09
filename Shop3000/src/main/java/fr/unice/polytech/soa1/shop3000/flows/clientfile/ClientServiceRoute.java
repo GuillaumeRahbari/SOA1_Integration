@@ -21,37 +21,33 @@ public class ClientServiceRoute extends RouteBuilder{
         /**
          * This flow create a client in the shop3000 database.
          *
-         * This flow continues to {@link Unmarshaller}.
+         * This flow continues to {@link Unmarshaller#jsonToClient}.
          */
         rest("/clientFile")
                 .post()
                 .to(Endpoint.CLIENT_UNMARSHALL.getInstruction());
 
         /**
-         * TODO : Mettre une gestion des cas d'erreur pour le post /clientFile
-         * TODO : Faire un get /clientFile/{firstName}
-         * TODO : Faire un Delete /clientFile/{firstName}
-         */
-
-        /**
          * This flows get a client in the shop3000 database thanks to the users's first name.
          *
-         * This flow continues to {@link ClientFileFlows}.
+         * This flow continues to {@link ClientFileFlows#configure()}.
          */
         rest("/clientFile/{clientFirstName}")
                 .get()
                 .to(Endpoint.GET_CLIENT_FILE.getInstruction());
 
-
         /**
          * This flows delete a client in the shop3000 database thanks to the user's first name.
          *
-         * This flow continues to {@link ClientFileFlows}.
+         * This flow continues to {@link ClientFileFlows#configure()}.
          */
         rest("/clientFile/{clientFirstName}")
                 .delete()
                 .to(Endpoint.DELETE_CLIENT_FILE.getInstruction());
 
+        /**
+         * The flows to send status.
+         */
         from(Endpoint.SEND_STATUS.getInstruction())
                 .log("Status : " + "${property.status}")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
