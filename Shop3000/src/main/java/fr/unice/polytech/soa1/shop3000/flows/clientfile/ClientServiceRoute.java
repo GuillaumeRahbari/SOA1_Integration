@@ -19,6 +19,6 @@ public class ClientServiceRoute extends RouteBuilder{
          */
         rest("/clientFile")
                 .post()
-                .to(Endpoint.CLIENT_FILE_INPUT.getInstruction());
+                .to(Endpoint.CLIENT_UNMARSHALL.getInstruction());
     }
 }

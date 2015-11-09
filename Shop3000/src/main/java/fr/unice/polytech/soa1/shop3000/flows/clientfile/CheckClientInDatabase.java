@@ -20,6 +20,7 @@ public class CheckClientInDatabase implements Processor {
     public void process(Exchange exchange) throws Exception {
         // We get a client by the "client" property
         Client client = (Client)exchange.getProperty("client");
+        System.out.println(client);
 
         // We check if he exists in db.
         if (ClientStorage.checkInDB(client)) {
