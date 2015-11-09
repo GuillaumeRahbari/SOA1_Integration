@@ -30,13 +30,5 @@ public class CartRoute extends RouteBuilder {
                 .log("ok")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
 
-
-        /**
-         * Juste du test : va disparaitre
-         */
-        rest("/clients/createBiko")
-                .post()
-                .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction());
-
     }
 }
