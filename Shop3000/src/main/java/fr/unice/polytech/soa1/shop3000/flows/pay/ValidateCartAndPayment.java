@@ -46,8 +46,8 @@ public class ValidateCartAndPayment extends RouteBuilder {
                     .aggregationStrategy(new JoinAggregationStrategy()) // TODO c'etait une autre strat d'aggreg
                     .log("multicasting")
                     .to(Endpoint.CHECK_CLIENT_BEER.getInstruction())
-                    .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
-                    .to(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                  //  .to(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
+                  //  .to(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .log("merging")
                 .end()
                 .log("body: ${body}");
