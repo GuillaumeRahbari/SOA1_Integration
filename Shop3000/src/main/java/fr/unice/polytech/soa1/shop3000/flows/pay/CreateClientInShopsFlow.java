@@ -25,24 +25,30 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .log("Begin create biko client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
+                //.setProperty("username",constant("test"))
                         /** @(Link CreateClientBiko} **/
                 .process(createClientBiko)
-                .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
+                .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"));
+
 
         from(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
                 .log("Begin create beer client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
+                //.setProperty("username",constant("nab"))
+                //.setProperty("password",constant("nab"))
                         /** @(Link CreateClientBeer } **/
                 .process(createClientBeer)
-                .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
+                .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"));
 
         from(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
                 .log("Begin create volley client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
+                //.setProperty("login",constant("nab"))
+                //.setProperty("password",constant("nab"))
                         /** @(Link CreateClientVolley} **/
                 .process(createClientVolley)
-                .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
+                .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"));
     }
 }
