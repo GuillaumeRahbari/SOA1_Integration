@@ -1,22 +1,24 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Created by user on 02/11/2015.
  */
 public class CreateClientInShopsFlow extends RouteBuilder {
 
-    private CreateClientBiko createClientBiko;
-    private CreateClientBeer createClientBeer;
-    private CreateClientVolley createClientVolley;
+    private CreateBikoClient createClientBiko;
+    private CreateBeerClient createClientBeer;
+    private CreateVolleyClient createClientVolley;
 
     public CreateClientInShopsFlow(){
-        this.createClientBiko = new CreateClientBiko();
-        this.createClientBeer = new CreateClientBeer();
-        this.createClientVolley = new CreateClientVolley();
+        this.createClientBiko = new CreateBikoClient();
+        this.createClientBeer = new CreateBeerClient();
+        this.createClientVolley = new CreateVolleyClient();
     }
 
     @Override
@@ -25,7 +27,6 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .log("Begin create biko client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
-                //.setProperty("username",constant("test"))
                         /** @(Link CreateClientBiko} **/
                 .process(createClientBiko)
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"));
@@ -35,8 +36,6 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .log("Begin create beer client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
-                //.setProperty("username",constant("nab"))
-                //.setProperty("password",constant("nab"))
                         /** @(Link CreateClientBeer } **/
                 .process(createClientBeer)
                 .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"));
@@ -45,10 +44,53 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .log("Begin create volley client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
-                //.setProperty("login",constant("nab"))
-                //.setProperty("password",constant("nab"))
                         /** @(Link CreateClientVolley} **/
                 .process(createClientVolley)
                 .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"));
+    }
+
+
+    private class CreateVolleyClient extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String login = (String)exchange.getProperty("clientID");
+            //String password = (String)exchange.getProperty("password");
+            JSONObject jObject = new JSONObject();
+            jObject.put("name", login);
+            jObject.put("password", login);
+            //System.out.println(jObject.toString());
+            exchange.getIn().setBody(jObject.toString());
+        }
+    }
+
+    private class CreateBikoClient extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String username = (String) exchange.getProperty("clientID");
+
+
+            JSONObject jObject = new JSONObject();
+            jObject.put("name", username);
+            jObject.put("id", 1);
+            //System.out.println(jObject.toString());
+            exchange.getIn().setBody(jObject.toString());
+        }
+    }
+
+    private class CreateBeerClient extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String login = (String)exchange.getProperty("clientID");
+            //String password = (String)exchange.getProperty("password");
+
+            JSONObject jObject = new JSONObject();
+            jObject.put("name", login);
+            jObject.put("password", login);
+            //System.out.println(jObject.toString());
+            exchange.getIn().setBody(jObject.toString());
+        }
     }
 }
