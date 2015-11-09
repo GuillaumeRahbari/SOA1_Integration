@@ -1,5 +1,8 @@
 package fr.unice.polytech.soa1.shop3000.business;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author Quentin Cornevin
  *
@@ -11,7 +14,9 @@ public class Client {
     private String lastName;
     private Cart cart;
 
-    public Client(String firstName, String lastName) {
+    @JsonCreator
+    public Client(@JsonProperty(value = "firstName", required = true) String firstName,
+                  @JsonProperty(value = "lastName", required = true) String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.cart = new Cart();
@@ -40,4 +45,5 @@ public class Client {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
+
 }

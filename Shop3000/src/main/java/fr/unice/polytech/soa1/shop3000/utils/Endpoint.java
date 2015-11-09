@@ -10,6 +10,7 @@ public enum Endpoint {
     /** Client Endpoints **/
     CLIENT_FILE_INPUT("direct:camel/input/client_file"),
     CLIENT_DATABASE("direct:checkClient"),
+    CLIENT_UNMARSHALL("direct:unmarshallClient"),
 
     /** Catalog Endpoints **/
     GET_CATALOG("direct:get_catalog"),
