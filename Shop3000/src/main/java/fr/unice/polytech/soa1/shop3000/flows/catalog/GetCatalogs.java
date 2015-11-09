@@ -6,6 +6,7 @@ import org.apache.camel.builder.RouteBuilder;
 
 /**
  * Created by Quentin on 10/21/2015.
+ * Updated by Laureen
  */
 public class GetCatalogs extends RouteBuilder {
 
@@ -18,18 +19,21 @@ public class GetCatalogs extends RouteBuilder {
      */
     @Override
     public void configure() throws Exception {
-        // This flow gets the different shops' catalogs and aggregates the results into one catalog
+        /**
+         * Begin of the flow to get the shops catalogs and merge them into a standard one
+         * It redirects to {@link CallExternalPartners}
+         */
         from(Endpoint.GET_CATALOG.getInstruction())
-                .log("Start get catalog Processing")
+                .log("Start get catalogs processing")
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy())
                     .parallelProcessing()
-                    .log("Test parallele processing")
-                    .log("Seconde test")
+                    .log("Parallel processing")
                     .to(Endpoint.BIKO_CATALOG.getInstruction())
                     .to(Endpoint.VOLLEY_CATALOG.getInstruction())
                     .to(Endpoint.BEER_CATALOG.getInstruction())
                     .end()
+                /** {@link JSonTransform} **/
                 .process(jSonTransform)
                     .log("${body}");
 

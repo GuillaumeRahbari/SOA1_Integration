@@ -46,17 +46,26 @@ public class ValidateCartAndPayment extends RouteBuilder {
                 .log("starting cart validation")
                 .log("starting cart extraction")
                 .process(cartExtractor)
+                .wireTap(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy()) // TODO c'etait une autre strat d'aggreg
                     .log("multicasting")
                     .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
-                  //  .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
-                  //  .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .log("merging")
                 .end()
                 .log("body: ${body}");
                 // TODO extract payment info from property and set body
                 //.to(PayEndpoint.PAY.getInstruction());
+
+
+        /**
+         * This flow handle the best seller
+         */
+        from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
+                .log("Here we update the number of item sells for the best seller");
+
     }
 
     /**
