@@ -1,12 +1,11 @@
 package fr.unice.polytech.soa1.shop3000.flows.clientfile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
-import fr.unice.polytech.soa1.shop3000.mock.ClientFileMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -20,11 +19,11 @@ public class ClientFileFlows extends RouteBuilder {
      * This class create a process that will mock the fact we don't have a real input and put a fake client in the body.
      */
     private GetClientInDatabase getClientInDatabase;
-    private AddClientToDataBase addClientToDataBase;
+    private AddClientToDB addClientToDataBase;
     private DeleteClientProcessor deleteClientProcessor;
 
     public ClientFileFlows() {
-        this.addClientToDataBase = new AddClientToDataBase();
+        this.addClientToDataBase = new AddClientToDB();
         this.getClientInDatabase = new GetClientInDatabase();
         this.deleteClientProcessor = new DeleteClientProcessor();
     }
@@ -52,7 +51,7 @@ public class ClientFileFlows extends RouteBuilder {
                     .log("The client doesn't exist")
                     .log("Begin process to add the client in the database")
                 /**
-                 * {@link AddClientToDataBase#process(Exchange)}
+                 * {@link AddClientToDB#process(Exchange)}
                  */
                     .process(addClientToDataBase)
                     .setProperty("status", constant(200))
@@ -119,6 +118,30 @@ public class ClientFileFlows extends RouteBuilder {
             }else { // We send status 404 if we did not manage to delete the client.
                 exchange.setProperty("status",404);
             }
+        }
+    }
+
+    /**
+     * @author Quentin Cornevin
+     *
+     * This process add a client to the database
+     */
+    private class AddClientToDB implements Processor {
+
+        /**
+         * This method add the client in the database.
+         *
+         * @param exchange This object contains a client object.
+         * @throws Exception
+         */
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            // We get a client by the "client" property
+            Client client = (Client)exchange.getProperty("client");
+            // We add the client in the db.
+            ClientStorage.addClient(client);
+            // We set the body to tell the client is added.
+            exchange.getIn().setBody("Client added to database");
         }
     }
 

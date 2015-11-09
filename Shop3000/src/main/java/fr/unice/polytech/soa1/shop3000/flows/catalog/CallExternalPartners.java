@@ -1,9 +1,22 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
+import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.business.CatalogItemBiko;
+import fr.unice.polytech.soa1.shop3000.business.CatalogItemVolley;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.Shop;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Quentin Cornevin
@@ -69,4 +82,98 @@ public class CallExternalPartners extends RouteBuilder {
                 .process(transformBeer)
                 .log("${body}");
     }
+
+    /**
+     * @author Laureen Ginier
+     * Read the response, which is a json array of items from a shop, and formats it into a json string
+     * containing the list of standardized CatalogItems.
+     */
+    private abstract class TransformCatalogResponse extends SuperProcessor {
+        protected String shopName;
+
+        public TransformCatalogResponse(String shopName) {
+            this.shopName = shopName;
+        }
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String out = extractExchangeBody(exchange);
+
+            ObjectMapper mapper = new ObjectMapper();
+            List<CatalogItem> items = mapToCatalogItem(out);
+            String jsonString = mapper.writeValueAsString(items);
+            exchange.getIn().setBody(jsonString.replace("[","").replace("]",""));
+        }
+
+        public abstract List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception;
+    }
+
+    /**
+     * @author Laureen Ginier
+     * Parse the json array of items coming from AllHailBeer shop and map it to a list of CatalogItem.
+     */
+    private class TransformResponseBeer extends TransformCatalogResponse {
+
+        public TransformResponseBeer(String shopName) {
+            super(shopName);
+        }
+
+        @Override
+        public List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception {
+            JSONArray jarray = new JSONArray(jsonString);
+            List<CatalogItem> items = new ArrayList<CatalogItem>();
+            for(int i = 0; i < jarray.length(); i++) {
+                JSONObject obj = jarray.getJSONObject(i);
+                for (Iterator iterator = obj.keys(); iterator.hasNext();) {
+                    String key = (String) iterator.next();
+                    JSONObject jobj = obj.getJSONObject(key);
+                    String name = jobj.getString("name");
+                    String price = jobj.getString("pricePerLiter");
+                    String descr = "Titration: " + jobj.getString("titration")
+                            + ", gout: " + jobj.getString("gout")
+                            + ", cereale: " + jobj.getString("cereale");
+                    items.add(new CatalogItem(name, Double.parseDouble(price), descr));
+                }
+            }
+            Catalog.getInstance().setItemsBeer(items);
+            return items;
+        }
+    }
+
+    /**
+     * @author Laureen Ginier
+     * Map the json array of items coming from Biko shop to a list of CatalogItem.
+     */
+    public class TransformResponseBiko extends TransformCatalogResponse {
+
+        public TransformResponseBiko(String shopName) {
+            super(shopName);
+        }
+
+        @Override
+        public List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception {
+            List<CatalogItem> items = new ObjectMapper().readValue(jsonString, new TypeReference<List<CatalogItemBiko>>() {});
+            Catalog.getInstance().setItemsBiko(items);
+            return items;
+        }
+    }
+
+    /**
+     * @author Laureen Ginier
+     * Map the json array of items coming from VolleyOnTheBeach shop to a list of CatalogItem.
+     */
+    public class TransformResponseVolley extends TransformCatalogResponse {
+
+        public TransformResponseVolley(String shopName) {
+            super(shopName);
+        }
+
+        @Override
+        public List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception {
+            List<CatalogItem> items = new ObjectMapper().readValue(jsonString, new TypeReference<List<CatalogItemVolley>>() {});
+            Catalog.getInstance().setItemsVolley(items);
+            return items;
+        }
+    }
+
 }
