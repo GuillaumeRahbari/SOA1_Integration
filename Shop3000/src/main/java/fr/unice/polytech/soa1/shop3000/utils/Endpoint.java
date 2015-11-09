@@ -8,16 +8,19 @@ package fr.unice.polytech.soa1.shop3000.utils;
 public enum Endpoint {
 
     /** Client Endpoints **/
-    CLIENT_FILE_INPUT("direct:camel/input/client_file"),
+    CREATE_CLIENT_FILE("direct:createClientFile"),
+    GET_CLIENT_FILE("direct:getClientFile"),
+    DELETE_CLIENT_FILE("direct:deleteClientFile"),
     CLIENT_DATABASE("direct:checkClient"),
     CLIENT_UNMARSHALL("direct:unmarshallClient"),
 
+
     /** Catalog Endpoints **/
-    GET_CATALOG("direct:get_catalog"),
+    GET_CATALOG("direct:getCatalog"),
     BIKO_CATALOG("direct:bikoCatalog"),
     VOLLEY_CATALOG("direct:volleyCatalog"),
     BEER_CATALOG("direct:beerCatalog"),
-    CSV_INPUT_DIRECTORY("file:camel/input"),
+    CSV_INPUT_DIRECTORY("file:csvInputDirectory"),
 
     /** Cart endpoints **/
     ADD_ITEM_CART("direct:addItemCart"),
