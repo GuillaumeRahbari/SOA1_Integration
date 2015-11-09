@@ -27,11 +27,14 @@ public class CheckClientFlow extends RouteBuilder {
          */
         from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
                 .log("Begin check client")
+                .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("clientID",constant("${header.clientID}"))
-                .setProperty("password", constant("${header.clientID}"))
-                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.password}?bridgeEndpoint=true"))
+/*                .setProperty("clientID", constant("${header.clientID}"))
+                .setProperty("password", constant("${header.clientID}"))*/
+                .log("${property.clientID}")
+                .log("${property.clientID}")
+                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.clientID}?bridgeEndpoint=true"))
 
                 /** {@link CheckClientExistenceBeer} **/
                 .process(checkClientExistenceBeer)
@@ -48,7 +51,8 @@ public class CheckClientFlow extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("clientID",constant("${header.clientID}"))
+                .setProperty("clientID", constant("${header.clientID}"))
+                .removeHeaders("*")
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
 
                 /** {@link CheckClientExistenceBiko} **/
@@ -67,6 +71,7 @@ public class CheckClientFlow extends RouteBuilder {
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
                 .setProperty("clientID", constant("${header.clientID}"))
+                .removeHeaders("*")
                 .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.clientID}?bridgeEndpoint=true"))
 
                 /** @{Link CheckClientExistenceVolley} **/

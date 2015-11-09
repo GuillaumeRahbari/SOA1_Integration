@@ -23,15 +23,13 @@ public class PayRoute extends RouteBuilder {
 
         rest("{clientID}/payment")
             .post()
-                .route()
-                .removeHeaders("*")
                 .to(GET_CLIENT_FROM_REST_ENDPOINT);
 
         from(GET_CLIENT_FROM_REST_ENDPOINT)
                 .log("extracting POST data")
                 .setProperty(PAYMENT_INFORMATION_PROPERTY, body())
                 .process(jsonPaymentInformationExtractor)
-                .setProperty(CLIENT_ID_PROPERTY, constant("${header.clientID}"))
+                .setProperty(CLIENT_ID_PROPERTY, simple("${header.clientId}"))
                 .log("client: ${property." + CLIENT_ID_PROPERTY + "}")
                 /** {@link ValidateCartAndPayment#configure() next} flow **/
                 .to(Endpoint.VALIDATE_CART.getInstruction());
