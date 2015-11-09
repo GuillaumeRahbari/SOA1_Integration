@@ -50,12 +50,14 @@ public class ClientFileFlows extends RouteBuilder {
                             .log("Client added to the database")
                 .log("End of the process");
 
-        from(Endpoint.GET_CLIENT_FILE.getInstruction())
-                ;
+        /*from(Endpoint.GET_CLIENT_FILE.getInstruction())
+                .log("Start processing")
+                ;*/
 
-        from(Endpoint.DELETE_CLIENT_FILE.getInstruction())
-                ;
+        /*from(Endpoint.DELETE_CLIENT_FILE.getInstruction())
+                ;*/
 
 
     }
+
 }
