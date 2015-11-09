@@ -1,6 +1,5 @@
 package fr.unice.polytech.soa1.shop3000.flows.clientfile;
 
-import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -8,7 +7,7 @@ import org.apache.camel.Processor;
 /**
  * Created by guillaume on 26/10/2015.
  */
-public class CheckClientInDatabase implements Processor {
+public class GetClientInDatabase implements Processor {
 
 
     /**
@@ -19,14 +18,17 @@ public class CheckClientInDatabase implements Processor {
      */
     public void process(Exchange exchange) throws Exception {
         // We get a client by the "client" property
-        Client client = (Client)exchange.getProperty("client");
-        System.out.println(client);
+        //Client client = (Client)exchange.getProperty("client");
+        //System.out.println(client);
+
+        String clientFirstName = (String)exchange.getProperty("clientFirstName");
 
         // We check if he exists in db.
-        if (ClientStorage.checkInDB(client)) {
-            // if he is, we set the property "client" to null.
-            exchange.setProperty("client", null);
-        }
+
+            // if he is, we set the property "client" to null
+            // exchange.setProperty("client", null);
+        exchange.setProperty("databaseClient",ClientStorage.read(clientFirstName));
+
         // else we do nothing to have the "client" property equal to the client.
     }
 }
