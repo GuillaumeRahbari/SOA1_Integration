@@ -11,7 +11,7 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class PayRoute extends RouteBuilder {
 
-    private static final String GET_CLIENT_FROM_REST_ENDPOINT = "activeMQ:getClientFromRest";
+    private static final String GET_CLIENT_FROM_REST_ENDPOINT = "activemq:getClientFromRest";
     static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
                         CLIENT_ID_PROPERTY = "clientID";
 
@@ -30,7 +30,7 @@ public class PayRoute extends RouteBuilder {
             .setProperty(PAYMENT_INFORMATION_PROPERTY, body())
             .process(jsonPaymentInformationExtractor)
             .setProperty(CLIENT_ID_PROPERTY, constant("${header.clientID}"))
-            .log("client: ${" + CLIENT_ID_PROPERTY + "}")
+            //.log("client: ${" + CLIENT_ID_PROPERTY + "}")
             // {@link ValidateCartAndPayment#configure() next} flow
             .to(Endpoint.VALIDATE_CART.getInstruction());
     }

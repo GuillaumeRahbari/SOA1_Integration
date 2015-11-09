@@ -17,7 +17,7 @@ public class ValidateCartAndPayment extends RouteBuilder {
          */
         from(Endpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction())
                 .log("starting payment information checking")
-                .choice()
+                .choice()/*
                     .when(new Predicate() {
                         public boolean matches(Exchange exchange) {
                             return exchange.getProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY)
@@ -28,7 +28,7 @@ public class ValidateCartAndPayment extends RouteBuilder {
                         // TODO send message
                     .otherwise()
                         .log("good information")
-                        .to(Endpoint.VALIDATE_CART.getInstruction())
+                        .to(Endpoint.VALIDATE_CART.getInstruction())*/
                 .endChoice();
 
         from(Endpoint.VALIDATE_CART.getInstruction())
