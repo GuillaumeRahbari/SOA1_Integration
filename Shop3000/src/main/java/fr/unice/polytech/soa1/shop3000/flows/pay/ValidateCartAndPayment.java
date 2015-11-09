@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -13,7 +15,21 @@ public class ValidateCartAndPayment extends RouteBuilder {
         /** Flow checking payment information.
          *  Expects a property "paymentInformation" with a JSON representing a PaymentInformation object.
          */
-        // TODO choice()
+        from(Endpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction())
+                .log("starting payment information checking")
+                .choice()
+                    .when(new Predicate() {
+                        public boolean matches(Exchange exchange) {
+                            return exchange.getProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY)
+                                    .equals(JsonPaymentInformationExtractor.BAD_INFORMATION);
+                        }
+                    })
+                        .log(JsonPaymentInformationExtractor.BAD_INFORMATION)
+                        // TODO send message
+                    .otherwise()
+                        .log("good information")
+                        .to(Endpoint.VALIDATE_CART.getInstruction())
+                .endChoice();
 
         from(Endpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")

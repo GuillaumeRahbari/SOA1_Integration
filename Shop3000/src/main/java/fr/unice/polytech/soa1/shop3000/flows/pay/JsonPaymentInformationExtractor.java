@@ -13,6 +13,8 @@ import org.apache.camel.Exchange;
  */
 public class JsonPaymentInformationExtractor extends SuperProcessor {
 
+    public static final String BAD_INFORMATION = "";
+
     @Override
     public void process(Exchange exchange) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -25,7 +27,7 @@ public class JsonPaymentInformationExtractor extends SuperProcessor {
                     objectMapper.writeValueAsString(paymentInformation));
         }
         catch (JsonMappingException e) {
-            exchange.setProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY, "");
+            exchange.setProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY, BAD_INFORMATION);
         }
     }
 }

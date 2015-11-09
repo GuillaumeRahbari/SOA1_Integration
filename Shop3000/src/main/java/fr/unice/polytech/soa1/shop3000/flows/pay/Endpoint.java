@@ -7,7 +7,8 @@ package fr.unice.polytech.soa1.shop3000.flows.pay;
  */
 public enum Endpoint {
 
-    VALIDATE_CART("direct:validateCart"),
+    VALIDATE_PAYMENT_INFORMATION("activeMQ:validatePaymentInformation"),
+    VALIDATE_CART("activeMQ:validateCart"),
     PAY("direct:pay");
 
     private String instruction;

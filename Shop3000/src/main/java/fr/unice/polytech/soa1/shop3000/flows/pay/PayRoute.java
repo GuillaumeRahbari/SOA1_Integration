@@ -11,7 +11,7 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class PayRoute extends RouteBuilder {
 
-    private static final String GET_CLIENT_FROM_REST_ENDPOINT = "direct:getClientFromRest";
+    private static final String GET_CLIENT_FROM_REST_ENDPOINT = "activeMQ:getClientFromRest";
     static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
                         CLIENT_ID_PROPERTY = "clientID";
 
