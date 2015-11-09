@@ -8,14 +8,12 @@ import org.apache.camel.builder.RouteBuilder;
  * Created by user on 02/11/2015.
  */
 public class CheckClientFlow extends RouteBuilder {
-
-
-    private CheckClientExistence checkClientExistenceBiko;
+    private CheckClientExistenceBiko checkClientExistenceBikoBiko;
     private CheckClientExistenceBeer checkClientExistenceBeer;
     private CheckClientExistenceVolley checkClientExistenceVolley;
 
     public CheckClientFlow(){
-        this.checkClientExistenceBiko = new CheckClientExistence("biko");
+        this.checkClientExistenceBikoBiko = new CheckClientExistenceBiko();
         this.checkClientExistenceBeer = new CheckClientExistenceBeer();
         this.checkClientExistenceVolley = new CheckClientExistenceVolley();
     }
@@ -29,18 +27,18 @@ public class CheckClientFlow extends RouteBuilder {
          */
         from(Endpoint.CHECK_CLIENT_BEER.getInstruction())
                 .log("Begin check client")
+                .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("login",constant("test"))
-                .setProperty("password", constant("test"))
-                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.login}/${property.password}?bridgeEndpoint=true"))
-
-                /** {@link CheckClientExistenceBeer} **/
-                .process(checkClientExistenceBeer)
-                .choice()
-                .when(simple("${property.result} == true"))
-                .when(simple("${property.result} == false"))
-                .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
+                .log("${property.clientID}")
+                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.clientID}?bridgeEndpoint=true"))
+                        /** {@link CheckClientExistenceBeer} **/
+                    .process(checkClientExistenceBeer)
+                    .choice()
+                        .when(simple("${property.result} == true"))
+                            .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction())
+                        .when(simple("${property.result} == false"))
+                            .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
 
         /**
          * This flow check if the client is in the biko system, if not we create the client in the system and then
@@ -48,17 +46,18 @@ public class CheckClientFlow extends RouteBuilder {
          */
         from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
                 .log("Begin check client")
+                .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("clientID", constant("user1"))
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
 
-                /** {@link CheckClientExistence} **/
-                .process(checkClientExistenceBiko)
-                .choice()
-                .when(simple("${property.result} == true"))
-                .when(simple("${property.result} == false"))
-                .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction());
+                /** {@link CheckClientExistenceBiko} **/
+                    .process(checkClientExistenceBikoBiko)
+                    .choice()
+                        .when(simple("${property.result} == true"))
+                            .to(Endpoint.ADD_TO_CART_BIKO.getInstruction())
+                        .when(simple("${property.result} == false"))
+                            .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction());
 
         /**
          * This flow check if client is already registered in the volley system. Create the client otherwise.
@@ -66,16 +65,17 @@ public class CheckClientFlow extends RouteBuilder {
          */
         from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .log("Begin check client")
+                .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("login", constant("jean"))
-                .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.login}?bridgeEndpoint=true"))
+                .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.clientID}?bridgeEndpoint=true"))
 
                 /** @{Link CheckClientExistenceVolley} **/
-                .process(checkClientExistenceVolley)
-                .choice()
-                .when(simple("${property.result} == true"))
-                .when(simple("${property.result} == false"))
-                .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction());
+                    .process(checkClientExistenceVolley)
+                    .choice()
+                        .when(simple("${property.result} == true"))
+                            .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction())
+                        .when(simple("${property.result} == false"))
+                            .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction());
     }
 }

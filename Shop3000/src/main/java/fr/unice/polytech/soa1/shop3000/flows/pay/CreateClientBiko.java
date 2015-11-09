@@ -10,13 +10,13 @@ import org.codehaus.jettison.json.JSONObject;
 public class CreateClientBiko extends SuperProcessor {
     @Override
     public void process(Exchange exchange) throws Exception {
-        String username = (String) exchange.getProperty("username");
+        String username = (String) exchange.getProperty("clientID");
 
 
         JSONObject jObject = new JSONObject();
         jObject.put("name", username);
         jObject.put("id", 1);
-        System.out.println(jObject.toString());
+        //System.out.println(jObject.toString());
         exchange.getIn().setBody(jObject.toString());
     }
 }

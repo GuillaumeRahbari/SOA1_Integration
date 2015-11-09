@@ -11,7 +11,7 @@ public class CheckClientExistenceBeer extends SuperProcessor {
     public void process(Exchange exchange) throws Exception {
         // test if client exist
         String body = extractExchangeBody(exchange);
-        String loginToTest = (String)exchange.getProperty("login");
+        String loginToTest = (String)exchange.getProperty("clientID");
         String login = new JSONArray(body).getJSONObject(0).getJSONObject(loginToTest).getString("username");
 
         if(loginToTest.equals(login)) {
