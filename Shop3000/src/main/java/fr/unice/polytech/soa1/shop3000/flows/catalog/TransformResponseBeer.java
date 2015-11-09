@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -40,6 +41,7 @@ public class TransformResponseBeer extends TransformResponse {
                 items.add(new CatalogItem(name, Double.parseDouble(price), descr));
             }
         }
+        Catalog.getInstance().setItemsBeer(items);
         return items;
     }
 }

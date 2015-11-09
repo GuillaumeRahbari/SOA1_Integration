@@ -2,6 +2,7 @@ package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
@@ -29,10 +30,12 @@ public abstract class TransformResponse extends SuperProcessor {
 
         ObjectMapper mapper = new ObjectMapper();
         List<CatalogItem> items = mapToCatalogItem(out);
-
-        String jsonString = "{\"shopName\":\""+shopName+"\", \"items\":"
+        //TODO fill in the 3 lists of the catalog
+        /*String jsonString = "{\"shopName\":\""+shopName+"\", \"items\":"
                 + mapper.writeValueAsString(items) + "}";
-        exchange.getIn().setBody(jsonString);
+        exchange.getIn().setBody(jsonString);*/
+        String jsonString = mapper.writeValueAsString(items);
+        exchange.getIn().setBody(jsonString.replace("[","").replace("]",""));
     }
 
     public abstract List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception;

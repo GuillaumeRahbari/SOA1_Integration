@@ -14,7 +14,7 @@ import java.util.List;
  * @author Laureen Ginier
  * Encapsulate the exchange into '[]' to have a valid json
  */
-public class JSonTransform implements Processor {
+public class ToJSonArray implements Processor {
 
     public void process(Exchange exchange) throws Exception {
         String response = (String) exchange.getIn().getBody();

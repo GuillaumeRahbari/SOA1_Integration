@@ -3,6 +3,7 @@ package fr.unice.polytech.soa1.shop3000.flows.catalog;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItemBiko;
 import org.apache.camel.Exchange;
@@ -27,6 +28,8 @@ public class TransformResponseBiko extends TransformResponse {
 
     @Override
     public List<CatalogItem> mapToCatalogItem(String jsonString) throws Exception {
-        return new ObjectMapper().readValue(jsonString, new TypeReference<List<CatalogItemBiko>>() { });
+        List<CatalogItem> items = new ObjectMapper().readValue(jsonString, new TypeReference<List<CatalogItemBiko>>() {});
+        Catalog.getInstance().setItemsBiko(items);
+        return items;
     }
 }

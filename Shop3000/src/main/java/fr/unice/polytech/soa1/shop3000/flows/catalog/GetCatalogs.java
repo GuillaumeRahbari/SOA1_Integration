@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.builder.RouteBuilder;
@@ -10,7 +11,7 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class GetCatalogs extends RouteBuilder {
 
-    private JSonTransform jSonTransform = new JSonTransform();
+    private ToJSonArray toJsonArray = new ToJSonArray();
 
     /**
      * This is the flow for the catalog. We make asynchrone request to the biko, volley and Hailbeer system, then we make
@@ -33,10 +34,9 @@ public class GetCatalogs extends RouteBuilder {
                     .to(Endpoint.VOLLEY_CATALOG.getInstruction())
                     .to(Endpoint.BEER_CATALOG.getInstruction())
                     .end()
-                /** {@link JSonTransform} **/
-                .process(jSonTransform)
+                /** {@link ToJSonArray} **/
+                .process(toJsonArray)
                     .log("${body}");
-
 
         from(Endpoint.GET_BEST_SELLER.getInstruction())
                 .log("Begin Get BestSeller");
