@@ -1,9 +1,10 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.Cart;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
-import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
+import fr.unice.polytech.soa1.shop3000.flows.BooleanAndAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -18,6 +19,7 @@ public class ValidateCart extends RouteBuilder {
     public static final String CART_PROPERTY = "cart";
 
     private CartExtractor cartExtractor = new CartExtractor();
+    private ShopsExtractor shopsExtractor = new ShopsExtractor();
 
     @Override
     public void configure() throws Exception {
@@ -40,21 +42,21 @@ public class ValidateCart extends RouteBuilder {
                 .endChoice();
 
         /**
-         * Flow extracting cart and validating its content by sending to the shops their related products.
+         * Flow validating its content by sending to the shops their related products.
          */
         from(PayEndpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
                 .wireTap(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
+                .process(shopsExtractor)
                 .multicast()
-                    .aggregationStrategy(new JoinAggregationStrategy()) // TODO c'etait une autre strat d'aggreg
+                    .aggregationStrategy(new BooleanAndAggregationStrategy())
                     .log("multicasting")
-                    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
-                    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
-                    .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                    //.to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
+                    //.to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                    //.to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .log("merging")
                 .end()
                 .log("body: ${body}");
-                // TODO extract payment info from property and set body
                 //.to(PayEndpoint.PAY.getInstruction());
 
         /**
@@ -88,6 +90,24 @@ public class ValidateCart extends RouteBuilder {
             }
             else {
                 exchange.setProperty(CART_PROPERTY, PayUnmarshaller.BAD_INFORMATION);
+            }
+        }
+    }
+
+    /**
+     * Extracts the cart's item in relation to the different shops.
+     * Expects a "cart" property to be set.
+     * Sets a property for each shop with its related products.
+     */
+    private class ShopsExtractor extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            ObjectMapper mapper = new ObjectMapper();
+            Cart cart = mapper.readValue((String) exchange.getProperty(CART_PROPERTY), Cart.class);
+
+            for (String key: cart.keySet()) {
+                exchange.setProperty(key, cart.get(key));
             }
         }
     }
