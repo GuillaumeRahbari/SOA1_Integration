@@ -8,14 +8,12 @@ import org.apache.camel.builder.RouteBuilder;
  * Created by user on 02/11/2015.
  */
 public class CheckClientFlow extends RouteBuilder {
-
-
-    private CheckClientExistence checkClientExistenceBiko;
+    private CheckClientExistenceBiko checkClientExistenceBikoBiko;
     private CheckClientExistenceBeer checkClientExistenceBeer;
     private CheckClientExistenceVolley checkClientExistenceVolley;
 
     public CheckClientFlow(){
-        this.checkClientExistenceBiko = new CheckClientExistence("biko");
+        this.checkClientExistenceBikoBiko = new CheckClientExistenceBiko();
         this.checkClientExistenceBeer = new CheckClientExistenceBeer();
         this.checkClientExistenceVolley = new CheckClientExistenceVolley();
     }
@@ -31,16 +29,16 @@ public class CheckClientFlow extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("login",constant("test"))
-                .setProperty("password", constant("test"))
-                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.login}/${property.password}?bridgeEndpoint=true"))
+                //.setProperty("login",constant("test"))
+                //.setProperty("password", constant("test"))
+                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.clientID}?bridgeEndpoint=true"))
 
                 /** {@link CheckClientExistenceBeer} **/
                 .process(checkClientExistenceBeer)
                 .choice()
-                .when(simple("${property.result} == true"))
-                .when(simple("${property.result} == false"))
-                .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
+                    .when(simple("${property.result} == true"))
+                    .when(simple("${property.result} == false"))
+                        .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
 
         /**
          * This flow check if the client is in the biko system, if not we create the client in the system and then
@@ -50,11 +48,11 @@ public class CheckClientFlow extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("clientID", constant("user1"))
+                //.setProperty("clientID", constant("user1"))
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
 
-                /** {@link CheckClientExistence} **/
-                .process(checkClientExistenceBiko)
+                /** {@link CheckClientExistenceBiko} **/
+                .process(checkClientExistenceBikoBiko)
                 .choice()
                 .when(simple("${property.result} == true"))
                 .when(simple("${property.result} == false"))
@@ -68,8 +66,8 @@ public class CheckClientFlow extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("login", constant("jean"))
-                .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.login}?bridgeEndpoint=true"))
+                //.setProperty("login", constant("jean"))
+                .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.clientID}?bridgeEndpoint=true"))
 
                 /** @{Link CheckClientExistenceVolley} **/
                 .process(checkClientExistenceVolley)
