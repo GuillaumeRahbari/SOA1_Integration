@@ -25,7 +25,7 @@ public class Unmarshaller extends RouteBuilder {
             .log("Avant le process")
             .process(jsonToClient)
             .log("Après le process")
-            .to(Endpoint.CLIENT_FILE_INPUT.getInstruction());
+            .to(Endpoint.CREATE_CLIENT_FILE.getInstruction());
     }
 
     private class JsonToClient extends SuperProcessor {
