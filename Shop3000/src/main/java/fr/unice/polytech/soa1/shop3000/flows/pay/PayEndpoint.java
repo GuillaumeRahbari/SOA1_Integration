@@ -9,8 +9,10 @@ public enum PayEndpoint {
 
     UNMARSHAL("direct:unmarshalPaymentData"),
     VALIDATE_PAYMENT_INFORMATION("direct:validatePaymentInformation"),
+    EXTRACT_CART("direct:extractCart"),
     VALIDATE_CART("direct:validateCart"),
     BAD_PAYMENT_INFORMATION_ENDPOINT("direct:badPaymentInformation"),
+    BAD_CLIENT_ID("direct:badClientID"),
     CHECK_CLIENT_BEER("direct:checkClientBeer"),
     CHECK_CLIENT_BIKO("direct:checkClientBiko"),
     CHECK_CLIENT_VOLLEY("direct:checkClientVolley"),

@@ -27,5 +27,12 @@ public class PayRoute extends RouteBuilder {
         from(PayEndpoint.BAD_PAYMENT_INFORMATION_ENDPOINT.getInstruction())
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
                 .setBody(constant("Bad payment information."));
+
+        /**
+         * Flow sending a BadRequest HTTP response in case of nonexistent client id.
+         */
+        from(PayEndpoint.BAD_CLIENT_ID.getInstruction())
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
+                .setBody(constant("Bad client id."));
     }
 }
