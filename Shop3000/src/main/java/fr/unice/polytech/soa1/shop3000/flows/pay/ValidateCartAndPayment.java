@@ -42,12 +42,13 @@ public class ValidateCartAndPayment extends RouteBuilder {
                 .log("starting cart validation")
                 .log("body: ${body}")
                 // TODO extract payment info from body and set a property
+
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy()) // TODO c'etait une autre strat d'aggreg
                     .log("multicasting")
                     .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
-                  //  .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
-                  //  .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .log("merging")
                 .end()
                 .log("body: ${body}");
