@@ -19,15 +19,6 @@ public class JSonTransform implements Processor {
     public void process(Exchange exchange) throws Exception {
         String response = (String) exchange.getIn().getBody();
         String jsonResponse = "[" + response + "]";
-
-        /*BufferedReader reader = new BufferedReader(new InputStreamReader(response));
-        StringBuilder out = new StringBuilder();
-        out.append("[");
-        String line;
-        while ((line = reader.readLine()) != null) { out.append(line); }
-        reader.close();
-        out.append("]");*/
-
         exchange.getIn().setBody(jsonResponse);
     }
 }
