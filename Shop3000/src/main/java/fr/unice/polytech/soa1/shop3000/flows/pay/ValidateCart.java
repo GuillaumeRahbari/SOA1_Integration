@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.Cart;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
-import fr.unice.polytech.soa1.shop3000.flows.BooleanAndAggregationStrategy;
+import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -49,13 +49,14 @@ public class ValidateCart extends RouteBuilder {
                 .wireTap(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
                 .process(shopsExtractor)
                 .multicast()
-                    .aggregationStrategy(new BooleanAndAggregationStrategy())
+                    .aggregationStrategy(new JoinAggregationStrategy())
                     .log("multicasting")
-                    //.to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
-                    //.to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
-                    //.to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
-                .log("merging")
+                    .parallelProcessing()
+                    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .end()
+                .log("merging")
                 .log("body: ${body}");
                 //.to(PayEndpoint.PAY.getInstruction());
 
@@ -104,8 +105,9 @@ public class ValidateCart extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             ObjectMapper mapper = new ObjectMapper();
-            Cart cart = mapper.readValue((String) exchange.getProperty(CART_PROPERTY), Cart.class);
+           // Cart cart = mapper.readValue((String) exchange.getProperty(CART_PROPERTY), Cart.class);
 
+            Cart cart = (Cart) exchange.getProperty(CART_PROPERTY);
             for (String key: cart.keySet()) {
                 exchange.setProperty(key, cart.get(key));
             }

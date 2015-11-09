@@ -104,7 +104,7 @@ public class CheckClientFlow extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             String loginToTest = (String)exchange.getProperty("clientID");
-            String body = extractExchangeBody(exchange);
+            String body = (String) exchange.getIn().getBody();
             String login = new JSONObject(body).getString("login");
             if(loginToTest.equals(login)) {
                 exchange.setProperty("result", true);
@@ -121,7 +121,7 @@ public class CheckClientFlow extends RouteBuilder {
         public void process(Exchange exchange) throws Exception {
             //test if client exist
             String nameToTest = (String)exchange.getProperty("clientID");
-            String body = extractExchangeBody(exchange);
+            String body = (String) exchange.getIn().getBody();
             JSONObject jObject = new JSONObject(body);
             String name = jObject.getString("name");
 
