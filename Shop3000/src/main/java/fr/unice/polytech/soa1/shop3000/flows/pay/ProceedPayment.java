@@ -28,5 +28,11 @@ public class ProceedPayment extends RouteBuilder {
                         /** {@link ValidateCart#configure() next} route builder **/
                 .to(PayEndpoint.EXTRACT_CART.getInstruction())
                 .endChoice();
+
+        from(PayEndpoint.GET_CART_PRICE.getInstruction())
+                .log("Starting the flow that will calculate the price to pay");
+        // TODO : Appeler le bean qui renvoie le prix pour une livraison
+
     }
+
 }
