@@ -30,7 +30,7 @@ public class PayRoute extends RouteBuilder {
             .setProperty(PAYMENT_INFORMATION_PROPERTY, body())
             .process(jsonPaymentInformationExtractor)
             .setProperty(CLIENT_ID_PROPERTY, constant("${header.clientID}"))
-            //.log("client: ${" + CLIENT_ID_PROPERTY + "}")
+            .log("client: ${property." + CLIENT_ID_PROPERTY + "}")
             // {@link ValidateCartAndPayment#configure() next} flow
             .to(Endpoint.VALIDATE_CART.getInstruction());
     }
