@@ -26,6 +26,7 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
                 .setProperty("username",constant("test"))
+                        /** @(Link CreateClientBiko} **/
                 .process(createClientBiko)
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"));
 
@@ -35,6 +36,7 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setBody(constant(""))
                 .setProperty("username",constant("nab"))
                 .setProperty("password",constant("nab"))
+                        /** @(Link CreateClientBeer} **/
                 .process(createClientBeer)
                 .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"));
 
@@ -44,6 +46,7 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setBody(constant(""))
                 .setProperty("login",constant("nab"))
                 .setProperty("password",constant("nab"))
+                        /** @(Link CreateClientVolley} **/
                 .process(createClientVolley)
                 .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"));
     }

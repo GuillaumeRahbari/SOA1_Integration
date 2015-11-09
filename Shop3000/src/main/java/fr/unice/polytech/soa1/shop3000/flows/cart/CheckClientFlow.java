@@ -34,6 +34,8 @@ public class CheckClientFlow extends RouteBuilder {
                 .setProperty("login",constant("test"))
                 .setProperty("password", constant("test"))
                 .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.login}/${property.password}?bridgeEndpoint=true"))
+
+                /** {@link CheckClientExistenceBeer} **/
                 .process(checkClientExistenceBeer)
                 .choice()
                 .when(simple("${property.result} == true"))
@@ -50,6 +52,8 @@ public class CheckClientFlow extends RouteBuilder {
                 .setBody(constant(""))
                 .setProperty("clientID", constant("user1"))
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
+
+                /** {@link CheckClientExistence} **/
                 .process(checkClientExistenceBiko)
                 .choice()
                 .when(simple("${property.result} == true"))
@@ -66,6 +70,8 @@ public class CheckClientFlow extends RouteBuilder {
                 .setBody(constant(""))
                 .setProperty("login", constant("jean"))
                 .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.login}?bridgeEndpoint=true"))
+
+                /** @{Link CheckClientExistenceVolley} **/
                 .process(checkClientExistenceVolley)
                 .choice()
                 .when(simple("${property.result} == true"))
