@@ -21,6 +21,8 @@ public class JsonPaymentInformationExtractor extends SuperProcessor {
 
         try {
             PaymentInformation paymentInformation = objectMapper.readValue(
+                    /*(String) exchange.getProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class
+            );*/
                     extractExchangeProperty(exchange, PayRoute.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class);
 
             exchange.setProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY,

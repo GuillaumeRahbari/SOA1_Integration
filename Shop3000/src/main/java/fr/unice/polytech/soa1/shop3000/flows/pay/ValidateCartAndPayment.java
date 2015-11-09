@@ -10,6 +10,8 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class ValidateCartAndPayment extends RouteBuilder {
 
+    private static final String BAD_PAYMENT_INFORMATION_ENDPOINT = "direct:badPaymentInformation";
+
     @Override
     public void configure() throws Exception {
 
@@ -26,11 +28,15 @@ public class ValidateCartAndPayment extends RouteBuilder {
                         }
                     })
                         .log("bad information")
-                        // TODO send message
+                        .to(BAD_PAYMENT_INFORMATION_ENDPOINT)
                     .otherwise()
                         .log("good information")
                         .to(Endpoint.VALIDATE_CART.getInstruction())
                 .endChoice();
+
+        from(BAD_PAYMENT_INFORMATION_ENDPOINT)
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
+                .setBody(constant("Bad payment information."));
 
         from(Endpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
