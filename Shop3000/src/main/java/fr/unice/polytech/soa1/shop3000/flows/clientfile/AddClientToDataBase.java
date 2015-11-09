@@ -15,7 +15,7 @@ public class AddClientToDataBase implements Processor {
     /**
      * This method add the client in the database.
      *
-     * @param exchange
+     * @param exchange This object contains a client object.
      * @throws Exception
      */
     public void process(Exchange exchange) throws Exception {
