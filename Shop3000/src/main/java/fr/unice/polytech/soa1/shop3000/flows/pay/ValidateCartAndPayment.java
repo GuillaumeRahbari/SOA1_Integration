@@ -6,7 +6,6 @@ import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
-import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -81,7 +80,7 @@ public class ValidateCartAndPayment extends RouteBuilder {
          */
         from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
                 .log("Here we update the number of item sells for the best seller");
-
+                // TODO guigui
     }
 
     /**
