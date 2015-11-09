@@ -10,6 +10,7 @@ import org.apache.camel.builder.RouteBuilder;
 /**
  * @author Marc Karassev
  *
+ * Builds routes responsible for unmarshalling data from payment requests.
  */
 public class PayUnmarshaller extends RouteBuilder {
 
