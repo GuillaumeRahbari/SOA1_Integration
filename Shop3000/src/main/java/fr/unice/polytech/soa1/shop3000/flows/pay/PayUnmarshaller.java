@@ -38,6 +38,7 @@ public class PayUnmarshaller extends RouteBuilder {
     /**
      * Process responsible for extracting a PaymentInformation object from a JSON expected to be in a
      * "paymentInformation" exchange property.
+     * Resets the "paymentInformation" exchange property.
      */
     private class JsonPaymentInformationExtractor extends SuperProcessor {
 
