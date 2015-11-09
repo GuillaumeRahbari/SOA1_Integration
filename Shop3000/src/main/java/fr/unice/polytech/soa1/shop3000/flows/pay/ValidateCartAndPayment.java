@@ -1,16 +1,19 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
  * @author Marc Karassev
+ *
+ * Builds routes responsible for checking payment information and cart contents.
  */
 public class ValidateCartAndPayment extends RouteBuilder {
 
-    private static final String BAD_PAYMENT_INFORMATION_ENDPOINT = "direct:badPaymentInformation";
+    private CartExtractor cartExtractor = new CartExtractor();
 
     @Override
     public void configure() throws Exception {
@@ -28,20 +31,21 @@ public class ValidateCartAndPayment extends RouteBuilder {
                         }
                     })
                         .log("bad information")
-                        .to(BAD_PAYMENT_INFORMATION_ENDPOINT)
+                        /** {@link PayRoute#configure() next} route builder **/
+                        .to(PayEndpoint.BAD_PAYMENT_INFORMATION_ENDPOINT.getInstruction())
                     .otherwise()
                         .log("good information")
+                        /** {@link ValidateCartAndPayment#configure() next} route builder **/
                         .to(PayEndpoint.VALIDATE_CART.getInstruction())
                 .endChoice();
 
-        from(BAD_PAYMENT_INFORMATION_ENDPOINT)
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
-                .setBody(constant("Bad payment information."));
-
+        /**
+         * Flow extracting cart and validating its content by sending to the shops their related products.
+         */
         from(PayEndpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
-                .log("body: ${body}")
-                // TODO extract payment info from body and set a property
+                .log("starting cart extraction")
+                .process(cartExtractor)
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy()) // TODO c'etait une autre strat d'aggreg
                     .log("multicasting")
@@ -53,5 +57,18 @@ public class ValidateCartAndPayment extends RouteBuilder {
                 .log("body: ${body}");
                 // TODO extract payment info from property and set body
                 //.to(PayEndpoint.PAY.getInstruction());
+    }
+
+    /**
+     * Process responsible for extracting a client cart.
+     * Expects a client id to be set in the "clientID" exchange property.
+     * Sets a "cart" exchange property.
+     */
+    private class CartExtractor extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+
+        }
     }
 }
