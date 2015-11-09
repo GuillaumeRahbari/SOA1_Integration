@@ -39,7 +39,10 @@ public enum Endpoint {
     GET_CART("direct:getCart"),
     CHECK_REQUEST_STATUS("direct:checkRequestStatus"),
     /** Payment endpoints **/
-    PAY("direct:pay");
+    PAY("direct:pay"),
+    PAY_TO_BIKO("direct:payToBiko"),
+    PAY_TO_VOLLEY("direct:payToVolley"),
+    PAY_TO_BEER("direct:payToBeer");
 
     private String instruction;
 

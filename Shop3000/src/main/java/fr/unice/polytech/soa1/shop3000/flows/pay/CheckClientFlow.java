@@ -44,12 +44,12 @@ public class CheckClientFlow extends RouteBuilder {
                             .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
                         /** {@link CheckClientExistenceBeer} **/
                 .process(checkClientExistenceBeer)
-                    .log("result : ${property.result}")
-                    .choice()
-                        .when(simple("${property.result} == true"))
-                            .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction())
-                        .when(simple("${property.result} == false"))
-                            .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
+                .choice()
+                    .when(simple("${property.result} == true"))
+                    .when(simple("${property.result} == false"))
+                        .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
+                .end()
+                .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
         /**
          * This flow check if the client is in the biko system, if not we create the client in the system and then
@@ -66,12 +66,12 @@ public class CheckClientFlow extends RouteBuilder {
                     .log("catch")
                 /** {@link CheckClientExistenceBiko} **/
                 .process(checkClientExistenceBikoBiko)
-                    .log("result : ${property.result}")
-                    .choice()
-                        .when(simple("${property.result} == true"))
-                            .to(Endpoint.ADD_TO_CART_BIKO.getInstruction())
-                        .when(simple("${property.result} == false"))
-                            .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction());
+                .choice()
+                    .when(simple("${property.result} == true"))
+                    .when(simple("${property.result} == false"))
+                        .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction())
+                .end()
+                .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
 
         /**
          * This flow check if client is already registered in the volley system. Create the client otherwise.
@@ -87,11 +87,12 @@ public class CheckClientFlow extends RouteBuilder {
                 .doCatch(Exception.class)
                         .log("catch")
                 /** @{Link CheckClientExistenceVolley} **/
-                    .process(checkClientExistenceVolley)
-                    .choice()
-                        .when(simple("${property.result} == true"))
-                            .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction())
-                        .when(simple("${property.result} == false"))
-                            .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction());
+                .process(checkClientExistenceVolley)
+                .choice()
+                    .when(simple("${property.result} == true"))
+                    .when(simple("${property.result} == false"))
+                        .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
+                .end()
+                .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
     }
 }

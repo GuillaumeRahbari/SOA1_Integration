@@ -1,6 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import fr.unice.polytech.soa1.shop3000.utils.Shop;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
@@ -17,9 +18,9 @@ public class CallExternalPartners extends RouteBuilder {
 
 
     public CallExternalPartners() {
-        this.transformBiko = new TransformResponseBiko("biko");
-        this.transformVolley = new TransformResponseVolley("volleyonthebeach");
-        this.transformBeer = new TransformResponseBeer("allhailbeer");
+        this.transformBiko = new TransformResponseBiko(Shop.BIKO.getName());
+        this.transformVolley = new TransformResponseVolley(Shop.VOLLEY.getName());
+        this.transformBeer = new TransformResponseBeer(Shop.BEER.getName());
     }
 
     /**
