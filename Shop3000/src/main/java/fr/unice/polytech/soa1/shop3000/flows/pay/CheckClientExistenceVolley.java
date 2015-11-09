@@ -10,7 +10,7 @@ import org.codehaus.jettison.json.*;
 public class CheckClientExistenceVolley extends SuperProcessor{
 
     public void process(Exchange exchange) throws Exception {
-        String loginToTest = (String)exchange.getProperty("login");
+        String loginToTest = (String)exchange.getProperty("clientID");
         String body = extractExchangeBody(exchange);
         String login = new JSONObject(body).getString("login");
         if(loginToTest.equals(login)) {

@@ -23,7 +23,9 @@ public class PayRoute extends RouteBuilder {
 
         rest("{clientID}/payment")
             .post()
-            .to(GET_CLIENT_FROM_REST_ENDPOINT);
+                .route()
+                .removeHeaders("*")
+                .to(GET_CLIENT_FROM_REST_ENDPOINT);
 
         from(GET_CLIENT_FROM_REST_ENDPOINT)
             .log("extracting POST data")

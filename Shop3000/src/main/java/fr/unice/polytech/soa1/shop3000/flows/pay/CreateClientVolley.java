@@ -10,13 +10,13 @@ import org.codehaus.jettison.json.JSONObject;
 public class CreateClientVolley extends SuperProcessor{
     @Override
     public void process(Exchange exchange) throws Exception {
-        String login = (String)exchange.getProperty("login");
-        String password = (String)exchange.getProperty("password");
+        String login = (String)exchange.getProperty("clientID");
+        //String password = (String)exchange.getProperty("password");
 
 
         JSONObject jObject = new JSONObject();
         jObject.put("name", login);
-        jObject.put("password", password);
+        jObject.put("password", login);
         System.out.println(jObject.toString());
         exchange.getIn().setBody(jObject.toString());
     }

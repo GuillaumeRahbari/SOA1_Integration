@@ -7,12 +7,9 @@ import org.codehaus.jettison.json.*;
 /**
  * Created by Nabil on 26/10/2015.
  */
-public class CheckClientExistence extends SuperProcessor {
+public class CheckClientExistenceBiko extends SuperProcessor {
 
-    private String derp;
-
-    public CheckClientExistence(String derp){
-        this.derp = derp;
+    public CheckClientExistenceBiko(){
     }
 
     public void process(Exchange exchange) throws Exception {
