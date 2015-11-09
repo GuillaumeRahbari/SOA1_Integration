@@ -1,6 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.clientfile;
 
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -37,7 +38,7 @@ public class ClientServiceRoute extends RouteBuilder{
          *
          * This flow continues to {@link ClientFileFlows}.
          */
-        rest("/clientfile/{firstName}")
+        rest("/clientFile/{clientFirstName}")
                 .get()
                 .to(Endpoint.GET_CLIENT_FILE.getInstruction());
 
@@ -47,8 +48,12 @@ public class ClientServiceRoute extends RouteBuilder{
          *
          * This flow continues to {@link ClientFileFlows}.
          */
-        rest("/clientfile/{firstName}")
+        rest("/clientFile/{clientFirstName}")
                 .delete()
                 .to(Endpoint.DELETE_CLIENT_FILE.getInstruction());
+
+        from(Endpoint.SEND_STATUS.getInstruction())
+                .log("Status : " + "${property.status}")
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
     }
 }

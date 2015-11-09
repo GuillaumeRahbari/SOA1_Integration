@@ -1,7 +1,12 @@
 package fr.unice.polytech.soa1.shop3000.flows.clientfile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.polytech.soa1.shop3000.business.Client;
+import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.mock.ClientFileMock;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -15,13 +20,15 @@ public class ClientFileFlows extends RouteBuilder {
      * This class create a process that will mock the fact we don't have a real input and put a fake client in the body.
      */
     private ClientFileMock clientFileMock;
-    private CheckClientInDatabase checkClientInDatabase;
+    private GetClientInDatabase getClientInDatabase;
     private AddClientToDataBase addClientToDataBase;
+    private DeleteClientProcessor deleteClientProcessor;
 
     public ClientFileFlows() {
         this.clientFileMock = new ClientFileMock();
         this.addClientToDataBase = new AddClientToDataBase();
-        this.checkClientInDatabase = new CheckClientInDatabase();
+        this.getClientInDatabase = new GetClientInDatabase();
+        this.deleteClientProcessor = new DeleteClientProcessor();
     }
 
     /**
@@ -35,27 +42,55 @@ public class ClientFileFlows extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from(Endpoint.CREATE_CLIENT_FILE.getInstruction())
-                .log("Start processing")
-                .process(checkClientInDatabase)
-                .log("Checked of the client in Database")
-                .choice()
-                    // If the client already exists (the property "client" is set to null)
-                    .when(simple("${property.client} == null"))
-                            .log("Client already exist")
-                    // Otherwise the client doesn't exist and we add him in the database.
-                    .otherwise()
-                            .log("The client doesn't exist")
-                            .log("Begin process to add the client in the database")
-                            .process(addClientToDataBase)
-                            .log("Client added to the database")
-                .log("End of the process");
+            .log("Start client creation processing")
+            .setProperty("clientFirstName", simple("${property.client.firstName}"))
+            .process(getClientInDatabase)
+            .log("Check of the client in Database")
+            .choice()
+                .when(simple("${property.databaseClient} == null"))
+                    .log("The client doesn't exist")
+                    .log("Begin process to add the client in the database")
+                    .process(addClientToDataBase)
+                    .setProperty("status", constant(200))
+                    .log("Client added to the database")
+                .otherwise()
+                    .setProperty("status", constant(409))
+                    .log("Client already exist")
+                .end()
+            .log("End of the process")
+            .to(Endpoint.SEND_STATUS.getInstruction());
 
         from(Endpoint.GET_CLIENT_FILE.getInstruction())
-                ;
+            .log("Start get client processing")
+            .setProperty("clientFirstName", simple("${header.clientFirstName}"))
+            .process(getClientInDatabase)
+                .log("Client in Database : ${property.databaseClient}")
+            .choice()
+                .when(simple("${property.databaseClient} == null"))
+                    .setProperty("status", constant(404))
+                .otherwise()
+                    .setBody(simple("${property.databaseClient}"))
+                    .setProperty("status", constant(200))
+                .end()
+            .to(Endpoint.SEND_STATUS.getInstruction());
 
         from(Endpoint.DELETE_CLIENT_FILE.getInstruction())
-                ;
+            .log("Start delete client processing")
+                .setProperty("clientFirstName", simple("${header.clientFirstName}"))
+                .process(deleteClientProcessor)
+            .to(Endpoint.SEND_STATUS.getInstruction());
 
+    }
 
+    private class DeleteClientProcessor extends SuperProcessor {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String clientFirstName = (String)exchange.getProperty("clientFirstName");
+            if (ClientStorage.delete(clientFirstName)){
+                exchange.setProperty("status",200);
+            }else {
+                exchange.setProperty("status",404);
+            }
+        }
     }
 }
