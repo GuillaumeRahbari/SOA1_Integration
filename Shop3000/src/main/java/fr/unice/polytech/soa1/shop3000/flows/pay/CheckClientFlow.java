@@ -29,16 +29,16 @@ public class CheckClientFlow extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                //.setProperty("login",constant("test"))
-                //.setProperty("password", constant("test"))
-                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.clientID}?bridgeEndpoint=true"))
+                .setProperty("clientID",constant("${header.clientID}"))
+                .setProperty("password", constant("${header.clientID}"))
+                .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.password}?bridgeEndpoint=true"))
 
                 /** {@link CheckClientExistenceBeer} **/
                 .process(checkClientExistenceBeer)
                 .choice()
-                    .when(simple("${property.result} == true"))
-                    .when(simple("${property.result} == false"))
-                        .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
+                .when(simple("${property.result} == true"))
+                .when(simple("${property.result} == false"))
+                .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
 
         /**
          * This flow check if the client is in the biko system, if not we create the client in the system and then
@@ -48,7 +48,7 @@ public class CheckClientFlow extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                //.setProperty("clientID", constant("user1"))
+                .setProperty("clientID",constant("${header.clientID}"))
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
 
                 /** {@link CheckClientExistenceBiko} **/
@@ -66,7 +66,7 @@ public class CheckClientFlow extends RouteBuilder {
                 .log("Begin check client")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                //.setProperty("login", constant("jean"))
+                .setProperty("clientID", constant("${header.clientID}"))
                 .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.clientID}?bridgeEndpoint=true"))
 
                 /** @{Link CheckClientExistenceVolley} **/
