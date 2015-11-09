@@ -62,7 +62,7 @@ public class ValidateCart extends RouteBuilder {
          */
         from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
                 .log("Here we update the number of item sells for the best seller");
-
+                // TODO guigui
     }
 
     /**

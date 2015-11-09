@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
@@ -39,7 +40,7 @@ public class AddItem {
      * @param catalogItem The items we want to add in the client cart.
      */
     private void addItemToCart (Client client, CatalogItem catalogItem) {
-        String shopName = catalogItem.getName();
+        String shopName = Catalog.getInstance().getShopName(catalogItem.getName());
         if (client.getCart().get(shopName) == null) {
             client.getCart().put(shopName, new ArrayList<CatalogItem>());
         }

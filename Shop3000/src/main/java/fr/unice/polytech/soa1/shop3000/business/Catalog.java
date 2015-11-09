@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.business;
 
+import fr.unice.polytech.soa1.shop3000.utils.Shop;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,5 +56,26 @@ public class Catalog {
         fullList.addAll(this.itemsBiko);
         fullList.addAll(this.itemsVolley);
         return fullList;
+    }
+
+    public String getShopName(String itemName) {
+        if(itemName != null && itemName != "") {
+            for (CatalogItem item : itemsBiko) {
+                if (itemName.equals(item.getName())) {
+                    return Shop.BIKO.getName();
+                }
+            }
+            for (CatalogItem item : itemsBeer) {
+                if (itemName.equals(item.getName())) {
+                    return Shop.BEER.getName();
+                }
+            }
+            for (CatalogItem item : itemsVolley) {
+                if (itemName.equals(item.getName())) {
+                    return Shop.VOLLEY.getName();
+                }
+            }
+        }
+        return null;
     }
 }
