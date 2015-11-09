@@ -30,18 +30,15 @@ public class CheckClientFlow extends RouteBuilder {
                 .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-/*                .setProperty("clientID", constant("${header.clientID}"))
-                .setProperty("password", constant("${header.clientID}"))*/
-                .log("${property.clientID}")
                 .log("${property.clientID}")
                 .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.clientID}?bridgeEndpoint=true"))
-
-                /** {@link CheckClientExistenceBeer} **/
-                .process(checkClientExistenceBeer)
-                .choice()
-                .when(simple("${property.result} == true"))
-                .when(simple("${property.result} == false"))
-                .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
+                        /** {@link CheckClientExistenceBeer} **/
+                    .process(checkClientExistenceBeer)
+                    .choice()
+                        .when(simple("${property.result} == true"))
+                            .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction())
+                        .when(simple("${property.result} == false"))
+                            .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction());
 
         /**
          * This flow check if the client is in the biko system, if not we create the client in the system and then
@@ -49,18 +46,18 @@ public class CheckClientFlow extends RouteBuilder {
          */
         from(Endpoint.CHECK_CLIENT_BIKO.getInstruction())
                 .log("Begin check client")
+                .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("clientID", constant("${header.clientID}"))
-                .removeHeaders("*")
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true"))
 
                 /** {@link CheckClientExistenceBiko} **/
-                .process(checkClientExistenceBikoBiko)
-                .choice()
-                .when(simple("${property.result} == true"))
-                .when(simple("${property.result} == false"))
-                .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction());
+                    .process(checkClientExistenceBikoBiko)
+                    .choice()
+                        .when(simple("${property.result} == true"))
+                            .to(Endpoint.ADD_TO_CART_BIKO.getInstruction())
+                        .when(simple("${property.result} == false"))
+                            .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction());
 
         /**
          * This flow check if client is already registered in the volley system. Create the client otherwise.
@@ -68,17 +65,17 @@ public class CheckClientFlow extends RouteBuilder {
          */
         from(Endpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .log("Begin check client")
+                .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .setProperty("clientID", constant("${header.clientID}"))
-                .removeHeaders("*")
                 .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.clientID}?bridgeEndpoint=true"))
 
                 /** @{Link CheckClientExistenceVolley} **/
-                .process(checkClientExistenceVolley)
-                .choice()
-                .when(simple("${property.result} == true"))
-                .when(simple("${property.result} == false"))
-                .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction());
+                    .process(checkClientExistenceVolley)
+                    .choice()
+                        .when(simple("${property.result} == true"))
+                            .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction())
+                        .when(simple("${property.result} == false"))
+                            .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction());
     }
 }
