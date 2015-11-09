@@ -23,8 +23,8 @@ public class ValidateCartAndPayment extends RouteBuilder {
                 .choice()
                     .when(new Predicate() {
                         public boolean matches(Exchange exchange) {
-                            return exchange.getProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY)
-                                    .equals(JsonPaymentInformationExtractor.BAD_INFORMATION);
+                            return exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY)
+                                    .equals(PayUnmarshaller.BAD_INFORMATION);
                         }
                     })
                         .log("bad information")

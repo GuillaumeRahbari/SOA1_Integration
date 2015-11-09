@@ -11,27 +11,13 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class PayRoute extends RouteBuilder {
 
-    private static final String GET_CLIENT_FROM_REST_ENDPOINT = "direct:getClientFromRest"; //TODO : c'était une queue
-    static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
-                        CLIENT_ID_PROPERTY = "clientID";
-
-    private JsonPaymentInformationExtractor jsonPaymentInformationExtractor = new JsonPaymentInformationExtractor();
-
     @Override
     public void configure() throws Exception {
         restConfiguration().component("servlet");
 
         rest("{clientID}/payment")
             .post()
-                .to(GET_CLIENT_FROM_REST_ENDPOINT);
-
-        from(GET_CLIENT_FROM_REST_ENDPOINT)
-                .log("extracting POST data")
-                .setProperty(PAYMENT_INFORMATION_PROPERTY, body())
-                .process(jsonPaymentInformationExtractor)
-                .setProperty(CLIENT_ID_PROPERTY, simple("${header.clientId}"))
-                .log("client: ${property." + CLIENT_ID_PROPERTY + "}")
-                /** {@link ValidateCartAndPayment#configure() next} flow **/
-                .to(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction());
+                    /** {@link PayUnmarshaller#configure() next} flow **/
+                .to(PayEndpoint.UNMARSHAL.getInstruction());
     }
 }
