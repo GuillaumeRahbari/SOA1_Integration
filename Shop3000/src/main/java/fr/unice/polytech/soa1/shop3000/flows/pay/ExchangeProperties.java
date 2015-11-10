@@ -7,7 +7,12 @@ public enum ExchangeProperties {
 
     CART_PROPERTY("cart"),
     CART_PRICE_PROPERTY("cartPrice"),
-    PAYMENT_STATE_PROPERTY("paymentStatus");
+    PAYMENT_STATE_PROPERTY("paymentStatus"),
+    PAYMENT_INFORMATION_PROPERTY("paymentInformation"),
+    CLIENT_ID_PROPERTY("clientID"),
+    BAD_INFORMATION("")
+
+    ;
 
 
 

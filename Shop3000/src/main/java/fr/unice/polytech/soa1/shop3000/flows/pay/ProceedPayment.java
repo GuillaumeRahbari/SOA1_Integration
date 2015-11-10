@@ -31,16 +31,16 @@ public class ProceedPayment extends RouteBuilder {
         from(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction())
                 .log("starting payment information checking")
                 .choice()
-                .when(exchange -> exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY)
-                        .equals(PayUnmarshaller.BAD_INFORMATION))
-                .log("bad payment information")
-                        /** {@link PayRoute#configure() next} route builder **/
-                .to(PayEndpoint.BAD_PAYMENT_INFORMATION_ENDPOINT.getInstruction())
-                .otherwise()
-                .log("good payment information")
-                        /** {@link ValidateCart#configure() next} route builder **/
-                .to(PayEndpoint.EXTRACT_CART.getInstruction())
-                .endChoice();
+                .when(exchange -> exchange.getProperty(ExchangeProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction())
+                        .equals(ExchangeProperties.BAD_INFORMATION.getInstruction()))
+                        .log("bad payment information")
+                                /** {@link PayRoute#configure() next} route builder **/
+                        .to(PayEndpoint.BAD_PAYMENT_INFORMATION_ENDPOINT.getInstruction())
+                        .otherwise()
+                        .log("good payment information")
+                                /** {@link ValidateCart#configure() next} route builder **/
+                        .to(PayEndpoint.EXTRACT_CART.getInstruction())
+                        .endChoice();
 
         /**
          * This part of the flow handle the payment of shop3000 with the client payment information
@@ -84,8 +84,12 @@ public class ProceedPayment extends RouteBuilder {
 
             double total = deliveryPrice + cartPrice;
 
-            PaymentInformation paymentInformation = objectMapper.readValue((String) exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class);
-            boolean paymentDone = MockPaymentSystem.pay(paymentInformation.getCardNumber(), paymentInformation.getExpirationDate(), paymentInformation.getSecurityCode(), paymentInformation.getAddress(), total);
+            PaymentInformation paymentInformation = objectMapper.readValue(
+                    (String) exchange.getProperty(ExchangeProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction()),
+                    PaymentInformation.class);
+
+            boolean paymentDone = MockPaymentSystem.pay(paymentInformation.getCardNumber(), paymentInformation.getExpirationDate(),
+                    paymentInformation.getSecurityCode(), paymentInformation.getAddress(), total);
 
             exchange.setProperty(ExchangeProperties.PAYMENT_STATE_PROPERTY.getInstruction(),paymentDone);
         }

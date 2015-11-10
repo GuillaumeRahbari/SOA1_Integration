@@ -35,7 +35,7 @@ public class ValidateCart extends RouteBuilder {
                 .process(cartExtractor)
                 .choice()
                     .when(exchange -> exchange.getProperty(ExchangeProperties.CART_PROPERTY.getInstruction())
-                            .equals(PayUnmarshaller.BAD_INFORMATION))
+                            .equals(ExchangeProperties.BAD_INFORMATION.getInstruction()))
                         .log("bad client id")
                         /** {@link PayRoute#configure() next} route builder **/
                         .to(PayEndpoint.BAD_CLIENT_ID.getInstruction())
@@ -97,7 +97,8 @@ public class ValidateCart extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            Client client = ClientStorage.read((String) exchange.getProperty(PayUnmarshaller.CLIENT_ID_PROPERTY));
+            Client client = ClientStorage.read(
+                    (String) exchange.getProperty(ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction()));
 
             if (client != null) {
                 Cart cart = client.getCart();
@@ -106,11 +107,13 @@ public class ValidateCart extends RouteBuilder {
                     exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(), cart);
                 }
                 else {
-                    exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(), PayUnmarshaller.BAD_INFORMATION);
+                    exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(),
+                            ExchangeProperties.BAD_INFORMATION.getInstruction());
                 }
             }
             else {
-                exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(), PayUnmarshaller.BAD_INFORMATION);
+                exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(),
+                        ExchangeProperties.BAD_INFORMATION.getInstruction());
             }
         }
     }

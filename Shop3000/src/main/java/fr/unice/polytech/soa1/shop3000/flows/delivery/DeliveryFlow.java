@@ -2,8 +2,8 @@ package fr.unice.polytech.soa1.shop3000.flows.delivery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
+import fr.unice.polytech.soa1.shop3000.flows.pay.ExchangeProperties;
 import fr.unice.polytech.soa1.shop3000.flows.pay.PayEndpoint;
-import fr.unice.polytech.soa1.shop3000.flows.pay.PayUnmarshaller;
 import fr.unice.polytech.soa1.shop3000.flows.pay.ProceedPayment;
 import fr.unice.polytech.soa1.shop3000.utils.MockDeliverySystem;
 import fr.unice.polytech.soa1.shop3000.utils.Shop3000Information;
@@ -45,7 +45,8 @@ public class DeliveryFlow extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             ObjectMapper objectMapper = new ObjectMapper();
-            PaymentInformation paymentInformation =  objectMapper.readValue((String) exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class);
+            PaymentInformation paymentInformation =  objectMapper.readValue(
+                    (String) exchange.getProperty(ExchangeProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction()), PaymentInformation.class);
             String clientAddress = paymentInformation.getAddress();
 
             double price = MockDeliverySystem.getDeliveryPrice(Shop3000Information.ADDRESS, clientAddress);

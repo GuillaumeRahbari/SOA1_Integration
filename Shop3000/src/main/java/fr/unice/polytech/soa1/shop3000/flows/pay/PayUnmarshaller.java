@@ -15,8 +15,8 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class PayUnmarshaller extends RouteBuilder {
 
-    public static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
-            CLIENT_ID_PROPERTY = "clientID", BAD_INFORMATION = "";
+//    public static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
+//            CLIENT_ID_PROPERTY = "clientID", BAD_INFORMATION = "";
 
     private JsonPaymentInformationExtractor jsonPaymentInformationExtractor = new JsonPaymentInformationExtractor();
     private PrepareWS prepareWS = new PrepareWS();
@@ -29,10 +29,10 @@ public class PayUnmarshaller extends RouteBuilder {
          */
         from(PayEndpoint.UNMARSHAL.getInstruction())
                 .log("extracting POST data")
-                .setProperty(PAYMENT_INFORMATION_PROPERTY, body())
+                .setProperty(ExchangeProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction(), body())
                 .process(jsonPaymentInformationExtractor)
-                .setProperty(CLIENT_ID_PROPERTY, simple("${header.clientId}"))
-                .log("client: ${property." + CLIENT_ID_PROPERTY + "}")
+                .setProperty(ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction(), simple("${header.clientId}"))
+                .log("client: ${property." + ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction() + "}")
                         /** {@link ProceedPayment#configure() next} flow **/
                 .to(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction());
 
@@ -66,13 +66,15 @@ public class PayUnmarshaller extends RouteBuilder {
                 PaymentInformation paymentInformation = objectMapper.readValue(
                     /*(String) exchange.getProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class
             );*/
-                        extractExchangeProperty(exchange, PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class);
+                        extractExchangeProperty(exchange, ExchangeProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction()),
+                        PaymentInformation.class);
 
-                exchange.setProperty(PAYMENT_INFORMATION_PROPERTY,
+                exchange.setProperty(ExchangeProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction(),
                         objectMapper.writeValueAsString(paymentInformation));
             }
             catch (JsonMappingException e) {
-                exchange.setProperty(PAYMENT_INFORMATION_PROPERTY, BAD_INFORMATION);
+                exchange.setProperty(ExchangeProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction(),
+                        ExchangeProperties.BAD_INFORMATION.getInstruction());
             }
         }
     }
