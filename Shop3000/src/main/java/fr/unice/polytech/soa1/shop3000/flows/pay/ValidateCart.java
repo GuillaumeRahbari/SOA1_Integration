@@ -1,13 +1,15 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.Cart;
+import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+
+import java.util.List;
 
 /**
  * @author Marc Karassev
@@ -100,19 +102,24 @@ public class ValidateCart extends RouteBuilder {
      * Extracts the cart's item in relation to the different shops.
      * Expects a "cart" property to be set.
      * Sets a property for each shop with its related products.
+     * In addition, this processor compute the price of all the items in the cart
+     * and set a property "price" with the good amount.
      */
     private class ShopsExtractor extends SuperProcessor {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            ObjectMapper mapper = new ObjectMapper();
-           // Cart cart = mapper.readValue((String) exchange.getProperty(CART_PROPERTY), Cart.class);
-
-            // TODO : ajouter le prix du panier dans une property ? :p
             Cart cart = (Cart) exchange.getProperty(CART_PROPERTY);
+            double price = 0;
+
             for (String key: cart.keySet()) {
+                List<CatalogItem> items = cart.get(key);
+                for(CatalogItem catalogItem : items) {
+                    price += catalogItem.getPrice();
+                }
                 exchange.setProperty(key, cart.get(key));
             }
+            exchange.setProperty("price", price);
         }
     }
 }
