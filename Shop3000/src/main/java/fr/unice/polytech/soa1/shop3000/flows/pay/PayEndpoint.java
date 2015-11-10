@@ -18,7 +18,7 @@ public enum PayEndpoint {
     CHECK_CLIENT_VOLLEY("direct:checkClientVolley"),
     UPDATE_BEST_SELLER("direct:updateBestSeller"),
     SHOP3000_PAYMENT("direct:getCartPrice"),
-    SHOPS_PAYMENT("direct:payShops"),
+    SHOPS_PAYMENT("activemq:payShops"),
     PAYMENT_TO_WS("direct:pay"),
     END_PAYMENT("direct:endPayment");
 
