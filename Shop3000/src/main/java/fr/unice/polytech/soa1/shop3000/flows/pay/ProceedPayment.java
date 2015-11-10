@@ -55,7 +55,8 @@ public class ProceedPayment extends RouteBuilder {
                 .log("after payment")
                 /** The rest of the flow is below **/
               //  .wireTap(PayEndpoint.SHOPS_PAYMENT.getInstruction())
-               // .to(PayEndpoint.PAYMENT_TO_WS.getInstruction())
+                /** {@link PayUnmarshaller#configure()} **/
+                .to(PayEndpoint.PAYMENT_TO_WS.getInstruction())
         ;
 
 

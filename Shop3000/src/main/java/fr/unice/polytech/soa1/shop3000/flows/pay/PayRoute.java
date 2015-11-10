@@ -37,7 +37,9 @@ public class PayRoute extends RouteBuilder {
 
 
         from(PayEndpoint.END_PAYMENT.getInstruction())
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${propery.requestStatus"));
+                .setBody(constant(""))
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.requestStatus}"));
+
 
     }
 }

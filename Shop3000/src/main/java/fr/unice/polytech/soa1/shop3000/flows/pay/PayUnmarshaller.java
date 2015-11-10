@@ -44,6 +44,8 @@ public class PayUnmarshaller extends RouteBuilder {
                 .log("Begin of the check payment status")
                 .process(prepareWS)
                 .log("${property.requestStatus}")
+
+                        /** {@link PayRoute#configure()} **/
                 .to(PayEndpoint.END_PAYMENT.getInstruction());
 
 
