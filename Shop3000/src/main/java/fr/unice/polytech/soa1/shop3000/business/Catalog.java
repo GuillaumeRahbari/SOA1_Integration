@@ -7,14 +7,17 @@ import java.util.List;
 
 /**
  * @author Laureen Ginier
- * This class represents the aggregation of all the various catalogs shops into a unique catalog
+ * This class represents the aggregation of all the various catalogs shops into a unique shop3000 catalog
  */
 public class Catalog {
 
     private static Catalog instance = new Catalog();
 
+    /** CatalogItems coming from Biko shop */
     private List<CatalogItem> itemsBiko;
+    /** CatalogItems coming from AllHailBeer shop */
     private List<CatalogItem> itemsBeer;
+    /** CatalogItems coming form VolleyOnTheBeach shop*/
     private List<CatalogItem> itemsVolley;
 
     private Catalog() {
@@ -51,6 +54,10 @@ public class Catalog {
         this.itemsVolley = itemsVolley;
     }
 
+    /**
+     * Gets the unique shop3000 catalog (aggregation of the three others)
+     * @return a catalog of all CatalogItems
+     */
     public List<CatalogItem> getAll() {
         List<CatalogItem> fullList = this.itemsBeer;
         fullList.addAll(this.itemsBiko);
@@ -58,8 +65,13 @@ public class Catalog {
         return fullList;
     }
 
+    /**
+     * Returns the shop name to which the product belongs
+     * @param itemName name of the item of which one wants to know the origin
+     * @return name of the shop from where comes the item
+     */
     public String getShopName(String itemName) {
-        if(itemName != null && itemName != "") {
+        if(itemName != null && !("".equals(itemName))) {
             for (CatalogItem item : itemsBiko) {
                 if (itemName.equals(item.getName())) {
                     return Shop.BIKO.getName();
