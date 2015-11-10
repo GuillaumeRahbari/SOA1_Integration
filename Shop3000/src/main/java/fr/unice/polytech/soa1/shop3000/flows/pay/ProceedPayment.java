@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -14,6 +15,11 @@ public class ProceedPayment extends RouteBuilder {
 
         /** Flow checking payment information.
          *  Expects a property "paymentInformation" with a JSON representing a PaymentInformation object.
+         *
+         *  List of property of the flow :
+         *  - "price" : contain the price of the whole cart added {@link fr.unice.polytech.soa1.shop3000.flows.pay.ValidateCart.ShopsExtractor#process(Exchange)}
+         *  -
+         *  -
          */
         from(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction())
                 .log("starting payment information checking")

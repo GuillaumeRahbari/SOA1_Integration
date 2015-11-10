@@ -5,6 +5,8 @@ import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
+import fr.unice.polytech.soa1.shop3000.flows.delivery.DeliveryEndpoints;
+import fr.unice.polytech.soa1.shop3000.flows.delivery.DeliveryFlow;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -31,6 +33,7 @@ public class ValidateCart extends RouteBuilder {
          */
         from(PayEndpoint.EXTRACT_CART.getInstruction())
                 .log("starting cart extraction")
+                /** {@link CartExtractor#process(Exchange)} **/
                 .process(cartExtractor)
                 .choice()
                     .when(exchange -> exchange.getProperty(CART_PROPERTY).equals(PayUnmarshaller.BAD_INFORMATION))
@@ -49,18 +52,30 @@ public class ValidateCart extends RouteBuilder {
         from(PayEndpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
                 .wireTap(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
-                /** {@link ShopsExtractor#process(Exchange)} **/
+                /**
+                 * This process add several property on the exchange. On per shop, the property is the name of the shop
+                 * and one name "price" with the price of all the items
+                 *  {@link ShopsExtractor#process(Exchange)}
+                 **/
                 .process(shopsExtractor)
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy())
                     .log("multicasting")
                     .parallelProcessing()
+                    /**
+                     * Those 3 flows check in the 3 shops if the client exist in their database. If it is not the case
+                     * they create the client, then they add all the items of client in the cart
+                     *  {@link CheckClientFlow#configure()}
+                     **/
                     .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
                     .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
                     .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .end()
                 .log("merging")
-                .log("body: ${body}");
+                .log("body: ${body}")
+
+                /** {@link DeliveryFlow#configure()} **/
+                .to(DeliveryEndpoints.GET_DELIVERY_PRICE.getInstruction());
                 //.to(PayEndpoint.PAY.getInstruction());
 
         /**
