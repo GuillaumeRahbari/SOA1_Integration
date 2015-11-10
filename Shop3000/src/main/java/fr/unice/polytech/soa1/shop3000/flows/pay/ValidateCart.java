@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ValidateCart extends RouteBuilder {
 
-    public static final String CART_PROPERTY = "cart", CART_PRICE_PROPERTY = "cartPrice" ;
+//    public static final String CART_PROPERTY = "cart", CART_PRICE_PROPERTY = "cartPrice" ;
 
     private CartExtractor cartExtractor = new CartExtractor();
     private ShopsExtractor shopsExtractor = new ShopsExtractor();
@@ -36,7 +36,8 @@ public class ValidateCart extends RouteBuilder {
                 /** {@link CartExtractor#process(Exchange)} **/
                 .process(cartExtractor)
                 .choice()
-                    .when(exchange -> exchange.getProperty(CART_PROPERTY).equals(PayUnmarshaller.BAD_INFORMATION))
+                    .when(exchange -> exchange.getProperty(ExchangeProperties.CART_PROPERTY.getInstruction())
+                            .equals(PayUnmarshaller.BAD_INFORMATION))
                         .log("bad client id")
                         /** {@link PayRoute#configure() next} route builder **/
                         .to(PayEndpoint.BAD_CLIENT_ID.getInstruction())
@@ -104,14 +105,14 @@ public class ValidateCart extends RouteBuilder {
                 Cart cart = client.getCart();
 
                 if (cart != null) {
-                    exchange.setProperty(CART_PROPERTY, cart);
+                    exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(), cart);
                 }
                 else {
-                    exchange.setProperty(CART_PROPERTY, PayUnmarshaller.BAD_INFORMATION);
+                    exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(), PayUnmarshaller.BAD_INFORMATION);
                 }
             }
             else {
-                exchange.setProperty(CART_PROPERTY, PayUnmarshaller.BAD_INFORMATION);
+                exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(), PayUnmarshaller.BAD_INFORMATION);
             }
         }
     }
@@ -127,7 +128,7 @@ public class ValidateCart extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            Cart cart = (Cart) exchange.getProperty(CART_PROPERTY);
+            Cart cart = (Cart) exchange.getProperty(ExchangeProperties.CART_PROPERTY.getInstruction());
             double price = 0;
 
             for (String key: cart.keySet()) {
@@ -137,7 +138,7 @@ public class ValidateCart extends RouteBuilder {
                 }
                 exchange.setProperty(key, cart.get(key));
             }
-            exchange.setProperty(CART_PRICE_PROPERTY, price);
+            exchange.setProperty(ExchangeProperties.CART_PRICE_PROPERTY.getInstruction(), price);
         }
     }
 }

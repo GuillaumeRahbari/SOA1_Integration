@@ -82,7 +82,7 @@ public class ProceedPayment extends RouteBuilder {
         public void process(Exchange exchange) throws Exception {
             ObjectMapper objectMapper = new ObjectMapper();
             double deliveryPrice = (double) exchange.getProperty(DeliveryFlow.DELIVERY_PRICE_PROPERTY);
-            double cartPrice = (double) exchange.getProperty(ValidateCart.CART_PRICE_PROPERTY);
+            double cartPrice = (double) exchange.getProperty(ExchangeProperties.CART_PRICE_PROPERTY.getInstruction());
 
             double total = deliveryPrice + cartPrice;
 
