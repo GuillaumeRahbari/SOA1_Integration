@@ -16,7 +16,9 @@ public class AddItemsToCarts extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction())
-                .log("Starting adding items to AllHailBeer cart");
+                .log("Starting adding items to AllHailBeer cart")
+                .setBody(constant(true));
+
                 //.log("${property.clientID}")
                 //.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
                 //.setBody(constant(""))
@@ -29,8 +31,10 @@ public class AddItemsToCarts extends RouteBuilder {
                 //.to(Endpoint.PAY_TO_BEER.getInstruction());
 
         from(Endpoint.ADD_TO_CART_BIKO.getInstruction())
-                .log("Starting adding items to Biko cart");
-                //.log("${property.clientID}")
+                .log("Starting adding items to Biko cart")
+                .setBody(constant(true));
+
+        //.log("${property.clientID}")
                         //.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
                         //.setBody(constant(""))
                 //.process(prepareBikoItems)
@@ -42,7 +46,9 @@ public class AddItemsToCarts extends RouteBuilder {
                 //.to(Endpoint.PAY_TO_BIKO.getInstruction());
 
         from(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction())
-                .log("Starting adding items to VolleyOnTheBeach cart");
+                .log("Starting adding items to VolleyOnTheBeach cart")
+                .setBody(constant(true));
+
                 //.log("${property.clientID}")
                         //.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
                         //.setBody(constant(""))

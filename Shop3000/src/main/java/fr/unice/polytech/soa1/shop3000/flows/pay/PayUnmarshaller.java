@@ -31,7 +31,7 @@ public class PayUnmarshaller extends RouteBuilder {
                 .process(jsonPaymentInformationExtractor)
                 .setProperty(CLIENT_ID_PROPERTY, simple("${header.clientId}"))
                 .log("client: ${property." + CLIENT_ID_PROPERTY + "}")
-                        /** {@link ValidateCartAndPayment#configure() next} flow **/
+                        /** {@link ProceedPayment#configure() next} flow **/
                 .to(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction());
     }
 

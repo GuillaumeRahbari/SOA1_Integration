@@ -1,25 +1,27 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
-import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 
-import javax.wsdl.extensions.http.HTTPOperation;
 import java.io.IOException;
 
 /**
  * Created by user on 02/11/2015.
  */
 public class CheckClientFlow extends RouteBuilder {
-    private CheckClientExistenceBiko checkClientExistenceBikoBiko;
-    private CheckClientExistenceBeer checkClientExistenceBeer;
-    private CheckClientExistenceVolley checkClientExistenceVolley;
+
+    private CheckBikoClientExistence checkClientExistenceBikoBiko;
+    private CheckBeerClientExistence checkClientExistenceBeer;
+    private CheckVolleyClientExistence checkClientExistenceVolley;
 
     public CheckClientFlow(){
-        this.checkClientExistenceBikoBiko = new CheckClientExistenceBiko();
-        this.checkClientExistenceBeer = new CheckClientExistenceBeer();
-        this.checkClientExistenceVolley = new CheckClientExistenceVolley();
+        this.checkClientExistenceBikoBiko = new CheckBikoClientExistence();
+        this.checkClientExistenceBeer = new CheckBeerClientExistence();
+        this.checkClientExistenceVolley = new CheckVolleyClientExistence();
     }
 
     @Override
@@ -42,7 +44,7 @@ public class CheckClientFlow extends RouteBuilder {
                 .doCatch(IOException.class, IllegalStateException.class, Exception.class)
                     .log("catch")
                             .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
-                        /** {@link CheckClientExistenceBeer} **/
+                        /** {@link CheckBeerClientExistence} **/
                 .process(checkClientExistenceBeer)
                 .choice()
                     .when(simple("${property.result} == true"))
@@ -64,7 +66,7 @@ public class CheckClientFlow extends RouteBuilder {
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true")).end()
                 .doCatch(Exception.class)
                     .log("catch")
-                /** {@link CheckClientExistenceBiko} **/
+                /** {@link CheckBikoClientExistence} **/
                 .process(checkClientExistenceBikoBiko)
                 .choice()
                     .when(simple("${property.result} == true"))
@@ -94,5 +96,57 @@ public class CheckClientFlow extends RouteBuilder {
                         .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
                 .end()
                 .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
+    }
+
+
+    private class CheckVolleyClientExistence extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String loginToTest = (String)exchange.getProperty("clientID");
+            String body = (String) exchange.getIn().getBody();
+            String login = new JSONObject(body).getString("login");
+            if(loginToTest.equals(login)) {
+                exchange.setProperty("result", true);
+            }else {
+                exchange.setProperty("result", false);
+            }
+        }
+    }
+
+
+    private class CheckBikoClientExistence extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            //test if client exist
+            String nameToTest = (String)exchange.getProperty("clientID");
+            String body = (String) exchange.getIn().getBody();
+            JSONObject jObject = new JSONObject(body);
+            String name = jObject.getString("name");
+
+            if(nameToTest.equals(name))
+                exchange.setProperty("result",true);
+            else
+                exchange.setProperty("result",false);
+        }
+    }
+
+
+    private class CheckBeerClientExistence extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            // test if client exist
+            String body = extractExchangeBody(exchange);
+            String loginToTest = (String)exchange.getProperty("clientID");
+            String login = new JSONArray(body).getJSONObject(0).getJSONObject(loginToTest).getString("username");
+
+            if(loginToTest.equals(login)) {
+                exchange.setProperty("result", true);
+            }else {
+                exchange.setProperty("result", false);
+            }
+        }
     }
 }

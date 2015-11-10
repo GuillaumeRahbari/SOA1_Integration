@@ -9,10 +9,15 @@ import org.apache.camel.processor.aggregate.AggregationStrategy;
 public class BooleanAndAggregationStrategy implements AggregationStrategy {
 
     public Exchange aggregate(Exchange exchange, Exchange exchange1) {
-        boolean bool = exchange.getIn().getBody(Boolean.class),
-                bool1 = exchange1.getIn().getBody(Boolean.class);
+        if(exchange == null) {
+            return exchange1;
+        } else {
 
-        exchange.getIn().setBody(bool && bool1);
-        return exchange;
+            boolean bool = exchange.getIn().getBody(Boolean.class),
+                    bool1 = exchange1.getIn().getBody(Boolean.class);
+
+            exchange.getIn().setBody(bool && bool1);
+            return exchange;
+        }
     }
 }
