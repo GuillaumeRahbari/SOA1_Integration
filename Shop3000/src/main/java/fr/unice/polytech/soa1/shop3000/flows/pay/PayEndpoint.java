@@ -19,7 +19,8 @@ public enum PayEndpoint {
     UPDATE_BEST_SELLER("direct:updateBestSeller"),
     SHOP3000_PAYMENT("direct:getCartPrice"),
     SHOPS_PAYMENT("direct:payShops"),
-    PAY("direct:pay");
+    PAYMENT_TO_WS("direct:pay"),
+    END_PAYMENT("direct:endPayment");
 
 
     private String instruction;

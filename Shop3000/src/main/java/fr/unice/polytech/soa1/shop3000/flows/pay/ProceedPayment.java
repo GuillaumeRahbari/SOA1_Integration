@@ -54,7 +54,8 @@ public class ProceedPayment extends RouteBuilder {
                 .process(payment)
                 .log("after payment")
                 /** The rest of the flow is below **/
-                .to(PayEndpoint.SHOPS_PAYMENT.getInstruction()) // TODO : Je pense qu'on devrait mettre ca dans une activemq
+              //  .wireTap(PayEndpoint.SHOPS_PAYMENT.getInstruction())
+               // .to(PayEndpoint.PAYMENT_TO_WS.getInstruction())
         ;
 
 

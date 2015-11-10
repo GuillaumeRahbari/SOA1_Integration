@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -18,6 +19,7 @@ public class PayUnmarshaller extends RouteBuilder {
             CLIENT_ID_PROPERTY = "clientID", BAD_INFORMATION = "";
 
     private JsonPaymentInformationExtractor jsonPaymentInformationExtractor = new JsonPaymentInformationExtractor();
+    private PrepareWS prepareWS = new PrepareWS();
 
     @Override
     public void configure() throws Exception {
@@ -33,6 +35,18 @@ public class PayUnmarshaller extends RouteBuilder {
                 .log("client: ${property." + CLIENT_ID_PROPERTY + "}")
                         /** {@link ProceedPayment#configure() next} flow **/
                 .to(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction());
+
+
+        /**
+         * This flow will clear the body for the WS and prepare the property the WS will send to the client
+         */
+        from(PayEndpoint.PAYMENT_TO_WS.getInstruction())
+                .log("Begin of the check payment status")
+                .process(prepareWS)
+                .log("${property.requestStatus}")
+                .to(PayEndpoint.END_PAYMENT.getInstruction());
+
+
     }
 
     /**
@@ -60,4 +74,20 @@ public class PayUnmarshaller extends RouteBuilder {
             }
         }
     }
+
+
+    private class PrepareWS implements Processor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            exchange.getIn().getBody();
+            boolean paymentDone = (boolean) exchange.getProperty(ProceedPayment.PAYMENT_STATE_PROPERTY);
+            if(paymentDone) {
+                exchange.setProperty("requestStatus",200);
+            } else {
+                exchange.setProperty("requestStatus",400);
+            }
+        }
+    }
+
 }
