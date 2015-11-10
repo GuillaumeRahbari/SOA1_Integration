@@ -69,6 +69,11 @@ public class ProceedPayment extends RouteBuilder {
     }
 
 
+    /**
+     * This process handle the payment of shop3000
+     * It will check the price of the delivery and the price of the cart, add the two and pay with the payment information
+     * given by the client
+     */
     private class Payment implements Processor {
 
         @Override
