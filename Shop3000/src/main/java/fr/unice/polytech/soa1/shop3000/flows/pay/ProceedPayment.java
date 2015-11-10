@@ -35,9 +35,31 @@ public class ProceedPayment extends RouteBuilder {
                 .to(PayEndpoint.EXTRACT_CART.getInstruction())
                 .endChoice();
 
-        from(PayEndpoint.GET_CART_PRICE.getInstruction())
-                .log("Starting the flow that will calculate the price to pay");
-        // TODO : Appeler le bean qui renvoie le prix pour une livraison
+        /**
+         * This part of the flow handle the payment of shop3000 with the client payment information
+         * For the moment it call a process that mock the payment system.
+         */
+        from(PayEndpoint.SHOP3000_PAYMENT.getInstruction())
+                .log("Starting the flow that will handle the payment")
+                // TODO : Ici on ajoute l'appel au process qui mock le payment
+                /** The rest of the flow is below **/
+                .to(PayEndpoint.SHOPS_PAYMENT.getInstruction()) // TODO : Je pense qu'on devrait mettre ca dans une activemq
+        ;
+
+
+        /**
+         * This part
+         */
+        from(PayEndpoint.SHOPS_PAYMENT.getInstruction())
+                .log("Begin of the flow that will pay the different shop")
+                // TODO : Ici faut mettre un multicast parrallele pour les 3 shops et appeler leur méthodes de payment avec les ID bancaire de shop3000
+                // TODO : Ici c'est la fin du flow gérer les 200 / 400
+                ;
+
+
+
+
+
 
     }
 

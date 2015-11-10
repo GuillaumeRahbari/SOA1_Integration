@@ -1,5 +1,8 @@
 package fr.unice.polytech.soa1.shop3000.flows.delivery;
 
+import fr.unice.polytech.soa1.shop3000.flows.pay.PayEndpoint;
+import fr.unice.polytech.soa1.shop3000.flows.pay.ProceedPayment;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -15,7 +18,10 @@ public class DeliveryFlow extends RouteBuilder {
 
         from(DeliveryEndpoints.GET_DELIVERY_PRICE.getInstruction())
                 .log("Begin of the flow to get the delivery Price")
+                /** {@link MockedDeliverySystem#process(Exchange)}  **/
                 .process(mockedDeliverySystem)
+                /** {@link ProceedPayment#configure()}  **/
+                .to(PayEndpoint.SHOP3000_PAYMENT.getInstruction())
         ;
 
     }
