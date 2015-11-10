@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.flows.pay;
+package fr.unice.polytech.soa1.shop3000.flows.pay.defs;
 
 /**
  * Created by Quentin on 11/10/2015.

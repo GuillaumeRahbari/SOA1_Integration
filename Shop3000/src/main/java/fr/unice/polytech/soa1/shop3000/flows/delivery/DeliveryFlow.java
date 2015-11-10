@@ -2,8 +2,8 @@ package fr.unice.polytech.soa1.shop3000.flows.delivery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
-import fr.unice.polytech.soa1.shop3000.flows.pay.ExchangeProperties;
-import fr.unice.polytech.soa1.shop3000.flows.pay.PayEndpoint;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.ExchangeProperties;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
 import fr.unice.polytech.soa1.shop3000.flows.pay.ProceedPayment;
 import fr.unice.polytech.soa1.shop3000.utils.MockDeliverySystem;
 import fr.unice.polytech.soa1.shop3000.utils.Shop3000Information;

@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.flows.pay;
+package fr.unice.polytech.soa1.shop3000.flows.pay.defs;
 
 /**
  * @author Marc Karassev

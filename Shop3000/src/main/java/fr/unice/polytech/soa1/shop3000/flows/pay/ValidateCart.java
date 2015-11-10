@@ -7,6 +7,8 @@ import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.flows.delivery.DeliveryEndpoints;
 import fr.unice.polytech.soa1.shop3000.flows.delivery.DeliveryFlow;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.ExchangeProperties;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;

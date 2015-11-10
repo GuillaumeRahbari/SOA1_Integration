@@ -3,6 +3,8 @@ package fr.unice.polytech.soa1.shop3000.flows.pay;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.ExchangeProperties;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
