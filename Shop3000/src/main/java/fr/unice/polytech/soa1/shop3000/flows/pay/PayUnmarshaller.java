@@ -15,9 +15,6 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class PayUnmarshaller extends RouteBuilder {
 
-//    public static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
-//            CLIENT_ID_PROPERTY = "clientID", BAD_INFORMATION = "";
-
     private JsonPaymentInformationExtractor jsonPaymentInformationExtractor = new JsonPaymentInformationExtractor();
     private PrepareWS prepareWS = new PrepareWS();
 
@@ -87,9 +84,9 @@ public class PayUnmarshaller extends RouteBuilder {
             exchange.getIn().getBody();
             boolean paymentDone = (boolean) exchange.getProperty(ExchangeProperties.PAYMENT_STATE_PROPERTY.getInstruction());
             if(paymentDone) {
-                exchange.setProperty("requestStatus",200);
+                exchange.setProperty(ExchangeProperties.REQUEST_STATUS_PROPERTY.getInstruction(),200);
             } else {
-                exchange.setProperty("requestStatus",400);
+                exchange.setProperty(ExchangeProperties.REQUEST_STATUS_PROPERTY.getInstruction(),400);
             }
         }
     }

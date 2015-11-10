@@ -10,7 +10,8 @@ public enum ExchangeProperties {
     PAYMENT_STATE_PROPERTY("paymentStatus"),
     PAYMENT_INFORMATION_PROPERTY("paymentInformation"),
     CLIENT_ID_PROPERTY("clientID"),
-    BAD_INFORMATION("")
+    BAD_INFORMATION(""), //TODO a changer ?
+    REQUEST_STATUS_PROPERTY("requestStatus")
 
     ;
 

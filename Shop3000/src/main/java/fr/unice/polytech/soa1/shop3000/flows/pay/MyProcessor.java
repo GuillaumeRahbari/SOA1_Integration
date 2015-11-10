@@ -19,7 +19,7 @@ public class MyProcessor extends SuperProcessor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String clientID = (String)exchange.getProperty("clientID");
+        String clientID = (String)exchange.getProperty("clientID"); // TODO : A changer et utiliser l'enum
         Client client = ClientStorage.read(clientID);
         if(client != null) {
             HashMap<String, List<CatalogItem>> cart = client.getCart(); //<ShopName, List<CatalogItem>>
