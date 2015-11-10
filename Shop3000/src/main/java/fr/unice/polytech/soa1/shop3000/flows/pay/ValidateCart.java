@@ -20,8 +20,6 @@ import java.util.List;
  */
 public class ValidateCart extends RouteBuilder {
 
-//    public static final String CART_PROPERTY = "cart", CART_PRICE_PROPERTY = "cartPrice" ;
-
     private CartExtractor cartExtractor = new CartExtractor();
     private ShopsExtractor shopsExtractor = new ShopsExtractor();
 

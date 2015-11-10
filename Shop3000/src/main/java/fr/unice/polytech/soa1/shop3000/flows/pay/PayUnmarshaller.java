@@ -83,7 +83,7 @@ public class PayUnmarshaller extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             exchange.getIn().getBody();
-            boolean paymentDone = (boolean) exchange.getProperty(ProceedPayment.PAYMENT_STATE_PROPERTY);
+            boolean paymentDone = (boolean) exchange.getProperty(ExchangeProperties.PAYMENT_STATE_PROPERTY.getInstruction());
             if(paymentDone) {
                 exchange.setProperty("requestStatus",200);
             } else {

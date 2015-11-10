@@ -6,7 +6,9 @@ package fr.unice.polytech.soa1.shop3000.flows.pay;
 public enum ExchangeProperties {
 
     CART_PROPERTY("cart"),
-    CART_PRICE_PROPERTY("cartPrice");
+    CART_PRICE_PROPERTY("cartPrice"),
+    PAYMENT_STATE_PROPERTY("paymentStatus");
+
 
 
     private String instruction;

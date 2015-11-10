@@ -15,8 +15,6 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class ProceedPayment extends RouteBuilder {
 
-    public static String PAYMENT_STATE_PROPERTY = "paymentStatus";
-
     private Payment payment = new Payment();
 
     @Override
@@ -89,7 +87,7 @@ public class ProceedPayment extends RouteBuilder {
             PaymentInformation paymentInformation = objectMapper.readValue((String) exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class);
             boolean paymentDone = MockPaymentSystem.pay(paymentInformation.getCardNumber(), paymentInformation.getExpirationDate(), paymentInformation.getSecurityCode(), paymentInformation.getAddress(), total);
 
-            exchange.setProperty(PAYMENT_STATE_PROPERTY,paymentDone);
+            exchange.setProperty(ExchangeProperties.PAYMENT_STATE_PROPERTY.getInstruction(),paymentDone);
         }
     }
 }
