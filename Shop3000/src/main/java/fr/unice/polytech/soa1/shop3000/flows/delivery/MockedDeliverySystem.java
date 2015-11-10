@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.delivery;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
 import fr.unice.polytech.soa1.shop3000.flows.pay.PayUnmarshaller;
 import fr.unice.polytech.soa1.shop3000.utils.Shop3000Information;
@@ -15,7 +16,8 @@ public class MockedDeliverySystem implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        PaymentInformation paymentInformation = (PaymentInformation) exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY);
+        ObjectMapper objectMapper = new ObjectMapper();
+        PaymentInformation paymentInformation =  objectMapper.readValue((String) exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class);
         String clientAddress = paymentInformation.getAddress();
 
         int price = externalCallToDeliverySystem(Shop3000Information.ADDRESS, clientAddress);
