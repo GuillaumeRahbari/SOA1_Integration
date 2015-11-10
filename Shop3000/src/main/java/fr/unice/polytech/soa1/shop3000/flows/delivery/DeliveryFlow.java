@@ -16,7 +16,7 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class DeliveryFlow extends RouteBuilder {
 
-    public static String DELIVERY_PRICE = "deliveryPrice";
+    public static String DELIVERY_PRICE_PROPERTY = "deliveryPrice";
 
     private HandleDeliveryPrice handleDeliveryPrice = new HandleDeliveryPrice();
 
@@ -37,7 +37,7 @@ public class DeliveryFlow extends RouteBuilder {
 
 
     /**
-     * This process will add a property where the name is defined in the constant DELIVERY_PRICE
+     * This process will add a property where the name is defined in the constant DELIVERY_PRICE_PROPERTY
      * This property will contain the price of the delivery given by the the delivery system.
      */
     private class HandleDeliveryPrice implements Processor {
@@ -48,8 +48,8 @@ public class DeliveryFlow extends RouteBuilder {
             PaymentInformation paymentInformation =  objectMapper.readValue((String) exchange.getProperty(PayUnmarshaller.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class);
             String clientAddress = paymentInformation.getAddress();
 
-            int price = MockDeliverySystem.getDeliveryPrice(Shop3000Information.ADDRESS, clientAddress);
-            exchange.setProperty(DELIVERY_PRICE, price);
+            double price = MockDeliverySystem.getDeliveryPrice(Shop3000Information.ADDRESS, clientAddress);
+            exchange.setProperty(DELIVERY_PRICE_PROPERTY, price);
 
         }
     }

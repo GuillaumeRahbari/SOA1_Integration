@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ValidateCart extends RouteBuilder {
 
-    public static final String CART_PROPERTY = "cart";
+    public static final String CART_PROPERTY = "cart", CART_PRICE_PROPERTY = "cartPrice" ;
 
     private CartExtractor cartExtractor = new CartExtractor();
     private ShopsExtractor shopsExtractor = new ShopsExtractor();
@@ -137,7 +137,7 @@ public class ValidateCart extends RouteBuilder {
                 }
                 exchange.setProperty(key, cart.get(key));
             }
-            exchange.setProperty("price", price);
+            exchange.setProperty(CART_PRICE_PROPERTY, price);
         }
     }
 }

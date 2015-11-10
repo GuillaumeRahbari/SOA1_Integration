@@ -13,7 +13,7 @@ public class MockDeliverySystem {
      * @param endAddress address of the client
      * @return the price of the devliery
      */
-    public static int getDeliveryPrice(String startAddress, String endAddress) {
+    public static double getDeliveryPrice(String startAddress, String endAddress) {
         return 666; // #Sataniste
     }
 }
