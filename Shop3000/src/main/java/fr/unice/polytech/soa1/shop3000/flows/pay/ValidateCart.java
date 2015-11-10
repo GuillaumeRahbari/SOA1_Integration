@@ -47,6 +47,7 @@ public class ValidateCart extends RouteBuilder {
         from(PayEndpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
                 .wireTap(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
+                /** {@link ShopsExtractor#process(Exchange)} **/
                 .process(shopsExtractor)
                 .multicast()
                     .aggregationStrategy(new JoinAggregationStrategy())
@@ -107,6 +108,7 @@ public class ValidateCart extends RouteBuilder {
             ObjectMapper mapper = new ObjectMapper();
            // Cart cart = mapper.readValue((String) exchange.getProperty(CART_PROPERTY), Cart.class);
 
+            // TODO : ajouter le prix du panier dans une property ? :p
             Cart cart = (Cart) exchange.getProperty(CART_PROPERTY);
             for (String key: cart.keySet()) {
                 exchange.setProperty(key, cart.get(key));
