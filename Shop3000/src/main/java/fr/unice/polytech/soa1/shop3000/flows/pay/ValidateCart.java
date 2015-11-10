@@ -86,6 +86,9 @@ public class ValidateCart extends RouteBuilder {
                 // TODO guigui
     }
 
+
+
+
     /**
      * Process responsible for extracting a client cart.
      * Expects a client id to be set in the "clientID" exchange property.

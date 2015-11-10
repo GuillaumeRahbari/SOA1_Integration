@@ -14,7 +14,7 @@ import org.apache.camel.builder.RouteBuilder;
  */
 public class PayUnmarshaller extends RouteBuilder {
 
-    static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
+    public static final String PAYMENT_INFORMATION_PROPERTY = "paymentInformation",
             CLIENT_ID_PROPERTY = "clientID", BAD_INFORMATION = "";
 
     private JsonPaymentInformationExtractor jsonPaymentInformationExtractor = new JsonPaymentInformationExtractor();

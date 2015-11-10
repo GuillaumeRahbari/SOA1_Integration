@@ -19,7 +19,10 @@ public class DeliveryFlow extends RouteBuilder {
         from(DeliveryEndpoints.GET_DELIVERY_PRICE.getInstruction())
                 .log("Begin of the flow to get the delivery Price")
                 /** {@link MockedDeliverySystem#process(Exchange)}  **/
-                .process(mockedDeliverySystem)
+                .log("${property.paymentInformation}")
+               // .process(mockedDeliverySystem)
+               // .log("${property.deliveryPrice}")
+
                 /** {@link ProceedPayment#configure()}  **/
                 .to(PayEndpoint.SHOP3000_PAYMENT.getInstruction())
         ;
