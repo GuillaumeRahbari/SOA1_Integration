@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.ExchangeProperties;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
@@ -50,8 +51,8 @@ public class CheckClientFlow extends RouteBuilder {
                     .when(simple("${property.result} == true"))
                     .when(simple("${property.result} == false"))
                         .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
-                .end()
-                .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
+                .end();
+       //         .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
         /**
          * This flow check if the client is in the biko system, if not we create the client in the system and then
@@ -94,8 +95,8 @@ public class CheckClientFlow extends RouteBuilder {
                     .when(simple("${property.result} == true"))
                     .when(simple("${property.result} == false"))
                         .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
-                .end()
-                .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
+                .end();
+           //     .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
     }
 
 
@@ -105,11 +106,15 @@ public class CheckClientFlow extends RouteBuilder {
         public void process(Exchange exchange) throws Exception {
             String loginToTest = (String)exchange.getProperty("clientID");
             String body = (String) exchange.getIn().getBody();
-            String login = new JSONObject(body).getString("login");
-            if(loginToTest.equals(login)) {
-                exchange.setProperty("result", true);
-            }else {
+            if(body.equals("")) {
                 exchange.setProperty("result", false);
+            } else {
+                String login = new JSONObject(body).getString("login");
+                if (loginToTest.equals(login)) {
+                    exchange.setProperty("result", true);
+                } else {
+                    exchange.setProperty("result", false);
+                }
             }
         }
     }
@@ -120,15 +125,19 @@ public class CheckClientFlow extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             //test if client exist
-            String nameToTest = (String)exchange.getProperty("clientID");
+            String nameToTest = (String)exchange.getProperty(ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction());
             String body = (String) exchange.getIn().getBody();
-            JSONObject jObject = new JSONObject(body);
-            String name = jObject.getString("name");
-
-            if(nameToTest.equals(name))
-                exchange.setProperty("result",true);
-            else
+            if(body.equals("")) {
                 exchange.setProperty("result",false);
+            } else {
+                JSONObject jObject = new JSONObject(body);
+                String name = jObject.getString("name");
+
+                if (nameToTest.equals(name))
+                    exchange.setProperty("result", true);
+                else
+                    exchange.setProperty("result", false);
+            }
         }
     }
 

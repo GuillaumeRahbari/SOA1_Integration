@@ -5,7 +5,6 @@ import fr.unice.polytech.soa1.shop3000.business.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by guillaume on 10/11/2015.
@@ -39,7 +38,7 @@ public class BestSellerBean {
                     BestSellerList.addItemToList(catalogItem);
                 }
             }
-            it.remove(); // avoids a ConcurrentModificationException
+          //  it.remove(); // avoids a ConcurrentModificationException
         }
     }
 

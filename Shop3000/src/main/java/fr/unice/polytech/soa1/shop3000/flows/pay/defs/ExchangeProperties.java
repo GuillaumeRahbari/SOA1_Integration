@@ -5,7 +5,7 @@ package fr.unice.polytech.soa1.shop3000.flows.pay.defs;
  */
 public enum ExchangeProperties {
 
-    CART_PROPERTY("cart"),
+    CART_PROPERTY("cart"), // TODO : peut etre a enlever
     CART_PRICE_PROPERTY("cartPrice"),
     PAYMENT_STATE_PROPERTY("paymentStatus"),
     PAYMENT_INFORMATION_PROPERTY("paymentInformation"),
@@ -14,8 +14,6 @@ public enum ExchangeProperties {
     REQUEST_STATUS_PROPERTY("requestStatus")
 
     ;
-
-
 
     private String instruction;
 

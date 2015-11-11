@@ -68,8 +68,8 @@ public class ValidateCart extends RouteBuilder {
                      * they create the client, then they add all the items of client in the cart
                      *  {@link CheckClientFlow#configure()}
                      **/
-                    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
-                    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                //    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
+                //    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
                     .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .end()
                 .log("merging")
@@ -84,7 +84,6 @@ public class ValidateCart extends RouteBuilder {
          */
         from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
                 .log("Here we update the number of item sells for the best seller")
-                // TODO guigui
                 /**
                  * {@link BestSellerBean#updateBestSeller(String)}
                  */

@@ -48,15 +48,12 @@ public class ClientStorage {
      * This part put some false client in the database.
      */
     static {
+
         ClientStorage.create("Quentin","Cornevin");
         ClientStorage.create("Marc","Karassev");
         ClientStorage.create("Laureen","Ginier");
         ClientStorage.create("Guillaume","Rahbari");
         ClientStorage.create("Je connais pas","bien l'orthographe de vos noms");
-
-        /** Uncomment this line if you want the filter to work **/
-    //    ClientStorage.create("ClientFirstName","ClientFirstName");
-
     }
 
 }
