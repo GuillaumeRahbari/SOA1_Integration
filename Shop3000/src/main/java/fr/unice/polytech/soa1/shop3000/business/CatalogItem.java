@@ -1,6 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.business;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -20,9 +21,12 @@ public class CatalogItem {
 
     @JsonCreator
     public CatalogItem(@JsonProperty(value = "name", required = true) String name,
-                       @JsonProperty(value = "price", required = true) double price){
+                       @JsonProperty(value = "price", required = true) double price,
+                       @JsonProperty(value = "description", required = true) ItemDescription description){
         this.name = name;
         this.price = price;
+        this.idescription = description;
+        System.out.println("constructeur de base" + name);
     }
 
     /**
@@ -31,12 +35,12 @@ public class CatalogItem {
      * @param price price of the item
      * @param description description of the item
      */
-    public CatalogItem(String name, double price, String description) {
+/*    public CatalogItem(String name, double price, String description) {
         this.name = name;
         this.price = price;
         this.description = description;
-
-    }
+        System.out.println("constructeur de base" + name);
+    }*/
 
     /**
      * This constructor is used for the items of biko
@@ -46,10 +50,12 @@ public class CatalogItem {
      * @param color
      */
     public CatalogItem(String name, double price, int idBiko, String color) {
+        System.out.println("constructeur biko " + name);
         this.name = name;
         this.price = price;
-        this.description = "id :" + idBiko + " color : " + color;
+        this.description = "{ \"id\" : \"" + idBiko + " \"color\" : \"" + color + "\" }";
         this.idescription = new ItemDescription(idBiko,color);
+        System.out.println(idescription.getIdBiko());
     }
 
     /**
@@ -141,6 +147,7 @@ public class CatalogItem {
         return result;
     }
 
+    @JsonIgnore
     public ItemDescription getIdescription() {
         return idescription;
     }

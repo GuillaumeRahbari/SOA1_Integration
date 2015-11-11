@@ -1,6 +1,5 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
-import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.Exchange;
@@ -56,6 +55,7 @@ public class GetCatalogs extends RouteBuilder {
 
         public void process(Exchange exchange) throws Exception {
             String response = (String) exchange.getIn().getBody();
+            System.out.println(response);
             String jsonResponse = "[" + response + "]";
             exchange.getIn().setBody(jsonResponse);
         }
