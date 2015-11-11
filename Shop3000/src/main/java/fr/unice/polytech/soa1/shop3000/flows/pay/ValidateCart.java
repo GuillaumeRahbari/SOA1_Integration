@@ -83,8 +83,12 @@ public class ValidateCart extends RouteBuilder {
          * This flow handle the best seller
          */
         from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
-                .log("Here we update the number of item sells for the best seller");
+                .log("Here we update the number of item sells for the best seller")
                 // TODO guigui
+                /**
+                 * {@link BestSellerBean#updateBestSeller(String)}
+                 */
+                .bean(BestSellerBean.class, "updateBestSeller(${property.clientID})");
     }
 
 

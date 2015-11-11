@@ -27,21 +27,25 @@ public class GetCatalogs extends RouteBuilder {
          * It redirects to {@link CallExternalPartners}
          */
         from(Endpoint.GET_CATALOG.getInstruction())
-                .log("Start get catalogs processing")
-                .multicast()
-                    .aggregationStrategy(new JoinAggregationStrategy())
-                    .parallelProcessing()
-                    .log("Parallel processing")
-                    .to(Endpoint.BIKO_CATALOG.getInstruction())
-                    .to(Endpoint.VOLLEY_CATALOG.getInstruction())
-                    .to(Endpoint.BEER_CATALOG.getInstruction())
-                    .end()
-                /** {@link ToJSonArray} **/
-                .process(toJsonArray)
-                    .log("${body}");
+            .log("Start get catalogs processing")
+            .multicast()
+                .aggregationStrategy(new JoinAggregationStrategy())
+                .parallelProcessing()
+                .log("Parallel processing")
+                .to(Endpoint.BIKO_CATALOG.getInstruction())
+                .to(Endpoint.VOLLEY_CATALOG.getInstruction())
+                .to(Endpoint.BEER_CATALOG.getInstruction())
+                .end()
+            /** {@link ToJSonArray} **/
+            .process(toJsonArray)
+                .log("${body}");
 
         from(Endpoint.GET_BEST_SELLER.getInstruction())
-                .log("Begin Get BestSeller");
+            .log("Begin Get BestSeller")
+                /**
+                 * {@link BestSellerBean#getBestSeller()}
+                 */
+            .bean(BestSellerBean.class, "getBestSeller()");
     }
 
     /**

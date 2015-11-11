@@ -79,4 +79,35 @@ public class CatalogItem {
         return s;
     }
 
+    @Override
+    public boolean equals (Object other) {
+        if (other == null) {
+            return false;
+        }
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof CatalogItem)) {
+            return false;
+        }
+        CatalogItem otherCatalogItem = (CatalogItem) other;
+        if (this.name.equals(otherCatalogItem.getName())
+                && this.description.equals(otherCatalogItem.getDescription())
+                && this.price == otherCatalogItem.getPrice()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = name.hashCode();
+        temp = Double.doubleToLongBits(price);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + description.hashCode();
+        return result;
+    }
+
 }
