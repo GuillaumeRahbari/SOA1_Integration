@@ -35,14 +35,45 @@ public class CatalogItem {
         this.name = name;
         this.price = price;
         this.description = description;
+
     }
 
+    /**
+     * This constructor is used for the items of biko
+     * @param name
+     * @param price
+     * @param idBiko
+     * @param color
+     */
     public CatalogItem(String name, double price, int idBiko, String color) {
         this.name = name;
         this.price = price;
         this.description = "id :" + idBiko + " color : " + color;
         this.idescription = new ItemDescription(idBiko,color);
     }
+
+    /**
+     * This constructor is ued for the volley items
+     *
+     * @param name
+     * @param color
+     * @param price
+     */
+    public CatalogItem(String name, String color, double price) {
+        this.name = name;
+        this.price = price;
+        this.description = "color : " + color;
+        this.idescription = new ItemDescription(color);
+    }
+
+
+    public CatalogItem(String name, double price, String titration, String gout, String cereal) {
+        this.name = name;
+        this.price = price;
+        this.description = "Titration : " + titration + " gout : " + gout + " cereal : " + cereal;
+        this.idescription = new ItemDescription(titration,gout,cereal);
+    }
+
 
     public String getName() {
         return name;

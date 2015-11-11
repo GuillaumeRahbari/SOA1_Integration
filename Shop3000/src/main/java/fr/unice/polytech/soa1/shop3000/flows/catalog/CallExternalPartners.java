@@ -129,10 +129,9 @@ public class CallExternalPartners extends RouteBuilder {
                     JSONObject jobj = obj.getJSONObject(key);
                     String name = jobj.getString("name");
                     String price = jobj.getString("pricePerLiter");
-                    String descr = "Titration: " + jobj.getString("titration")
-                            + ", gout: " + jobj.getString("gout")
-                            + ", cereale: " + jobj.getString("cereale");
-                    items.add(new CatalogItem(name, Double.parseDouble(price), descr));
+
+                    CatalogItem beerItem = new CatalogItem(name, Double.parseDouble(price),jobj.getString("titration") ,  jobj.getString("gout"), jobj.getString("cereale") );
+                    items.add(beerItem);
                 }
             }
             Catalog.getInstance().setItemsBeer(items);
