@@ -151,32 +151,17 @@ public class AddItemsToCarts extends RouteBuilder {
         public void process(Exchange exchange) throws Exception {
             int iterationNumber = (int)exchange.getProperty("iterationNumber");
             String clientName = (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction());
-                           /*     .setBody().constant("  {\n" +
-                    "    \"name\": \"bike2\",\n" +
-                    "    \"id\": 133456789,\n" +
-                    "    \"color\": \"blue\",\n" +
-                    "    \"price\": 100\n" +
-                    "  }")*/
+
             Client client = ClientStorage.read(clientName);
             Cart cart = client.getCart();
             List<CatalogItem> catalogItems = cart.get(Shop.BIKO.getName());
             CatalogItem catalogItem = catalogItems.get(iterationNumber);
-
-
-            if(catalogItem.getIdescription() == null ) {
-                System.out.println("LOLOLOLOLOLOL");
-            }
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", catalogItem.getName());
             jsonObject.put("id", catalogItem.getIdescription().getIdBiko());
             jsonObject.put("color", catalogItem.getIdescription().getColor());
             jsonObject.put("price", catalogItem.getPrice());
-
-            System.out.println("ToJSON");
-            System.out.println(jsonObject.toJSONString());
-            System.out.println("to string");
-            System.out.println(jsonObject.toString());
 
             exchange.getIn().setBody(jsonObject.toString());
             exchange.setProperty("iterationNumber", iterationNumber++);
