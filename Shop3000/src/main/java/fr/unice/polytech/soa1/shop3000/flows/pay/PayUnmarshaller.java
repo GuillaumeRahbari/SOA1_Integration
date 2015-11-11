@@ -28,10 +28,10 @@ public class PayUnmarshaller extends RouteBuilder {
          */
         from(PayEndpoint.UNMARSHAL.getInstruction())
                 .log("extracting POST data")
-                .setProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction(), body())
+                .setProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getName(), body())
                 .process(jsonPaymentInformationExtractor)
-                .setProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction(), simple("${header.clientId}"))
-                .log("client: ${property." + PayProperties.CLIENT_ID_PROPERTY.getInstruction() + "}")
+                .setProperty(PayProperties.CLIENT_ID_PROPERTY.getName(), simple("${header.clientId}"))
+                .log("client: ${property." + PayProperties.CLIENT_ID_PROPERTY.getName() + "}")
                         /** {@link ProceedPayment#configure() next} flow **/
                 .to(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction());
 
@@ -65,15 +65,15 @@ public class PayUnmarshaller extends RouteBuilder {
                 PaymentInformation paymentInformation = objectMapper.readValue(
                     /*(String) exchange.getProperty(PayRoute.PAYMENT_INFORMATION_PROPERTY), PaymentInformation.class
             );*/
-                        extractExchangeProperty(exchange, PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction()),
+                        extractExchangeProperty(exchange, PayProperties.PAYMENT_INFORMATION_PROPERTY.getName()),
                         PaymentInformation.class);
 
-                exchange.setProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction(),
+                exchange.setProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getName(),
                         objectMapper.writeValueAsString(paymentInformation));
             }
             catch (JsonMappingException e) {
-                exchange.setProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction(),
-                        PayProperties.BAD_INFORMATION.getInstruction());
+                exchange.setProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getName(),
+                        PayProperties.BAD_INFORMATION.getName());
             }
         }
     }
@@ -84,11 +84,11 @@ public class PayUnmarshaller extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             exchange.getIn().getBody();
-            boolean paymentDone = (boolean) exchange.getProperty(PayProperties.PAYMENT_STATE_PROPERTY.getInstruction());
+            boolean paymentDone = (boolean) exchange.getProperty(PayProperties.PAYMENT_STATE_PROPERTY.getName());
             if(paymentDone) {
-                exchange.setProperty(PayProperties.REQUEST_STATUS_PROPERTY.getInstruction(),200);
+                exchange.setProperty(PayProperties.REQUEST_STATUS_PROPERTY.getName(),200);
             } else {
-                exchange.setProperty(PayProperties.REQUEST_STATUS_PROPERTY.getInstruction(),400);
+                exchange.setProperty(PayProperties.REQUEST_STATUS_PROPERTY.getName(),400);
             }
         }
     }

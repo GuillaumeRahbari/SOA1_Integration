@@ -20,7 +20,7 @@ public enum PayProperties {
         this.instruction = instruction;
     }
 
-    public String getInstruction() {
+    public String getName() {
         return instruction;
     }
 }

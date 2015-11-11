@@ -34,8 +34,8 @@ public class ValidateCart extends RouteBuilder {
                 /** {@link CartExtractor#process(Exchange)} **/
                 .process(cartExtractor)
                 .choice()
-                    .when(exchange -> exchange.getProperty(PayProperties.CART_PROPERTY.getInstruction())
-                            .equals(PayProperties.BAD_INFORMATION.getInstruction()))
+                    .when(exchange -> exchange.getProperty(PayProperties.CART_PROPERTY.getName())
+                            .equals(PayProperties.BAD_INFORMATION.getName()))
                         .log("bad client id")
                         /** {@link PayRoute#configure() next} route builder **/
                         .to(PayEndpoint.BAD_CLIENT_ID.getInstruction())
@@ -98,22 +98,22 @@ public class ValidateCart extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             Client client = ClientStorage.read(
-                    (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction()));
+                    (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getName()));
 
             if (client != null) {
                 Cart cart = client.getCart();
 
                 if (cart != null) {
-                    exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(), cart);
+                    exchange.setProperty(PayProperties.CART_PROPERTY.getName(), cart);
                 }
                 else {
-                    exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(),
-                            PayProperties.BAD_INFORMATION.getInstruction());
+                    exchange.setProperty(PayProperties.CART_PROPERTY.getName(),
+                            PayProperties.BAD_INFORMATION.getName());
                 }
             }
             else {
-                exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(),
-                        PayProperties.BAD_INFORMATION.getInstruction());
+                exchange.setProperty(PayProperties.CART_PROPERTY.getName(),
+                        PayProperties.BAD_INFORMATION.getName());
             }
         }
     }
@@ -129,7 +129,7 @@ public class ValidateCart extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            Cart cart = (Cart) exchange.getProperty(PayProperties.CART_PROPERTY.getInstruction());
+            Cart cart = (Cart) exchange.getProperty(PayProperties.CART_PROPERTY.getName());
             double price = 0;
 
             for (String key: cart.keySet()) {
@@ -139,7 +139,7 @@ public class ValidateCart extends RouteBuilder {
                 }
                 exchange.setProperty(key, cart.get(key));
             }
-            exchange.setProperty(PayProperties.CART_PRICE_PROPERTY.getInstruction(), price);
+            exchange.setProperty(PayProperties.CART_PRICE_PROPERTY.getName(), price);
         }
     }
 }
