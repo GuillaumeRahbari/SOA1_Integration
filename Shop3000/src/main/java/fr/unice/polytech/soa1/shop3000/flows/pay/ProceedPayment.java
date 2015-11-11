@@ -1,7 +1,8 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
+import fr.unice.polytech.soa1.shop3000.business.payment.PaymentInformation;
+import fr.unice.polytech.soa1.shop3000.flows.BooleanAndAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayProperties;
 import fr.unice.polytech.soa1.shop3000.utils.MockDeliverySystem;
@@ -68,21 +69,29 @@ public class ProceedPayment extends RouteBuilder {
                 .process(payment)
                 .log("after payment")
                 /** The rest of the flow is below **/
-                .wireTap(PayEndpoint.SHOPS_PAYMENT.getInstruction())
+                .removeHeaders("*")
+                .wireTap(PayEndpoint.SHOPS_PAYMENT.getInstruction(), true, exchange -> {
+                    exchange.getIn().setBody(exchange.getProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction()));
+                    exchange.getIn().setHeader(Exchange.HTTP_PATH, //PayProperties.CLIENT_ID_PROPERTY.getInstruction(),
+                            exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction()));
+                })
                 /** {@link PayUnmarshaller#configure()} **/
-                .to(PayEndpoint.PAYMENT_TO_WS.getInstruction())
-        ;
-
+                .to(PayEndpoint.PAYMENT_TO_WS.getInstruction());
 
         /**
          * This part of the flow will handle the payment of the different shops
          */
         from(PayEndpoint.SHOPS_PAYMENT.getInstruction())
                 .log("Begin of the flow that will pay the different shop")
-                /*
                 .multicast()
                     .parallelProcessing()
-                    .aggregationStrategy(new BooleanAndAggregationStrategy())*/
+                    .aggregationStrategy(new BooleanAndAggregationStrategy())
+                /** the 3 {@link PayShop#configure() next} flows **/
+                    .to(PayEndpoint.PAY_BEER.getInstruction())
+                    .to(PayEndpoint.PAY_BIKO.getInstruction())
+                    .to(PayEndpoint.PAY_VOLLEY.getInstruction())
+                .end()
+
                     ;//.
                 // TODO : Ici faut mettre un multicast parrallele pour les 3 shops et appeler leur méthodes de payment avec les ID bancaire de shop3000
                 // TODO : Ici c'est la fin du flow gérer les 200 / 400

@@ -21,8 +21,10 @@ public enum PayEndpoint {
     SHOPS_PAYMENT("activemq:payShops"),
     PAYMENT_TO_WS("direct:pay"),
     END_PAYMENT("direct:endPayment"),
-    GET_DELIVERY_PRICE("direct:getDeliveryPrice");
-
+    GET_DELIVERY_PRICE("direct:getDeliveryPrice"),
+    PAY_BEER("activemq:payBeer"),
+    PAY_BIKO("activemq:payBiko"),
+    PAY_VOLLEY("activemq:payVolley");
 
     private String instruction;
 
