@@ -13,6 +13,7 @@ public class CatalogItem {
     private String name;
     private double price;
     private String description;
+    private ItemDescription idescription;
 
     public CatalogItem(){
     };
@@ -34,6 +35,13 @@ public class CatalogItem {
         this.name = name;
         this.price = price;
         this.description = description;
+    }
+
+    public CatalogItem(String name, double price, int idBiko, String color) {
+        this.name = name;
+        this.price = price;
+        this.description = "id :" + idBiko + " color : " + color;
+        this.idescription = new ItemDescription(idBiko,color);
     }
 
     public String getName() {
