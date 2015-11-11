@@ -36,8 +36,8 @@ public class ProceedPayment extends RouteBuilder {
         from(PayEndpoint.VALIDATE_PAYMENT_INFORMATION.getInstruction())
                 .log("starting payment information checking")
                 .choice()
-                .when(exchange -> exchange.getProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getName())
-                        .equals(PayProperties.BAD_INFORMATION.getName()))
+                .when(exchange -> exchange.getProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction())
+                        .equals(PayProperties.BAD_INFORMATION.getInstruction()))
                         .log("bad payment information")
                                 /** {@link PayRoute#configure() next} route builder **/
                         .to(PayEndpoint.BAD_PAYMENT_INFORMATION_ENDPOINT.getInstruction())
@@ -100,19 +100,19 @@ public class ProceedPayment extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             ObjectMapper objectMapper = new ObjectMapper();
-            double deliveryPrice = (double) exchange.getProperty(PayProperties.DELIVERY_PRICE_PROPERTY.getName());
-            double cartPrice = (double) exchange.getProperty(PayProperties.CART_PRICE_PROPERTY.getName());
+            double deliveryPrice = (double) exchange.getProperty(PayProperties.DELIVERY_PRICE_PROPERTY.getInstruction());
+            double cartPrice = (double) exchange.getProperty(PayProperties.CART_PRICE_PROPERTY.getInstruction());
 
             double total = deliveryPrice + cartPrice;
 
             PaymentInformation paymentInformation = objectMapper.readValue(
-                    (String) exchange.getProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getName()),
+                    (String) exchange.getProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction()),
                     PaymentInformation.class);
 
             boolean paymentDone = MockPaymentSystem.pay(paymentInformation.getCardNumber(), paymentInformation.getExpirationDate(),
                     paymentInformation.getSecurityCode(), paymentInformation.getAddress(), total);
 
-            exchange.setProperty(PayProperties.PAYMENT_STATE_PROPERTY.getName(),paymentDone);
+            exchange.setProperty(PayProperties.PAYMENT_STATE_PROPERTY.getInstruction(),paymentDone);
         }
     }
 
@@ -127,11 +127,11 @@ public class ProceedPayment extends RouteBuilder {
         public void process(Exchange exchange) throws Exception {
             ObjectMapper objectMapper = new ObjectMapper();
             PaymentInformation paymentInformation =  objectMapper.readValue(
-                    (String) exchange.getProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getName()), PaymentInformation.class);
+                    (String) exchange.getProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction()), PaymentInformation.class);
             String clientAddress = paymentInformation.getAddress();
 
             double price = MockDeliverySystem.getDeliveryPrice(Shop3000Information.ADDRESS, clientAddress);
-            exchange.setProperty(PayProperties.DELIVERY_PRICE_PROPERTY.getName(), price);
+            exchange.setProperty(PayProperties.DELIVERY_PRICE_PROPERTY.getInstruction(), price);
 
         }
     }

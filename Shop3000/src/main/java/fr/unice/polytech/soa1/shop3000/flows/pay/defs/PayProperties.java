@@ -5,7 +5,7 @@ package fr.unice.polytech.soa1.shop3000.flows.pay.defs;
  */
 public enum PayProperties {
 
-    CART_PROPERTY("cart"),
+    CART_PROPERTY("cart"), // TODO : peut etre a enlever
     CART_PRICE_PROPERTY("cartPrice"),
     PAYMENT_STATE_PROPERTY("paymentStatus"),
     PAYMENT_INFORMATION_PROPERTY("paymentInformation"),
@@ -20,7 +20,7 @@ public enum PayProperties {
         this.instruction = instruction;
     }
 
-    public String getName() {
+    public String getInstruction() {
         return instruction;
     }
 }

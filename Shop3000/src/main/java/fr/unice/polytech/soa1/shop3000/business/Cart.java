@@ -15,8 +15,8 @@ public class Cart extends HashMap<String, List<CatalogItem>> {
 
     public Cart() {
         super();
-        put(Shop.BEER.getName(), new ArrayList<CatalogItem>());
-        put(Shop.BIKO.getName(), new ArrayList<CatalogItem>());
-        put(Shop.VOLLEY.getName(), new ArrayList<CatalogItem>());
+        this.put(Shop.BEER.getName(), new ArrayList<>());
+        this.put(Shop.BIKO.getName(), new ArrayList<>());
+        this.put(Shop.VOLLEY.getName(), new ArrayList<>());
     }
 }

@@ -13,6 +13,7 @@ public class Client {
     private String firstName;
     private String lastName;
     private Cart cart;
+    private int bikoId;
 
     @JsonCreator
     public Client(@JsonProperty(value = "firstName", required = true) String firstName,
@@ -20,6 +21,7 @@ public class Client {
         this.firstName = firstName;
         this.lastName = lastName;
         this.cart = new Cart();
+        this.bikoId = (int)(Math.random() * 100);
     }
 
     public String getFirstName() {
@@ -46,4 +48,12 @@ public class Client {
         this.cart = cart;
     }
 
+    public int getBikoId() {
+        return bikoId;
+    }
+
+    public void setBikoId(int bikoId) {
+        this.bikoId = bikoId;
+    }
 }
+

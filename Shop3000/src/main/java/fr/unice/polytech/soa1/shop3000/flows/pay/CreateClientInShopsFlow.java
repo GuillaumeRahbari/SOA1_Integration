@@ -1,5 +1,8 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import fr.unice.polytech.soa1.shop3000.business.Client;
+import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayProperties;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
@@ -29,7 +32,8 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setBody(constant(""))
                         /** @(Link CreateClientBiko} **/
                 .process(createClientBiko)
-                .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"))
+                .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
 
 
         from(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
@@ -38,15 +42,19 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setBody(constant(""))
                         /** @(Link CreateClientBeer } **/
                 .process(createClientBeer)
-                .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"))
+                .recipientList(simple("http://localhost:8181/cxf/shop/account?bridgeEndpoint=true"))
+                .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
         from(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
                 .log("Begin create volley client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .setBody(constant(""))
-                        /** @(Link CreateClientVolley} **/
+                        /** @(link CreateClientVolley} **/
                 .process(createClientVolley)
-                .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"))
+                .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
     }
 
 
@@ -55,11 +63,11 @@ public class CreateClientInShopsFlow extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             String login = (String)exchange.getProperty("clientID");
-            //String password = (String)exchange.getProperty("password");
+            Client client = ClientStorage.read(login);
+
             JSONObject jObject = new JSONObject();
-            jObject.put("name", login);
-            jObject.put("password", login);
-            //System.out.println(jObject.toString());
+            jObject.put("login", client.getFirstName());
+            jObject.put("password", client.getLastName());
             exchange.getIn().setBody(jObject.toString());
         }
     }
@@ -68,12 +76,13 @@ public class CreateClientInShopsFlow extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            String username = (String) exchange.getProperty("clientID");
-
+            String username = (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction());
+            Client client = ClientStorage.read(username);
 
             JSONObject jObject = new JSONObject();
-            jObject.put("name", username);
-            jObject.put("id", 1);
+            jObject.put("name", client.getLastName());
+            jObject.put("id", client.getBikoId());
+            System.out.println(client.getBikoId());
             //System.out.println(jObject.toString());
             exchange.getIn().setBody(jObject.toString());
         }
@@ -83,12 +92,13 @@ public class CreateClientInShopsFlow extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            String login = (String)exchange.getProperty("clientID");
+            String login = (String)exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction());
             //String password = (String)exchange.getProperty("password");
+            Client client = ClientStorage.read(login);
 
             JSONObject jObject = new JSONObject();
-            jObject.put("name", login);
-            jObject.put("password", login);
+            jObject.put("name", client.getFirstName());
+            jObject.put("password", client.getLastName());
             //System.out.println(jObject.toString());
             exchange.getIn().setBody(jObject.toString());
         }

@@ -34,8 +34,8 @@ public class ValidateCart extends RouteBuilder {
                 /** {@link CartExtractor#process(Exchange)} **/
                 .process(cartExtractor)
                 .choice()
-                    .when(exchange -> exchange.getProperty(PayProperties.CART_PROPERTY.getName())
-                            .equals(PayProperties.BAD_INFORMATION.getName()))
+                    .when(exchange -> exchange.getProperty(PayProperties.CART_PROPERTY.getInstruction())
+                            .equals(PayProperties.BAD_INFORMATION.getInstruction()))
                         .log("bad client id")
                         /** {@link PayRoute#configure() next} route builder **/
                         .to(PayEndpoint.BAD_CLIENT_ID.getInstruction())
@@ -66,8 +66,8 @@ public class ValidateCart extends RouteBuilder {
                      * they create the client, then they add all the items of client in the cart
                      *  {@link CheckClientFlow#configure()}
                      **/
-                    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
-                    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                //    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
+                //    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
                     .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .end()
                 .log("merging")
@@ -81,8 +81,11 @@ public class ValidateCart extends RouteBuilder {
          * This flow handle the best seller
          */
         from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
-                .log("Here we update the number of item sells for the best seller");
-                // TODO guigui
+                .log("Here we update the number of item sells for the best seller")
+                /**
+                 * {@link BestSellerBean#updateBestSeller(String)}
+                 */
+                .bean(BestSellerBean.class, "updateBestSeller(${property.clientID})");
     }
 
 
@@ -98,22 +101,22 @@ public class ValidateCart extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             Client client = ClientStorage.read(
-                    (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getName()));
+                    (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction()));
 
             if (client != null) {
                 Cart cart = client.getCart();
 
                 if (cart != null) {
-                    exchange.setProperty(PayProperties.CART_PROPERTY.getName(), cart);
+                    exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(), cart);
                 }
                 else {
-                    exchange.setProperty(PayProperties.CART_PROPERTY.getName(),
-                            PayProperties.BAD_INFORMATION.getName());
+                    exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(),
+                            PayProperties.BAD_INFORMATION.getInstruction());
                 }
             }
             else {
-                exchange.setProperty(PayProperties.CART_PROPERTY.getName(),
-                        PayProperties.BAD_INFORMATION.getName());
+                exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(),
+                        PayProperties.BAD_INFORMATION.getInstruction());
             }
         }
     }
@@ -129,7 +132,7 @@ public class ValidateCart extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            Cart cart = (Cart) exchange.getProperty(PayProperties.CART_PROPERTY.getName());
+            Cart cart = (Cart) exchange.getProperty(PayProperties.CART_PROPERTY.getInstruction());
             double price = 0;
 
             for (String key: cart.keySet()) {
@@ -139,7 +142,7 @@ public class ValidateCart extends RouteBuilder {
                 }
                 exchange.setProperty(key, cart.get(key));
             }
-            exchange.setProperty(PayProperties.CART_PRICE_PROPERTY.getName(), price);
+            exchange.setProperty(PayProperties.CART_PRICE_PROPERTY.getInstruction(), price);
         }
     }
 }

@@ -38,6 +38,8 @@ public class ClientFileFlows extends RouteBuilder {
      */
     @Override
     public void configure() throws Exception {
+
+
         from(Endpoint.CREATE_CLIENT_FILE.getInstruction())
             .log("Start client creation processing")
             .setProperty("clientFirstName", simple("${property.client.firstName}"))
@@ -66,6 +68,9 @@ public class ClientFileFlows extends RouteBuilder {
                  */
             .to(Endpoint.SEND_STATUS.getInstruction());
 
+
+
+
         from(Endpoint.GET_CLIENT_FILE.getInstruction())
             .log("Start get client processing")
             .setProperty("clientFirstName", simple("${header.clientFirstName}"))
@@ -85,6 +90,8 @@ public class ClientFileFlows extends RouteBuilder {
                  * {@link ClientServiceRoute#configure()}
                  */
             .to(Endpoint.SEND_STATUS.getInstruction());
+
+
 
         from(Endpoint.DELETE_CLIENT_FILE.getInstruction())
             .log("Start delete client processing")

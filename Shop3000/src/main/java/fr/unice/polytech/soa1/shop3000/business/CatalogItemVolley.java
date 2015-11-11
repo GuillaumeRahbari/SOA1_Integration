@@ -20,7 +20,7 @@ public class CatalogItemVolley extends CatalogItem {
                              @JsonProperty(value = "price", required = true) double price,
                              @JsonProperty(value = "description", required = true) String description,
                              @JsonProperty(value = "color", required = false) String color){
-        super(name, price, description + " color: " + color);
+        super(name, color, price);
     }
 
 }

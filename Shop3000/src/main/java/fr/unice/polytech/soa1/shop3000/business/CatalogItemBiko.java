@@ -19,7 +19,7 @@ public class CatalogItemBiko extends CatalogItem {
     public CatalogItemBiko(@JsonProperty(value = "price", required = true) double price,
                        @JsonProperty(value = "name", required = true) String name,
                        @JsonProperty(value = "color", required = true) String description,
-                       @JsonProperty(value = "id", required = true) String id) {
-        super(name, price, "id: " + id + ", " + description);
+                       @JsonProperty(value = "id", required = true) int id) {
+        super(name, price,id,description);
     }
 }
