@@ -36,7 +36,7 @@ public class PayRoute extends RouteBuilder {
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
                 .setBody(constant("Bad client id."));
 
-
+        // TODO comments
         from(PayEndpoint.END_PAYMENT.getInstruction())
                 .setBody(constant(""))
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.requestStatus}"));

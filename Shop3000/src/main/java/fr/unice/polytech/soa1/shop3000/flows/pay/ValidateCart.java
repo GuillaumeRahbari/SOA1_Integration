@@ -5,10 +5,8 @@ import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
-import fr.unice.polytech.soa1.shop3000.flows.delivery.DeliveryEndpoints;
-import fr.unice.polytech.soa1.shop3000.flows.delivery.DeliveryFlow;
-import fr.unice.polytech.soa1.shop3000.flows.pay.defs.ExchangeProperties;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayProperties;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -36,8 +34,8 @@ public class ValidateCart extends RouteBuilder {
                 /** {@link CartExtractor#process(Exchange)} **/
                 .process(cartExtractor)
                 .choice()
-                    .when(exchange -> exchange.getProperty(ExchangeProperties.CART_PROPERTY.getInstruction())
-                            .equals(ExchangeProperties.BAD_INFORMATION.getInstruction()))
+                    .when(exchange -> exchange.getProperty(PayProperties.CART_PROPERTY.getInstruction())
+                            .equals(PayProperties.BAD_INFORMATION.getInstruction()))
                         .log("bad client id")
                         /** {@link PayRoute#configure() next} route builder **/
                         .to(PayEndpoint.BAD_CLIENT_ID.getInstruction())
@@ -75,8 +73,8 @@ public class ValidateCart extends RouteBuilder {
                 .log("merging")
                 .log("body: ${body}")
 
-                /** {@link DeliveryFlow#configure()} **/
-                .to(DeliveryEndpoints.GET_DELIVERY_PRICE.getInstruction());
+                /** {@link ProceedPayment#configure()} **/
+                .to(PayEndpoint.GET_DELIVERY_PRICE.getInstruction());
                 //.to(PayEndpoint.PAY.getInstruction());
 
         /**
@@ -100,22 +98,22 @@ public class ValidateCart extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             Client client = ClientStorage.read(
-                    (String) exchange.getProperty(ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction()));
+                    (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction()));
 
             if (client != null) {
                 Cart cart = client.getCart();
 
                 if (cart != null) {
-                    exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(), cart);
+                    exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(), cart);
                 }
                 else {
-                    exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(),
-                            ExchangeProperties.BAD_INFORMATION.getInstruction());
+                    exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(),
+                            PayProperties.BAD_INFORMATION.getInstruction());
                 }
             }
             else {
-                exchange.setProperty(ExchangeProperties.CART_PROPERTY.getInstruction(),
-                        ExchangeProperties.BAD_INFORMATION.getInstruction());
+                exchange.setProperty(PayProperties.CART_PROPERTY.getInstruction(),
+                        PayProperties.BAD_INFORMATION.getInstruction());
             }
         }
     }
@@ -131,7 +129,7 @@ public class ValidateCart extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            Cart cart = (Cart) exchange.getProperty(ExchangeProperties.CART_PROPERTY.getInstruction());
+            Cart cart = (Cart) exchange.getProperty(PayProperties.CART_PROPERTY.getInstruction());
             double price = 0;
 
             for (String key: cart.keySet()) {
@@ -141,7 +139,7 @@ public class ValidateCart extends RouteBuilder {
                 }
                 exchange.setProperty(key, cart.get(key));
             }
-            exchange.setProperty(ExchangeProperties.CART_PRICE_PROPERTY.getInstruction(), price);
+            exchange.setProperty(PayProperties.CART_PRICE_PROPERTY.getInstruction(), price);
         }
     }
 }

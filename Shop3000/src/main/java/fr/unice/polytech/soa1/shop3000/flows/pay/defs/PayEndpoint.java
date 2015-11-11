@@ -20,7 +20,8 @@ public enum PayEndpoint {
     SHOP3000_PAYMENT("direct:getCartPrice"),
     SHOPS_PAYMENT("activemq:payShops"),
     PAYMENT_TO_WS("direct:pay"),
-    END_PAYMENT("direct:endPayment");
+    END_PAYMENT("direct:endPayment"),
+    GET_DELIVERY_PRICE("direct:getDeliveryPrice");
 
 
     private String instruction;
