@@ -28,7 +28,8 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 //.setProperty("username",constant("test"))
                         /** @(Link CreateClientBiko} **/
                 .process(createClientBiko)
-                .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"))
+                .to(Endpoint.ADD_TO_CART_BIKO.getInstruction());
 
 
         from(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
@@ -39,7 +40,8 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 //.setProperty("password",constant("nab"))
                         /** @(Link CreateClientBeer } **/
                 .process(createClientBeer)
-                .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"))
+                .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
         from(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
                 .log("Begin create volley client")
@@ -49,6 +51,7 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 //.setProperty("password",constant("nab"))
                         /** @(Link CreateClientVolley} **/
                 .process(createClientVolley)
-                .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"))
+                .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
     }
 }
