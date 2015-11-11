@@ -141,4 +141,11 @@ public class CatalogItem {
         return result;
     }
 
+    public ItemDescription getIdescription() {
+        return idescription;
+    }
+
+    public void setIdescription(ItemDescription idescription) {
+        this.idescription = idescription;
+    }
 }
