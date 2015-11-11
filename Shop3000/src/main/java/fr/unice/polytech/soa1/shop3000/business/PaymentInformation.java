@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.business.payment;
+package fr.unice.polytech.soa1.shop3000.business;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

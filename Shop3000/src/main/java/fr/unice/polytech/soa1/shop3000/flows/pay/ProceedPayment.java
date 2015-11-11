@@ -1,7 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.unice.polytech.soa1.shop3000.business.payment.PaymentInformation;
+import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
 import fr.unice.polytech.soa1.shop3000.flows.BooleanAndAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayProperties;
@@ -71,9 +71,7 @@ public class ProceedPayment extends RouteBuilder {
                 /** The rest of the flow is below **/
                 .removeHeaders("*")
                 .wireTap(PayEndpoint.SHOPS_PAYMENT.getInstruction(), true, exchange -> {
-                    exchange.getIn().setBody(exchange.getProperty(PayProperties.PAYMENT_INFORMATION_PROPERTY.getInstruction()));
-                    exchange.getIn().setHeader(Exchange.HTTP_PATH, //PayProperties.CLIENT_ID_PROPERTY.getInstruction(),
-                            exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction()));
+                    exchange.getIn().setBody(exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction()));
                 })
                 /** {@link PayUnmarshaller#configure()} **/
                 .to(PayEndpoint.PAYMENT_TO_WS.getInstruction());
