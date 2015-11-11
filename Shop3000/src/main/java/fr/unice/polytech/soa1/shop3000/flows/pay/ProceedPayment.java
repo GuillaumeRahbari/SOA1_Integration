@@ -88,12 +88,7 @@ public class ProceedPayment extends RouteBuilder {
                     .to(PayEndpoint.PAY_BEER.getInstruction())
                     .to(PayEndpoint.PAY_BIKO.getInstruction())
                     .to(PayEndpoint.PAY_VOLLEY.getInstruction())
-                .end()
-
-                    ;//.
-                // TODO : Ici faut mettre un multicast parrallele pour les 3 shops et appeler leur méthodes de payment avec les ID bancaire de shop3000
-                // TODO : Ici c'est la fin du flow gérer les 200 / 400
-                ;
+                .end();
     }
 
 

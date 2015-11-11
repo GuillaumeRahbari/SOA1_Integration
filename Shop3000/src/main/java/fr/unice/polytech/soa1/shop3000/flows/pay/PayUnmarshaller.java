@@ -3,11 +3,10 @@ package fr.unice.polytech.soa1.shop3000.flows.pay;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.PaymentInformation;
-import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayProperties;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayProperties;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -46,8 +45,6 @@ public class PayUnmarshaller extends RouteBuilder {
 
                         /** {@link PayRoute#configure()} **/
                 .to(PayEndpoint.END_PAYMENT.getInstruction());
-
-
     }
 
     /**
@@ -79,7 +76,7 @@ public class PayUnmarshaller extends RouteBuilder {
     }
 
 
-    private class PrepareWS implements Processor {
+    private class PrepareWS extends SuperProcessor {
 
         @Override
         public void process(Exchange exchange) throws Exception {
@@ -87,8 +84,10 @@ public class PayUnmarshaller extends RouteBuilder {
             boolean paymentDone = (boolean) exchange.getProperty(PayProperties.PAYMENT_STATE_PROPERTY.getInstruction());
             if(paymentDone) {
                 exchange.setProperty(PayProperties.REQUEST_STATUS_PROPERTY.getInstruction(),200);
+                exchange.getIn().setBody("Payment accepted.");
             } else {
                 exchange.setProperty(PayProperties.REQUEST_STATUS_PROPERTY.getInstruction(),400);
+                exchange.getIn().setBody("Payment refused.");
             }
         }
     }
