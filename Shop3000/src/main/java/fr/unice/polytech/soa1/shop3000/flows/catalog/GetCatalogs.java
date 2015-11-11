@@ -1,15 +1,19 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
  * Created by Quentin on 10/21/2015.
+ * Updated by Laureen
  */
 public class GetCatalogs extends RouteBuilder {
 
-    private JSonTransform jSonTransform = new JSonTransform();
+    private ToJSonArray toJsonArray = new ToJSonArray();
 
     /**
      * This is the flow for the catalog. We make asynchrone request to the biko, volley and Hailbeer system, then we make
@@ -18,25 +22,42 @@ public class GetCatalogs extends RouteBuilder {
      */
     @Override
     public void configure() throws Exception {
-        // This flow gets the different shops' catalogs and aggregates the results into one catalog
+        /**
+         * Begin of the flow to get the shops catalogs and merge them into a standard one
+         * It redirects to {@link CallExternalPartners}
+         */
         from(Endpoint.GET_CATALOG.getInstruction())
-                .log("Start get catalog Processing")
-                .multicast()
-                    .aggregationStrategy(new JoinAggregationStrategy())
-                    .parallelProcessing()
-                    .log("Test parallele processing")
-                    .log("Seconde test")
-                    .to(Endpoint.BIKO_CATALOG.getInstruction())
-                    .to(Endpoint.VOLLEY_CATALOG.getInstruction())
-                    .to(Endpoint.BEER_CATALOG.getInstruction())
-                    .end()
-                .process(jSonTransform)
-                    .log("${body}");
-
+            .log("Start get catalogs processing")
+            .multicast()
+                .aggregationStrategy(new JoinAggregationStrategy())
+                .parallelProcessing()
+                .log("Parallel processing")
+                .to(Endpoint.BIKO_CATALOG.getInstruction())
+                .to(Endpoint.VOLLEY_CATALOG.getInstruction())
+                .to(Endpoint.BEER_CATALOG.getInstruction())
+                .end()
+            /** {@link ToJSonArray} **/
+            .process(toJsonArray)
+                .log("${body}");
 
         from(Endpoint.GET_BEST_SELLER.getInstruction())
-                .log("Begin Get BestSeller");
+            .log("Begin Get BestSeller")
+                /**
+                 * {@link BestSellerBean#getBestSeller()}
+                 */
+            .bean(BestSellerBean.class, "getBestSeller()");
+    }
 
+    /**
+     * @author Laureen Ginier
+     * Encapsulate the exchange into '[]' to have a valid json array
+     */
+    private class ToJSonArray implements Processor {
 
+        public void process(Exchange exchange) throws Exception {
+            String response = (String) exchange.getIn().getBody();
+            String jsonResponse = "[" + response + "]";
+            exchange.getIn().setBody(jsonResponse);
+        }
     }
 }

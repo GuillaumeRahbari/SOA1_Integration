@@ -6,6 +6,7 @@ import org.apache.camel.builder.RouteBuilder;
 
 /**
  * Created by tom on 26/10/15.
+ * Updated by Laureen on 11/10/2015.
  */
 public class CartRoute extends RouteBuilder {
 
@@ -23,20 +24,21 @@ public class CartRoute extends RouteBuilder {
                 .to(Endpoint.UNMARSHALL_JSON_ITEM.getInstruction());
 
         /**
+         * Begin of the flow to get the cart of the client
+         *
+         * {@link GetCart}
+         */
+        rest("{clientID}/cart")
+                .get()
+                .to(Endpoint.GET_CART.getInstruction());
+
+        /**
          * End of the flow started by : PUT /{clientID]/cart
          * Comes from {@link CartFlows}
          */
         from(Endpoint.CHECK_REQUEST_STATUS.getInstruction())
                 .log("ok")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.status}"));
-
-
-        /**
-         * Juste du test : va disparaitre
-         */
-        rest("/clients/createBiko")
-                .post()
-                .to(Endpoint.CREATE_CLIENT_BIKO.getInstruction());
 
     }
 }

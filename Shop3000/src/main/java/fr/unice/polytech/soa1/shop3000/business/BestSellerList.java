@@ -7,18 +7,18 @@ import java.util.HashMap;
  */
 public class BestSellerList {
 
-    private HashMap<CatalogItem, Integer> bestSellerList;
+    private static HashMap<CatalogItem, Integer> bestSellerList = new HashMap<>();
 
-    public BestSellerList() {
-        this.bestSellerList = new HashMap<CatalogItem, Integer>();
-    }
-
-    public HashMap<CatalogItem, Integer> getBestSellerList() {
+    public static HashMap<CatalogItem, Integer> getBestSellerList() {
         return bestSellerList;
     }
 
     public CatalogItem getBestSeller() {
         return null;
+    }
+
+    public static void addItemToList (CatalogItem catalogItem) {
+        bestSellerList.put(catalogItem, 1);
     }
 
 

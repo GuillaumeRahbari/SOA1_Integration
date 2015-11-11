@@ -1,22 +1,27 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import fr.unice.polytech.soa1.shop3000.business.Client;
+import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.ExchangeProperties;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Created by user on 02/11/2015.
  */
 public class CreateClientInShopsFlow extends RouteBuilder {
 
-    private CreateClientBiko createClientBiko;
-    private CreateClientBeer createClientBeer;
-    private CreateClientVolley createClientVolley;
+    private CreateBikoClient createClientBiko;
+    private CreateBeerClient createClientBeer;
+    private CreateVolleyClient createClientVolley;
 
     public CreateClientInShopsFlow(){
-        this.createClientBiko = new CreateClientBiko();
-        this.createClientBeer = new CreateClientBeer();
-        this.createClientVolley = new CreateClientVolley();
+        this.createClientBiko = new CreateBikoClient();
+        this.createClientBeer = new CreateBeerClient();
+        this.createClientVolley = new CreateVolleyClient();
     }
 
     @Override
@@ -25,7 +30,6 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .log("Begin create biko client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
-                //.setProperty("username",constant("test"))
                         /** @(Link CreateClientBiko} **/
                 .process(createClientBiko)
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients?bridgeEndpoint=true"))
@@ -36,22 +40,66 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .log("Begin create beer client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
-                //.setProperty("username",constant("nab"))
-                //.setProperty("password",constant("nab"))
                         /** @(Link CreateClientBeer } **/
                 .process(createClientBeer)
                 .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"))
+                .recipientList(simple("http://localhost:8181/cxf/shop/account?bridgeEndpoint=true"))
                 .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
         from(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
                 .log("Begin create volley client")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
-                //.setProperty("login",constant("nab"))
-                //.setProperty("password",constant("nab"))
                         /** @(Link CreateClientVolley} **/
                 .process(createClientVolley)
                 .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"))
                 .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
+    }
+
+
+    private class CreateVolleyClient extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String login = (String)exchange.getProperty("clientID");
+            Client client = ClientStorage.read(login);
+
+            JSONObject jObject = new JSONObject();
+            jObject.put("name", client.getFirstName());
+            jObject.put("password", client.getLastName());
+            //System.out.println(jObject.toString());
+            exchange.getIn().setBody(jObject.toString());
+        }
+    }
+
+    private class CreateBikoClient extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String username = (String) exchange.getProperty(ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction());
+            Client client = ClientStorage.read(username);
+
+            JSONObject jObject = new JSONObject();
+            jObject.put("name", client.getLastName());
+            jObject.put("id", client.getFirstName());
+            //System.out.println(jObject.toString());
+            exchange.getIn().setBody(jObject.toString());
+        }
+    }
+
+    private class CreateBeerClient extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String login = (String)exchange.getProperty(ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction());
+            //String password = (String)exchange.getProperty("password");
+            Client client = ClientStorage.read(login);
+
+            JSONObject jObject = new JSONObject();
+            jObject.put("name", client.getFirstName());
+            jObject.put("password", client.getLastName());
+            //System.out.println(jObject.toString());
+            exchange.getIn().setBody(jObject.toString());
+        }
     }
 }

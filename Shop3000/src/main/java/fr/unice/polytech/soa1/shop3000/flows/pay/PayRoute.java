@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
 /**
@@ -19,5 +21,26 @@ public class PayRoute extends RouteBuilder {
             .post()
                     /** {@link PayUnmarshaller#configure() next} flow **/
                 .to(PayEndpoint.UNMARSHAL.getInstruction());
+
+        /**
+         * Flow sending a BadRequest HTTP response in case of bad payment information.
+         */
+        from(PayEndpoint.BAD_PAYMENT_INFORMATION_ENDPOINT.getInstruction())
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
+                .setBody(constant("Bad payment information."));
+
+        /**
+         * Flow sending a BadRequest HTTP response in case of nonexistent client id.
+         */
+        from(PayEndpoint.BAD_CLIENT_ID.getInstruction())
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
+                .setBody(constant("Bad client id."));
+
+
+        from(PayEndpoint.END_PAYMENT.getInstruction())
+                .setBody(constant(""))
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, simple("${property.requestStatus}"));
+
+
     }
 }

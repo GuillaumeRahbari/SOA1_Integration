@@ -11,30 +11,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * {
  *     "cardNumber": string,
  *     "expirationDate": string,
- *     "securityCode": string
+ *     "securityCode": string,
+ *     "address": string
  * }
  * An example is:
  * {
  *     "cardNumber": "0000111122223333",
  *     "expirationDate": "01/01",
- *     "securityCode": "123"
+ *     "securityCode": "123",
+ *     "address": "somewhere"
  * }
  */
 public class PaymentInformation {
 
     // Attributes
 
-    private String cardNumber, expirationDate, securityCode;
+    private String cardNumber, expirationDate, securityCode, address;
 
     // Constructors
 
     @JsonCreator
     public PaymentInformation(@JsonProperty(value = "cardNumber", required = true) String cardNumber,
                               @JsonProperty(value = "expirationDate", required = true) String expirationDate,
-                              @JsonProperty(value = "securityCode", required = true) String securityCode) {
+                              @JsonProperty(value = "securityCode", required = true) String securityCode,
+                              @JsonProperty(value = "address", required = true) String address) {
         this.cardNumber = cardNumber;
         this.expirationDate = expirationDate;
         this.securityCode = securityCode;
+        this.address = address;
     }
 
     // Methods
@@ -57,4 +61,9 @@ public class PaymentInformation {
     public String getSecurityCode() {
         return securityCode;
     }
+
+    public String getAddress() {
+        return address;
+    }
+
 }

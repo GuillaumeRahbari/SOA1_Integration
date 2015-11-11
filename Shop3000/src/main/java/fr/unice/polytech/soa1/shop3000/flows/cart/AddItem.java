@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Quentin on 11/1/2015.
+ * Updated by Laureen on 11/10/2015.
  */
 public class AddItem {
 
@@ -26,8 +28,7 @@ public class AddItem {
         Client client = ClientStorage.read(clientFirstName);
         // If the client exists.
         if (client != null){
-            addItemToCart(client,catalogItem);
-            return true;
+            return addItemToCart(client,catalogItem);
         }
         return false;
     }
@@ -38,11 +39,15 @@ public class AddItem {
      * @param client The client we want to add items in his cart.
      * @param catalogItem The items we want to add in the client cart.
      */
-    private void addItemToCart (Client client, CatalogItem catalogItem) {
-        String shopName = catalogItem.getName();
-        if (client.getCart().get(shopName) == null) {
-            client.getCart().put(shopName, new ArrayList<CatalogItem>());
+    private boolean addItemToCart (Client client, CatalogItem catalogItem) {
+        String shopName = Catalog.getInstance().getShopName(catalogItem.getName());
+        if(shopName != null && !("".equals(shopName))) {
+            if (client.getCart().get(shopName) == null) {
+                client.getCart().put(shopName, new ArrayList<CatalogItem>());
+            }
+            client.getCart().get(shopName).add(catalogItem);
+            return true;
         }
-        client.getCart().get(shopName).add(catalogItem);
+        return false;
     }
 }
