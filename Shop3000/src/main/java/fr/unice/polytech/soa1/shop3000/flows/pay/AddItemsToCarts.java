@@ -25,6 +25,8 @@ public class AddItemsToCarts extends RouteBuilder {
     private prepareAddItemBiko prepareAddItemBiko = new prepareAddItemBiko();
     private prepareAddItemVolley prepareAddItemVolley = new prepareAddItemVolley();
 
+    private addJsonInBodyBiko addJsonInBodyBiko = new addJsonInBodyBiko();
+
     @Override
     public void configure() throws Exception {
         from(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction())
@@ -54,12 +56,9 @@ public class AddItemsToCarts extends RouteBuilder {
                 .log("${property.numberOfItem}")
                 .log("Before the loop")
                 .loop(simple("${property.numberOfItem}"))
-               /*     .setBody().constant("  {\n" +
-                    "    \"name\": \"bike2\",\n" +
-                    "    \"id\": 133456789,\n" +
-                    "    \"color\": \"blue\",\n" +
-                    "    \"price\": 100\n" +
-                    "  }")*/
+                    .log("${property.iterationNumber}")
+
+                    .process(addJsonInBodyBiko)
                     .log("Yop")
                     .recipientList(simple(("http://localhost:8181/cxf/biko/user/${property.bikoId}/cart/item?bridgeEndpoint=true")))
                     .log("hey")
@@ -130,6 +129,7 @@ public class AddItemsToCarts extends RouteBuilder {
 
             exchange.setProperty("numberOfItem",catalogItemBiko.size());
             exchange.setProperty("bikoId", constant(client.getBikoId()));
+            exchange.setProperty("iterationNumber", 0);
         }
     }
 
@@ -144,4 +144,42 @@ public class AddItemsToCarts extends RouteBuilder {
         }
     }
 
+
+    private class addJsonInBodyBiko implements Processor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            int iterationNumber = (int)exchange.getProperty("iterationNumber");
+            String clientName = (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction());
+                           /*     .setBody().constant("  {\n" +
+                    "    \"name\": \"bike2\",\n" +
+                    "    \"id\": 133456789,\n" +
+                    "    \"color\": \"blue\",\n" +
+                    "    \"price\": 100\n" +
+                    "  }")*/
+            Client client = ClientStorage.read(clientName);
+            Cart cart = client.getCart();
+            List<CatalogItem> catalogItems = cart.get(Shop.BIKO.getName());
+            CatalogItem catalogItem = catalogItems.get(iterationNumber);
+
+
+            if(catalogItem.getIdescription() == null ) {
+                System.out.println("LOLOLOLOLOLOL");
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", catalogItem.getName());
+            jsonObject.put("id", catalogItem.getIdescription().getIdBiko());
+            jsonObject.put("color", catalogItem.getIdescription().getColor());
+            jsonObject.put("price", catalogItem.getPrice());
+
+            System.out.println("ToJSON");
+            System.out.println(jsonObject.toJSONString());
+            System.out.println("to string");
+            System.out.println(jsonObject.toString());
+
+            exchange.getIn().setBody(jsonObject.toString());
+            exchange.setProperty("iterationNumber", iterationNumber++);
+        }
+    }
 }
