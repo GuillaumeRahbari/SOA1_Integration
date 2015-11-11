@@ -1,5 +1,8 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
+import fr.unice.polytech.soa1.shop3000.business.Client;
+import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
+import fr.unice.polytech.soa1.shop3000.flows.pay.defs.ExchangeProperties;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
@@ -38,7 +41,10 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setBody(constant(""))
                         /** @(Link CreateClientBeer } **/
                 .process(createClientBeer)
-                .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/shop/account?bridgeEndpoint=true"));
+
+
+
 
         from(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
                 .log("Begin create volley client")
@@ -55,10 +61,11 @@ public class CreateClientInShopsFlow extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             String login = (String)exchange.getProperty("clientID");
-            //String password = (String)exchange.getProperty("password");
+            Client client = ClientStorage.read(login);
+
             JSONObject jObject = new JSONObject();
-            jObject.put("name", login);
-            jObject.put("password", login);
+            jObject.put("name", client.getFirstName());
+            jObject.put("password", client.getLastName());
             //System.out.println(jObject.toString());
             exchange.getIn().setBody(jObject.toString());
         }
@@ -68,12 +75,12 @@ public class CreateClientInShopsFlow extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            String username = (String) exchange.getProperty("clientID");
-
+            String username = (String) exchange.getProperty(ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction());
+            Client client = ClientStorage.read(username);
 
             JSONObject jObject = new JSONObject();
-            jObject.put("name", username);
-            jObject.put("id", 1);
+            jObject.put("name", client.getLastName());
+            jObject.put("id", client.getFirstName());
             //System.out.println(jObject.toString());
             exchange.getIn().setBody(jObject.toString());
         }
@@ -83,12 +90,13 @@ public class CreateClientInShopsFlow extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            String login = (String)exchange.getProperty("clientID");
+            String login = (String)exchange.getProperty(ExchangeProperties.CLIENT_ID_PROPERTY.getInstruction());
             //String password = (String)exchange.getProperty("password");
+            Client client = ClientStorage.read(login);
 
             JSONObject jObject = new JSONObject();
-            jObject.put("name", login);
-            jObject.put("password", login);
+            jObject.put("name", client.getFirstName());
+            jObject.put("password", client.getLastName());
             //System.out.println(jObject.toString());
             exchange.getIn().setBody(jObject.toString());
         }
