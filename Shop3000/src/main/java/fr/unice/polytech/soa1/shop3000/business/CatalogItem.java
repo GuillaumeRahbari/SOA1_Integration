@@ -3,6 +3,7 @@ package fr.unice.polytech.soa1.shop3000.business;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.json.simple.JSONObject;
 
 /**
  * @author: Laureen Ginier on 21/10/15.
@@ -53,7 +54,10 @@ public class CatalogItem {
         System.out.println("constructeur biko " + name);
         this.name = name;
         this.price = price;
-        this.description = "{ \"id\" : \"" + idBiko + " \"color\" : \"" + color + "\" }";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", idBiko);
+        jsonObject.put("color", color);
+        this.description = jsonObject.toString();
         this.idescription = new ItemDescription(idBiko,color);
         System.out.println(idescription.getIdBiko());
     }
@@ -68,7 +72,9 @@ public class CatalogItem {
     public CatalogItem(String name, String color, double price) {
         this.name = name;
         this.price = price;
-        this.description = "color : " + color;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("color",color);
+        this.description =   jsonObject.toJSONString(); //"color : " + color;
         this.idescription = new ItemDescription(color);
     }
 
