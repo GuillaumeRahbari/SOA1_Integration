@@ -67,8 +67,8 @@ public class ValidateCart extends RouteBuilder {
                      *  {@link CheckClientFlow#configure()}
                      **/
                     .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
-                //    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
-                 //   .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .end()
                 .log("merging")
                 .log("body: ${body}");

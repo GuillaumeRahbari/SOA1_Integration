@@ -52,7 +52,7 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setBody(constant(""))
                         /** @(link CreateClientVolley} **/
                 .process(createClientVolley)
-                .recipientList(simple("http://localhost:8181/cxf/shop/account?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"));
     }
 
 
