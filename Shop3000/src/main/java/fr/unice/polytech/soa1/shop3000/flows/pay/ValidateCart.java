@@ -71,10 +71,9 @@ public class ValidateCart extends RouteBuilder {
                     .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .end()
                 .log("merging")
-                .log("body: ${body}");
 
                 /** {@link ProceedPayment#configure()} **/
-               // .to(PayEndpoint.GET_DELIVERY_PRICE.getInstruction());
+                .to(PayEndpoint.GET_DELIVERY_PRICE.getInstruction());
 
         /**
          * This flow handle the best seller
