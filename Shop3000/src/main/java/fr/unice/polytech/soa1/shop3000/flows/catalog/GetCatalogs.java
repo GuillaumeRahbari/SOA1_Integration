@@ -1,6 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
-import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
+import fr.unice.polytech.soa1.shop3000.utils.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

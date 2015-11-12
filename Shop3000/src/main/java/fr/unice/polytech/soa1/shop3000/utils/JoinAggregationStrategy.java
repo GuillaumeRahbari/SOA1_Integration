@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.flows;
+package fr.unice.polytech.soa1.shop3000.utils;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.processor.aggregate.AggregationStrategy;

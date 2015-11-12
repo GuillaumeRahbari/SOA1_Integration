@@ -4,7 +4,7 @@ import fr.unice.polytech.soa1.shop3000.business.Cart;
 import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
-import fr.unice.polytech.soa1.shop3000.flows.JoinAggregationStrategy;
+import fr.unice.polytech.soa1.shop3000.utils.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayEndpoint;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayProperties;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
