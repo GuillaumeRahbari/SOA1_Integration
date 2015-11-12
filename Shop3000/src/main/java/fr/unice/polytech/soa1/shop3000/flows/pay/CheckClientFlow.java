@@ -95,8 +95,8 @@ public class CheckClientFlow extends RouteBuilder {
                     .when(simple("${property.result} == true"))
                     .when(simple("${property.result} == false"))
                         .to(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
-                .end();
-           //     .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
+                .end()
+                .to(Endpoint.ADD_TO_CART_VOLLEY_ON_THE_BEACH.getInstruction());
     }
 
 

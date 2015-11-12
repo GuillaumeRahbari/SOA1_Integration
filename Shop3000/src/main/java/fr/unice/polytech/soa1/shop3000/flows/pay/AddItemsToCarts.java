@@ -73,14 +73,13 @@ public class AddItemsToCarts extends RouteBuilder {
 
                 .log("${property.clientID}")
                 .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .setBody(constant(""))
                 .process(prepareAddItemVolley)
-                //TODO get client's shop3000 basket using his id
-                //TODO get list of items coming from AllHailBeer
-                //TODO form a json object with user id, list of items and quantity
-                //TODO add items to user Volley basket => REST request
-                .to("http://localhost:8181/cxf/biko/catalog?bridgeEndpoint=true")
-        ;
+                .log("${property.clientID}")
+                // http://localhost:8181/cxf/volley/basket/Quentin
+                .recipientList(simple("http://localhost:8181/cxf/volley/basket/${property.clientID}?bridgeEndpoint=true"));
+
     }
 
 
@@ -140,7 +139,13 @@ public class AddItemsToCarts extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            // TODO :
+            String clientName = (String)exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction());
+            Client client = ClientStorage.read(clientName);
+
+            Cart cart = client.getCart();
+            List<CatalogItem> volleyItems = cart.get(Shop.VOLLEY.getName());
+
+            // TODO : la serialisation
         }
     }
 
