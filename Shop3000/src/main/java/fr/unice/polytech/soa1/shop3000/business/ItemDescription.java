@@ -13,6 +13,7 @@ public class ItemDescription {
     private String titration;
     private String gout;
     private String cereale;
+    private double quantite;
 
     public ItemDescription(int idBiko, String color) {
         this.idBiko = idBiko;
@@ -23,6 +24,10 @@ public class ItemDescription {
         this.color = color;
     }
 
+    public ItemDescription(double quantity) {
+        this.quantite = quantity;
+    }
+
     public ItemDescription(String titration, String gout, String cereale) {
         this.cereale = cereale;
         this.titration = titration;
@@ -31,12 +36,13 @@ public class ItemDescription {
 
     @JsonCreator
     public ItemDescription(@JsonProperty(value = "id") int idBiko,@JsonProperty(value = "color") String color,@JsonProperty(value = "titration") String titration,
-                           @JsonProperty(value = "gout") String gout,@JsonProperty(value = "cereale") String cereale) {
+                           @JsonProperty(value = "gout") String gout,@JsonProperty(value = "cereale") String cereale, @JsonProperty(value = "quantite") double quantity) {
         this.color = color;
         this.idBiko = idBiko;
         this.titration = titration;
         this.gout = gout;
         this.cereale = cereale;
+        this.quantite = quantity;
     }
 
     public int getIdBiko() {
@@ -77,5 +83,13 @@ public class ItemDescription {
 
     public void setCereale(String cereale) {
         this.cereale = cereale;
+    }
+
+    public double getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(double quantite) {
+        this.quantite = quantite;
     }
 }

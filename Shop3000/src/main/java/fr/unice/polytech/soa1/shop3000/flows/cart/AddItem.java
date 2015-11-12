@@ -25,9 +25,6 @@ public class AddItem {
      * </ul>
      */
     public boolean addItemToCart(String clientFirstName, CatalogItem catalogItem){
-        if(catalogItem.getIdescription() == null) {
-            System.out.println("dans ton cul");
-        }
         Client client = ClientStorage.read(clientFirstName);
         // If the client exists.
         if (client != null){

@@ -14,7 +14,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,29 +24,29 @@ public class AddItemsToCarts extends RouteBuilder {
 
     private prepareAddItemBeer prepareAddItemBeer = new prepareAddItemBeer();
     private prepareAddItemBiko prepareAddItemBiko = new prepareAddItemBiko();
-    private prepareAddItemVolley prepareAddItemVolley = new prepareAddItemVolley();
 
+    private BodyToJonVolley BodyToJonVolley = new BodyToJonVolley();
     private addJsonInBodyBiko addJsonInBodyBiko = new addJsonInBodyBiko();
+    private BodyInJsonBeer bodyInJsonBeer = new BodyInJsonBeer();
+
 
     @Override
     public void configure() throws Exception {
         from(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction())
                 .log("Starting adding items to AllHailBeer cart")
-
                 .log("${property.clientID}")
-/*                .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
-                .setBody(constant(""))
-                .process(addItemToBeer)
+                .removeHeaders("*")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .process(prepareAddItemBeer)
+                .recipientList(simple(("http://localhost:8181/cxf/shop/cart?username=${property.clientID}")))
 
-                //TODO get client's shop3000 basket using his id
-                //TODO get list of items coming from AllHailBeer
-                //TODO form a json object with user id, list of items and quantity
-                //TODO add items to user AllHailBeer basket => REST request
-                .to("http://localhost:8181/cxf/biko/catalog?bridgeEndpoint=true")*/
+                .removeHeaders("*")
+                .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+                .process(bodyInJsonBeer)
+                .recipientList(simple(("http://localhost:8181/cxf/shop/cart?username=${property.clientID}")))
+
+                .log("the end")
         ;
-
-
-
 
 
         from(Endpoint.ADD_TO_CART_BIKO.getInstruction())
@@ -78,7 +77,7 @@ public class AddItemsToCarts extends RouteBuilder {
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .setBody(constant(""))
-                .process(prepareAddItemVolley)
+                .process(BodyToJonVolley)
                 .log("${property.clientID}")
                // .log("${body}")
                 .recipientList(simple("http://localhost:8181/cxf/volley/basket/${property.clientID}?bridgeEndpoint=true"));
@@ -93,25 +92,12 @@ public class AddItemsToCarts extends RouteBuilder {
 
         @Override
         public void process(Exchange exchange) throws Exception {
-            String clientId = (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction());
-            Client client = ClientStorage.read(clientId);
-            if(client != null) {
-                HashMap<String, List<CatalogItem>> cart = client.getCart();
-                List<CatalogItem> beerItem = cart.get(Shop.BEER.getName());
+            String user = (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("owner",user);
+            jsonObject.put("cartData", new JSONObject());
 
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("owner",clientId);
-
-                JSONObject beerList = new JSONObject();
-
-                for(CatalogItem beer : beerItem) {
-                     beerList.put(beer.getName(), beer.getPrice());
-                }
-
-                jsonObject.put("cartData", beerList);
-                System.out.println(jsonObject);
-            }
-            exchange.getIn().setBody(constant(false));
+            exchange.getIn().setBody(jsonObject.toString());
         }
     }
 
@@ -138,7 +124,7 @@ public class AddItemsToCarts extends RouteBuilder {
     /**
      * This process will create the JSON with all the item to add to the volley cart.
      */
-    private class prepareAddItemVolley implements Processor {
+    private class BodyToJonVolley implements Processor {
 
         @Override
         public void process(Exchange exchange) throws Exception {
@@ -183,6 +169,29 @@ public class AddItemsToCarts extends RouteBuilder {
 
             exchange.getIn().setBody(jsonObject.toString());
             exchange.setProperty("iterationNumber", iterationNumber++);
+        }
+    }
+
+
+    private class BodyInJsonBeer implements Processor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            String clientName = (String) exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction());
+            Client client = ClientStorage.read(clientName);
+
+            List<CatalogItem> beerCart = client.getCart().get(Shop.BEER.getName());
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("owner",clientName);
+
+            for(CatalogItem catalogItem1 : beerCart) {
+                JSONObject beer = new JSONObject();
+                beer.put(catalogItem1.getName(),catalogItem1.getIdescription().getQuantite());
+                jsonObject.put("cartData", beer);
+            }
+            exchange.getIn().setBody(jsonObject.toString());
+
         }
     }
 }

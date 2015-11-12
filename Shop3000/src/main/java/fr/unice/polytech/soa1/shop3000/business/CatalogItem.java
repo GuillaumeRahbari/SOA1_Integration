@@ -29,18 +29,6 @@ public class CatalogItem {
         this.idescription = description;
     }
 
-    /**
-     * Constructor of a shop3000 catalog
-     * @param name name of the item
-     * @param price price of the item
-     * @param description description of the item
-     */
-/*    public CatalogItem(String name, double price, String description) {
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        System.out.println("constructeur de base" + name);
-    }*/
 
     /**
      * This constructor is used for the items of biko
@@ -73,6 +61,12 @@ public class CatalogItem {
         jsonObject.put("color",color);
         this.description =   jsonObject.toJSONString(); //"color : " + color;
         this.idescription = new ItemDescription(color);
+    }
+
+
+    public CatalogItem(String name, double quantity) {
+        this.name = name;
+        this.idescription = new ItemDescription(quantity);
     }
 
 
