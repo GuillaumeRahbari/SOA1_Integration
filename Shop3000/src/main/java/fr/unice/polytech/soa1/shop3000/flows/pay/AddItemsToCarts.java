@@ -10,8 +10,10 @@ import fr.unice.polytech.soa1.shop3000.utils.Shop;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,12 +74,13 @@ public class AddItemsToCarts extends RouteBuilder {
                 .log("Starting adding items to VolleyOnTheBeach cart")
 
                 .log("${property.clientID}")
+                .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .setBody(constant(""))
                 .process(prepareAddItemVolley)
                 .log("${property.clientID}")
-                // http://localhost:8181/cxf/volley/basket/Quentin
+               // .log("${body}")
                 .recipientList(simple("http://localhost:8181/cxf/volley/basket/${property.clientID}?bridgeEndpoint=true"));
 
     }
@@ -144,8 +147,18 @@ public class AddItemsToCarts extends RouteBuilder {
 
             Cart cart = client.getCart();
             List<CatalogItem> volleyItems = cart.get(Shop.VOLLEY.getName());
-
-            // TODO : la serialisation
+            JSONArray jsonArray = new JSONArray();
+            for(CatalogItem catalogItem : volleyItems) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("color", catalogItem.getIdescription().getColor());
+                jsonObject.put("quantity",1);
+                jsonObject.put("name",catalogItem.getName());
+                jsonArray.add(jsonObject);
+            }
+            StringWriter out = new StringWriter();
+            jsonArray.writeJSONString(out);
+            System.out.println(out);
+            exchange.getIn().setBody(out.toString());
         }
     }
 

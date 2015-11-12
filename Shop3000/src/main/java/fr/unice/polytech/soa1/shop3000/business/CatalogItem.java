@@ -27,7 +27,6 @@ public class CatalogItem {
         this.name = name;
         this.price = price;
         this.idescription = description;
-        System.out.println("constructeur de base" + name);
     }
 
     /**
@@ -51,7 +50,6 @@ public class CatalogItem {
      * @param color
      */
     public CatalogItem(String name, double price, int idBiko, String color) {
-        System.out.println("constructeur biko " + name);
         this.name = name;
         this.price = price;
         JSONObject jsonObject = new JSONObject();
@@ -59,7 +57,6 @@ public class CatalogItem {
         jsonObject.put("color", color);
         this.description = jsonObject.toString();
         this.idescription = new ItemDescription(idBiko,color);
-        System.out.println(idescription.getIdBiko());
     }
 
     /**
@@ -142,7 +139,7 @@ public class CatalogItem {
         return false;
     }
 
-    @Override
+/*    @Override
     public int hashCode() {
         int result;
         long temp;
@@ -151,7 +148,7 @@ public class CatalogItem {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + description.hashCode();
         return result;
-    }
+    }*/
 
     @JsonIgnore
     public ItemDescription getIdescription() {
