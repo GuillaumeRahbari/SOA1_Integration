@@ -37,12 +37,13 @@ public class CreateClientInShopsFlow extends RouteBuilder {
 
         from(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
                 .log("Begin create beer client")
+                .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setBody(constant(""))
                         /** @(Link CreateClientBeer } **/
                 .process(createClientBeer)
-                .recipientList(simple("http://localhost:8181/cxf/account?bridgeEndpoint=true"))
                 .recipientList(simple("http://localhost:8181/cxf/shop/account?bridgeEndpoint=true"));
+
 
         from(Endpoint.CREATE_CLIENT_VOLLEY_ON_THE_BEACH.getInstruction())
                 .log("Begin create volley client")
@@ -51,7 +52,7 @@ public class CreateClientInShopsFlow extends RouteBuilder {
                 .setBody(constant(""))
                         /** @(link CreateClientVolley} **/
                 .process(createClientVolley)
-                .recipientList(simple("http://localhost:8181/cxf/volley/accounts?bridgeEndpoint=true"));
+                .recipientList(simple("http://localhost:8181/cxf/shop/account?bridgeEndpoint=true"));
     }
 
 
@@ -94,7 +95,7 @@ public class CreateClientInShopsFlow extends RouteBuilder {
             Client client = ClientStorage.read(login);
 
             JSONObject jObject = new JSONObject();
-            jObject.put("name", client.getFirstName());
+            jObject.put("username", client.getFirstName());
             jObject.put("password", client.getLastName());
             //System.out.println(jObject.toString());
             exchange.getIn().setBody(jObject.toString());

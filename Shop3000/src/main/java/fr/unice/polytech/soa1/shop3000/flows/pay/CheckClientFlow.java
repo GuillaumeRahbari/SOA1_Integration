@@ -44,15 +44,14 @@ public class CheckClientFlow extends RouteBuilder {
                     .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.clientID}?bridgeEndpoint=true")).end()
                 .doCatch(IOException.class, IllegalStateException.class, Exception.class)
                     .log("catch")
-                            .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
                         /** {@link CheckBeerClientExistence} **/
                 .process(checkClientExistenceBeer)
                 .choice()
                     .when(simple("${property.result} == true"))
                     .when(simple("${property.result} == false"))
                         .to(Endpoint.CREATE_CLIENT_ALL_HAIL_BEER.getInstruction())
-                .end();
-       //         .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
+                .end()
+                .to(Endpoint.ADD_TO_CART_ALL_HAIL_BEER.getInstruction());
 
         /**
          * This flow check if the client is in the biko system, if not we create the client in the system and then
@@ -147,14 +146,18 @@ public class CheckClientFlow extends RouteBuilder {
         @Override
         public void process(Exchange exchange) throws Exception {
             // test if client exist
-            String body = extractExchangeBody(exchange);
+            String body = (String) exchange.getIn().getBody();
             String loginToTest = (String)exchange.getProperty("clientID");
-            String login = new JSONArray(body).getJSONObject(0).getJSONObject(loginToTest).getString("username");
-
-            if(loginToTest.equals(login)) {
-                exchange.setProperty("result", true);
-            }else {
-                exchange.setProperty("result", false);
+            System.out.println(body);
+            if(body.equals("")) {
+                exchange.setProperty("result",false);
+            } else {
+                String login = new JSONArray(body).getJSONObject(0).getJSONObject(loginToTest).getString("username");
+                if (loginToTest.equals(login)) {
+                    exchange.setProperty("result", true);
+                } else {
+                    exchange.setProperty("result", false);
+                }
             }
         }
     }

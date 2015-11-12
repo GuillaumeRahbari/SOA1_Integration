@@ -66,9 +66,9 @@ public class ValidateCart extends RouteBuilder {
                      * they create the client, then they add all the items of client in the cart
                      *  {@link CheckClientFlow#configure()}
                      **/
-                //    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
-                //    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction()) Work !
-                    .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
+                    .to(PayEndpoint.CHECK_CLIENT_BEER.getInstruction())
+                //    .to(PayEndpoint.CHECK_CLIENT_BIKO.getInstruction())
+                 //   .to(PayEndpoint.CHECK_CLIENT_VOLLEY.getInstruction())
                 .end()
                 .log("merging")
                 .log("body: ${body}");
