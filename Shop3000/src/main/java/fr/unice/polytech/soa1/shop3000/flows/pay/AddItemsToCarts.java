@@ -75,7 +75,7 @@ public class AddItemsToCarts extends RouteBuilder {
 
                 .log("${property.clientID}")
                 .removeHeaders("*")
-                .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .setBody(constant(""))
                 .process(prepareAddItemVolley)
