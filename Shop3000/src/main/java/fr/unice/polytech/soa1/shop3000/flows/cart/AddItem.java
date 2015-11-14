@@ -1,7 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
-import fr.unice.polytech.soa1.shop3000.business.Catalog;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.business.catalog.Catalog;
+import fr.unice.polytech.soa1.shop3000.business.catalog.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 

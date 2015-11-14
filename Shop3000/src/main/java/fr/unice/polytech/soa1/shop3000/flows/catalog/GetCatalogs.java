@@ -1,7 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
-import fr.unice.polytech.soa1.shop3000.business.Catalog;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.business.catalog.Catalog;
+import fr.unice.polytech.soa1.shop3000.business.catalog.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.utils.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;

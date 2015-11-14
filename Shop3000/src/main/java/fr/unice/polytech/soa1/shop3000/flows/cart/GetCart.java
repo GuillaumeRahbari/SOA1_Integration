@@ -2,7 +2,7 @@ package fr.unice.polytech.soa1.shop3000.flows.cart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.Cart;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.business.catalog.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;

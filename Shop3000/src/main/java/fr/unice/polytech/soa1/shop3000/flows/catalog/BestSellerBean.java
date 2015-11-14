@@ -1,7 +1,9 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.unice.polytech.soa1.shop3000.business.BestSellerList;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.business.catalog.CatalogItem;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -30,6 +32,12 @@ public class BestSellerBean {
                 bestSeller = (CatalogItem)pair.getKey();
             }
         }
-        return bestSeller.toJsonString();
+        String s = "";
+        try {
+             s = new ObjectMapper().writeValueAsString(bestSeller);//.toJsonString();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 }

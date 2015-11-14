@@ -1,5 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.business;
 
+import fr.unice.polytech.soa1.shop3000.business.catalog.CatalogItem;
+
 import java.util.HashMap;
 
 /**

@@ -1,5 +1,6 @@
 package fr.unice.polytech.soa1.shop3000.business;
 
+import fr.unice.polytech.soa1.shop3000.business.catalog.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.utils.Shop;
 
 import java.util.ArrayList;

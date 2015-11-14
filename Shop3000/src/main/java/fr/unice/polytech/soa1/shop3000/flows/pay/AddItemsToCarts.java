@@ -1,7 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.pay;
 
 import fr.unice.polytech.soa1.shop3000.business.Cart;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.business.catalog.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.business.Client;
 import fr.unice.polytech.soa1.shop3000.business.ClientStorage;
 import fr.unice.polytech.soa1.shop3000.flows.pay.defs.PayProperties;
@@ -136,7 +136,7 @@ public class AddItemsToCarts extends RouteBuilder {
             JSONArray jsonArray = new JSONArray();
             for(CatalogItem catalogItem : volleyItems) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("color", catalogItem.getIdescription().getColor());
+                jsonObject.put("color", catalogItem.getDescription().getColor());
                 jsonObject.put("quantity",1);
                 jsonObject.put("name",catalogItem.getName());
                 jsonArray.add(jsonObject);
@@ -163,8 +163,8 @@ public class AddItemsToCarts extends RouteBuilder {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", catalogItem.getName());
-            jsonObject.put("id", catalogItem.getIdescription().getIdBiko());
-            jsonObject.put("color", catalogItem.getIdescription().getColor());
+            jsonObject.put("id", catalogItem.getDescription().getIdBiko());
+            jsonObject.put("color", catalogItem.getDescription().getColor());
             jsonObject.put("price", catalogItem.getPrice());
 
             exchange.getIn().setBody(jsonObject.toString());
@@ -187,7 +187,7 @@ public class AddItemsToCarts extends RouteBuilder {
 
             for(CatalogItem catalogItem1 : beerCart) {
                 JSONObject beer = new JSONObject();
-                beer.put(catalogItem1.getName(),catalogItem1.getIdescription().getQuantite());
+                beer.put(catalogItem1.getName(),catalogItem1.getDescription().getQuantite());
                 jsonObject.put("cartData", beer);
             }
             exchange.getIn().setBody(jsonObject.toString());
