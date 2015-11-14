@@ -1,7 +1,7 @@
 package fr.unice.polytech.soa1.shop3000.flows.cart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
+import fr.unice.polytech.soa1.shop3000.business.catalog.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;

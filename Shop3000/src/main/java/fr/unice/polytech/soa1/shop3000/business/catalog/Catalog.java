@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.business;
+package fr.unice.polytech.soa1.shop3000.business.catalog;
 
 import fr.unice.polytech.soa1.shop3000.utils.Shop;
 

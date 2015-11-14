@@ -1,4 +1,4 @@
-package fr.unice.polytech.soa1.shop3000.business;
+package fr.unice.polytech.soa1.shop3000.business.catalog;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,14 +13,14 @@ public class CatalogItemVolley extends CatalogItem {
      * @param name name of the item
      * @param price price of the item
      * @param description description of the item
-     * @param color customization of the item
+     * @param color catalog of the item
      */
     @JsonCreator
     public CatalogItemVolley(@JsonProperty(value = "name", required = true) String name,
                              @JsonProperty(value = "price", required = true) double price,
                              @JsonProperty(value = "description", required = true) String description,
                              @JsonProperty(value = "color", required = false) String color){
-        super(name, color, price);
+        super(name, price, new ItemDescription(color), null);
     }
 
 }

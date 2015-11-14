@@ -2,10 +2,7 @@ package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.unice.polytech.soa1.shop3000.business.Catalog;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItemBiko;
-import fr.unice.polytech.soa1.shop3000.business.CatalogItemVolley;
+import fr.unice.polytech.soa1.shop3000.business.catalog.*;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
 import fr.unice.polytech.soa1.shop3000.utils.Shop;
 import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
@@ -129,8 +126,7 @@ public class CallExternalPartners extends RouteBuilder {
                     JSONObject jobj = obj.getJSONObject(key);
                     String name = jobj.getString("name");
                     String price = jobj.getString("pricePerLiter");
-
-                    CatalogItem beerItem = new CatalogItem(name, Double.parseDouble(price),jobj.getString("titration") ,  jobj.getString("gout"), jobj.getString("cereale") );
+                    CatalogItem beerItem = new CatalogItem(name, Double.parseDouble(price), new ItemDescription(jobj.getString("titration") ,  jobj.getString("gout"), jobj.getString("cereale")), null);
                     items.add(beerItem);
                 }
             }

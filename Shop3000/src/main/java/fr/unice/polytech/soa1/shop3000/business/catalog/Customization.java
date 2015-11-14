@@ -1,26 +1,23 @@
-package fr.unice.polytech.soa1.shop3000.business.customization;
+package fr.unice.polytech.soa1.shop3000.business.catalog;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.unice.polytech.soa1.shop3000.business.customization.Customization;
-
-import java.util.List;
 
 /**
  * @author : Laureen Ginier
  *
- * This class represents the customization of an item of the Biko shop.
+ * This class represents the catalog of an item of the Biko shop.
  */
-public class BikoCustom extends Customization {
+public class Customization {
 
     private String name;
     private double price;
     private String type;
 
     @JsonCreator
-    public BikoCustom(@JsonProperty(value = "name", required = true) String name,
-                      @JsonProperty(value = "price", required = true) double price,
-                      @JsonProperty(value = "type", required = true) String type) {
+    public Customization(@JsonProperty(value = "name", required = true) String name,
+                         @JsonProperty(value = "price", required = true) double price,
+                         @JsonProperty(value = "type", required = true) String type) {
         this.name = name;
         this.price = price;
         this.type = type;
