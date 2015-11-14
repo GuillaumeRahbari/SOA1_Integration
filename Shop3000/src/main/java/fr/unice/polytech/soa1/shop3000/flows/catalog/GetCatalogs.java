@@ -1,10 +1,15 @@
 package fr.unice.polytech.soa1.shop3000.flows.catalog;
 
+import fr.unice.polytech.soa1.shop3000.business.Catalog;
+import fr.unice.polytech.soa1.shop3000.business.CatalogItem;
 import fr.unice.polytech.soa1.shop3000.utils.JoinAggregationStrategy;
 import fr.unice.polytech.soa1.shop3000.utils.Endpoint;
+import fr.unice.polytech.soa1.shop3000.utils.SuperProcessor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+
+import java.util.List;
 
 /**
  * Created by Quentin on 10/21/2015.
@@ -13,6 +18,7 @@ import org.apache.camel.builder.RouteBuilder;
 public class GetCatalogs extends RouteBuilder {
 
     private ToJSonArray toJsonArray = new ToJSonArray();
+    private GetVolleyItemName getVolleyItemName = new GetVolleyItemName();
 
     /**
      * This is the flow for the catalog. We make asynchrone request to the biko, volley and Hailbeer system, then we make
@@ -23,7 +29,7 @@ public class GetCatalogs extends RouteBuilder {
     public void configure() throws Exception {
         /**
          * Begin of the flow to get the shops catalogs and merge them into a standard one
-         * It redirects to {@link CallExternalPartners}
+         * It redirects to {@link CallExternalPartners#configure()}
          */
         from(Endpoint.GET_CATALOG.getInstruction())
             .log("Start get catalogs processing")
@@ -45,6 +51,29 @@ public class GetCatalogs extends RouteBuilder {
                  * {@link BestSellerBean#getBestSeller()}
                  */
             .bean(BestSellerBean.class, "getBestSeller()");
+
+        /**
+         * Gets the cutomization available for volley items.
+         * Provides a json array of available colors.
+         */
+        from(Endpoint.CUSTOM_VOLLEY.getInstruction())
+                .log("Begin : get Custom Volley")
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .setBody(constant(""))
+                /**
+                 * {@link GetCatalogs#getVolleyItemName}
+                 */
+                .process(getVolleyItemName)
+                .recipientList(simple("http://localhost:8181/cxf/volley/catalog/${property.volleyItemName}/colors?bridgeEndpoint=true"))
+                .log("$body");
+
+        from(Endpoint.CUSTOM_BIKO.getInstruction())
+                .log("Begin : get custom Biko")
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .setBody(constant(""))
+                .to("http://localhost:8181/cxf/biko/catalog/component/types/wheel?bridgeEndpoint=true")
+                .log("$body");
+
     }
 
     /**
@@ -58,6 +87,18 @@ public class GetCatalogs extends RouteBuilder {
             System.out.println(response);
             String jsonResponse = "[" + response + "]";
             exchange.getIn().setBody(jsonResponse);
+        }
+    }
+
+
+    public class GetVolleyItemName extends SuperProcessor {
+
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            List<CatalogItem> catalog = Catalog.getInstance().getItemsVolley();
+            if(!catalog.isEmpty()) {
+                exchange.setProperty("volleyItemName", catalog.get(0).getName());
+            }
         }
     }
 }

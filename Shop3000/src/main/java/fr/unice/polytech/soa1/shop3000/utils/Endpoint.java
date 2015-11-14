@@ -23,6 +23,8 @@ public enum Endpoint {
     BEER_CATALOG("direct:beerCatalog"),
     CSV_INPUT_DIRECTORY("file:csvInputDirectory"),
     GET_BEST_SELLER("direct:getBestSeller"),
+    CUSTOM_VOLLEY("direct:volleyCustom"),
+    CUSTOM_BIKO("direct:bikoCustom"),
 
     /** Cart endpoints **/
     ADD_ITEM_CART("direct:addItemCart"),
@@ -39,6 +41,7 @@ public enum Endpoint {
     CREATE_CLIENT_ALL_HAIL_BEER("direct:createClientBeer"),
     GET_CART("direct:getCart"),
     CHECK_REQUEST_STATUS("direct:checkRequestStatus"),
+
     /** Payment endpoints **/
     PAY("direct:pay"),
     PAY_TO_BIKO("direct:payToBiko"),

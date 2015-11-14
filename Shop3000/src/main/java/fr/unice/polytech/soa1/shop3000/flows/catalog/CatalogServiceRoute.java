@@ -19,6 +19,7 @@ public class CatalogServiceRoute extends RouteBuilder {
         restConfiguration().component("servlet"); // feature:install camel-servlet + edit in the OSGi blueprint
 
         /**
+         * This flow gets the shop3000 catalog.
          * {@link GetCatalogs#configure()}
          */
         rest("/catalog")
@@ -27,11 +28,28 @@ public class CatalogServiceRoute extends RouteBuilder {
 
 
         /**
+         * This flow gets the bestseller item of shop3000.
          * {@link GetCatalogs#configure()}
          */
         rest("/catalog/bestSeller")
                 .get()
                 .to(Endpoint.GET_BEST_SELLER.getInstruction());
+
+        /***
+         * This flow gets the customizable colors for volley items
+         *{@link GetCatalogs#configure()}
+         */
+        rest("/catalog/customization/volley")
+                .get()
+                .to(Endpoint.CUSTOM_VOLLEY.getInstruction());
+
+        /**
+         * This flow gets the customizations available for bike items.
+         * {@link GetCatalogs#configure()}
+         */
+        rest("/catalog/customization/bike")
+                .get()
+                .to(Endpoint.CUSTOM_BIKO.getInstruction());
 
     }
 
