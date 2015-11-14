@@ -1,9 +1,10 @@
 package fr.unice.polytech.soa1.shop3000.business;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import fr.unice.polytech.soa1.shop3000.business.customization.BikoCustom;
 import org.json.simple.JSONObject;
+
+import java.util.List;
 
 /**
  * @author: Laureen Ginier on 21/10/15.
@@ -16,6 +17,7 @@ public class CatalogItem {
     private double price;
     private String description;
     private ItemDescription idescription;
+    private List<BikoCustom> customization;
 
     public CatalogItem(){
     };
@@ -23,10 +25,12 @@ public class CatalogItem {
     @JsonCreator
     public CatalogItem(@JsonProperty(value = "name", required = true) String name,
                        @JsonProperty(value = "price", required = true) double price,
-                       @JsonProperty(value = "description", required = true) ItemDescription description){
+                       @JsonProperty(value = "description", required = true) ItemDescription description,
+                       @JsonProperty(value = "customization", required = false) List<BikoCustom> custom){
         this.name = name;
         this.price = price;
         this.idescription = description;
+        this.customization = custom;
     }
 
 
@@ -100,6 +104,15 @@ public class CatalogItem {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @JsonIgnore
+    public List<BikoCustom> getCustomization() {
+        return customization;
+    }
+
+    public void setCustomization(List<BikoCustom> customization) {
+        this.customization = customization;
     }
 
     /**
