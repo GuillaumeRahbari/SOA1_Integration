@@ -17,7 +17,7 @@ public class MockPaymentSystem {
      */
     public static boolean pay(String cardNumber, String expirationDate, String securityCode, String address, double amount) {
         double random = Math.random();
-        if(random > 0.5) {
+        if(Long.valueOf(cardNumber) % 2 == 0) {
             return true;
         }
         return false;
