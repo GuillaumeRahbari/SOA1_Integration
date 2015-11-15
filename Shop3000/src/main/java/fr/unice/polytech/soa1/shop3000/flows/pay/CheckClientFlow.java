@@ -148,7 +148,6 @@ public class CheckClientFlow extends RouteBuilder {
             // test if client exist
             String body = (String) exchange.getIn().getBody();
             String loginToTest = (String)exchange.getProperty("clientID");
-            System.out.println(body);
             if(body.equals("")) {
                 exchange.setProperty("result",false);
             } else {

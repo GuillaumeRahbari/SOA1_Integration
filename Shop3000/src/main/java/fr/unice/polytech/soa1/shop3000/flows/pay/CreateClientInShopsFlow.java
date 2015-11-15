@@ -80,8 +80,6 @@ public class CreateClientInShopsFlow extends RouteBuilder {
             JSONObject jObject = new JSONObject();
             jObject.put("name", client.getLastName());
             jObject.put("id", client.getBikoId());
-            System.out.println(client.getBikoId());
-            //System.out.println(jObject.toString());
             exchange.getIn().setBody(jObject.toString());
         }
     }
@@ -97,7 +95,6 @@ public class CreateClientInShopsFlow extends RouteBuilder {
             JSONObject jObject = new JSONObject();
             jObject.put("username", client.getFirstName());
             jObject.put("password", client.getLastName());
-            //System.out.println(jObject.toString());
             exchange.getIn().setBody(jObject.toString());
         }
     }

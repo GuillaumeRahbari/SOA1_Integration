@@ -84,7 +84,6 @@ public class GetCatalogs extends RouteBuilder {
 
         public void process(Exchange exchange) throws Exception {
             String response = (String) exchange.getIn().getBody();
-            System.out.println(response);
             String jsonResponse = "[" + response + "]";
             exchange.getIn().setBody(jsonResponse);
         }

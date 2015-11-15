@@ -112,7 +112,6 @@ public class AddItemsToCarts extends RouteBuilder {
             Client client = ClientStorage.read(username);
 
             Cart cart = client.getCart();
-            System.out.println(cart.size());
             List<CatalogItem> catalogItemBiko = cart.get(Shop.BIKO.getName());
 
             exchange.setProperty("numberOfItem",catalogItemBiko.size());
@@ -143,7 +142,6 @@ public class AddItemsToCarts extends RouteBuilder {
             }
             StringWriter out = new StringWriter();
             jsonArray.writeJSONString(out);
-            System.out.println(out);
             exchange.getIn().setBody(out.toString());
         }
     }
