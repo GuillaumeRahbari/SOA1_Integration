@@ -50,7 +50,6 @@ public class ValidateCart extends RouteBuilder {
          */
         from(PayEndpoint.VALIDATE_CART.getInstruction())
                 .log("starting cart validation")
-                .wireTap(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
                 /**
                  * This process add several property on the exchange. On per shop, the property is the name of the shop
                  * and one name "price" with the price of all the items
@@ -74,16 +73,6 @@ public class ValidateCart extends RouteBuilder {
 
                 /** {@link ProceedPayment#configure()} **/
                 .to(PayEndpoint.GET_DELIVERY_PRICE.getInstruction());
-
-        /**
-         * This flow handle the best seller
-         */
-        from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
-                .log("Here we update the number of item sells for the best seller")
-                /**
-                 * {@link BestSellerBean#updateBestSeller(String)}
-                 */
-                .bean(BestSellerBean.class, "updateBestSeller(${property.clientID})");
     }
 
 

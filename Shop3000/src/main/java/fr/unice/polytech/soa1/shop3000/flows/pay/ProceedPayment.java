@@ -68,8 +68,11 @@ public class ProceedPayment extends RouteBuilder {
                 /** {@link Payment#process(Exchange)} **/
                 .process(payment)
                 .log("after payment")
-                /** The rest of the flow is below **/
-                .removeHeaders("*")
+                /** see below for the next flow **/
+                .wireTap(PayEndpoint.UPDATE_BEST_SELLER.getInstruction(), true, exchange -> {
+                    exchange.getIn().setBody(exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction()));
+                })
+                /** see below for the next flow **/
                 .wireTap(PayEndpoint.SHOPS_PAYMENT.getInstruction(), true, exchange -> {
                     exchange.getIn().setBody(exchange.getProperty(PayProperties.CLIENT_ID_PROPERTY.getInstruction()));
                 })
@@ -77,10 +80,21 @@ public class ProceedPayment extends RouteBuilder {
                 .to(PayEndpoint.PAYMENT_TO_WS.getInstruction());
 
         /**
+         * This flow handle the management of best seller products.
+         */
+        from(PayEndpoint.UPDATE_BEST_SELLER.getInstruction())
+                .log("Here we update the number of item sells for the best seller")
+                        /**
+                         * {@link BestSellerBean#updateBestSeller(String)}
+                         */
+                .bean(BestSellerBean.class, "updateBestSeller(${body})");
+
+        /**
          * This part of the flow will handle the payment of the different shops
          */
         from(PayEndpoint.SHOPS_PAYMENT.getInstruction())
                 .log("Begin of the flow that will pay the different shop")
+                .removeHeaders("*")
                 .multicast()
                     .parallelProcessing()
                     .aggregationStrategy(new BooleanAndAggregationStrategy())
