@@ -10,7 +10,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.codehaus.jettison.json.JSONObject;
 
 /**
- * Created by user on 02/11/2015.
+ * @author Nabil El Moussaid
+ * This class contains the flow that create accounts in providers
  */
 public class CreateClientInShopsFlow extends RouteBuilder {
 

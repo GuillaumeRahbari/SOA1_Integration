@@ -11,7 +11,8 @@ import org.codehaus.jettison.json.JSONObject;
 import java.io.IOException;
 
 /**
- * Created by user on 02/11/2015.
+ * @author Nabil El Moussaid
+ * This class contains the flows checking wether or not the client has an account in providers
  */
 public class CheckClientFlow extends RouteBuilder {
 
@@ -38,12 +39,9 @@ public class CheckClientFlow extends RouteBuilder {
                 .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setBody(constant(""))
-                .log("hello")
-                .log("${property.clientID}")
                 .doTry()
                     .recipientList(simple("http://localhost:8181/cxf/shop/account/${property.clientID}/${property.clientID}?bridgeEndpoint=true")).end()
                 .doCatch(IOException.class, IllegalStateException.class, Exception.class)
-                    .log("catch")
                         /** {@link CheckBeerClientExistence} **/
                 .process(checkClientExistenceBeer)
                 .choice()
@@ -65,7 +63,6 @@ public class CheckClientFlow extends RouteBuilder {
                 .doTry()
                 .recipientList(simple("http://localhost:8181/cxf/biko/clients/name/${property.clientID}?bridgeEndpoint=true")).end()
                 .doCatch(Exception.class)
-                    .log("catch")
                 /** {@link CheckBikoClientExistence} **/
                 .process(checkClientExistenceBikoBiko)
                 .choice()
@@ -87,7 +84,6 @@ public class CheckClientFlow extends RouteBuilder {
                 .doTry()
                 .recipientList(simple("http://localhost:8181/cxf/volley/accounts/${property.clientID}?bridgeEndpoint=true")).end()
                 .doCatch(Exception.class)
-                        .log("catch")
                 /** @{Link CheckClientExistenceVolley} **/
                 .process(checkClientExistenceVolley)
                 .choice()
