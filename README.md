@@ -1,6 +1,6 @@
 # Installation steps
 
-1. Open a shell into the extracted IntegrationLab/ directory - you should find 4 source folders, one inputFiles folder, a pom.xml and a soapui project file
+1. Open a shell into the code/ directory - you should find here 4 source folders, one inputFiles folder and a pom.xml
 
 2. Type and execute the "maven clean package" command - it you should print "maven build success"
 
